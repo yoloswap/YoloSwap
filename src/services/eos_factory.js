@@ -6,7 +6,9 @@ function eosFromPrivateKey(key, chain) {
   return Eos({
    keyProvider: key,
    httpEndpoint: chain.endpoint,
-   chain: chain.id
+  // verbose: 'true',
+  // debug: true,
+   chainId: chain.id
   })
 }
 

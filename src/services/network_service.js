@@ -102,6 +102,22 @@ async function getRates(options) {
     return ratesArray
 }
 
+async function send(options) {
+  let eos = options.eos
+  let userAccount = options.userAccount
+  let toAccount = options.toAccount
+  let srcAmount = options.srcAmount
+  let srcSymbol = options.srcSymbol
+  let asset = `${srcAmount} ${srcSymbol}`
+  const result = await eos.transfer({
+    from:userAccount,
+    to:toAccount,
+    quantity:asset,
+    memo:""
+  });
+  return result;
+}
+
 async function trade(options) {
     let eos = options.eos
     let networkAccount = options.networkAccount
@@ -132,10 +148,7 @@ async function trade(options) {
       memo:memo
     }, {
       authorization: [`${userAccount}@active`],
-      broadcast: true,
-      sign: true
     });
-    console.log(result);
     return result;
 }
 
@@ -153,4 +166,4 @@ async function getUserBalance(options){
     return parseFloat(balanceRes[0]);
 }
 
-export {getBalances, getEnabled, getRate, getRates, trade, getUserBalance};
+export {getBalances, getEnabled, getRate, getRates, trade, getUserBalance, send};

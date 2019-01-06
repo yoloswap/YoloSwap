@@ -1,5 +1,5 @@
 import React from 'react';
-import {trade} from './services/network_service';
+import {trade, send} from './services/network_service';
 import {account} from './account.js';
 import {NETWORK_ACCOUNT} from './constants.js';
 
@@ -14,11 +14,23 @@ class TradeDemo extends React.Component {
 
     componentDidMount(){
       console.log(account.eos)
+      // send({
+      //   eos: account.eos,
+      //   userAccount: account.account,
+      //   srcAmount: "1.5",
+      //   srcSymbol: "EOS",
+      //   toAccount: "lionofcourse"
+      // }).then((result) => {
+      //   console.log(result)
+      //   this.setState({
+      //     waiting: false
+      //   });
+      // })
       trade({
         eos: account.eos,
         networkAccount: NETWORK_ACCOUNT,
         userAccount: account.account,
-        srcAmount: "1.5",
+        srcAmount: "1.5000",
         srcPrecision: 4,
         srcTokenAccount: 'eosio.token',
         srcSymbol: "EOS",
