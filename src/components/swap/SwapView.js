@@ -1,7 +1,8 @@
 import React from 'react';
+import Modal from '../commons/Modal';
 import TokenSelector from '../commons/TokenSelector';
 
-const SwapView = () => (
+const SwapView = (props) => (
   <div className={"swap container"}>
     <div className={"swap__container"}>
       <div className={"swap__content"}>
@@ -26,12 +27,16 @@ const SwapView = () => (
     </div>
 
     <div className={"swap__bot"}>
-      <div className={"swap__bot-button common__button-gradient"}>Swap Now</div>
+      <div className={"swap__bot-button common__button-gradient"} onClick={() => props.handleOpenScatterModal()}>Swap Now</div>
       <div className={"swap__bot-term"}>
         <span>By Swapping, you agree to the </span>
         <a href="#" target="_blank">Terms and Conditions</a>
       </div>
     </div>
+    <div>{props.hahaha}</div>
+    <Modal isActive={props.isScatterModalOpen} handleClose={props.handleCloseScatterModal} title="Sign In">
+      Test
+    </Modal>
   </div>
 );
 
