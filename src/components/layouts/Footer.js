@@ -5,18 +5,18 @@ const Footer = () => (
     <div className={"footer__container"}>
       <div className={"container common__flexbox"}>
         <div className={"footer__content"}>
-          <a href="#" className={"footer__content-item"}>Yolo</a>
-          <a href="#" className={"footer__content-item"}>FAQ</a>
-          <a href="#" className={"footer__content-item"}>Contact Us</a>
-          <a href="#" className={"footer__content-item"}>KYC</a>
-          <a href="#" className={"footer__content-item"}>Blog</a>
+          <a href="/" className={"footer__content-item"}>Yolo</a>
+          <a href="/" className={"footer__content-item"}>FAQ</a>
+          <a href="/" className={"footer__content-item"}>Contact Us</a>
+          <a href="/" className={"footer__content-item"}>KYC</a>
+          <a href="/" className={"footer__content-item"}>Blog</a>
         </div>
 
         <div className={"footer__logo"}>
-          <a href="#" className={"footer__logo-item telegram"}/>
-          <a href="#" className={"footer__logo-item twitter"}/>
-          <a href="#" className={"footer__logo-item reddit"}/>
-          <a href="#" className={"footer__logo-item medium"}/>
+          <a href="/"><span className={"footer__logo-item telegram"}/></a>
+          <a href="/"><span className={"footer__logo-item twitter"}/></a>
+          <a href="/"><span className={"footer__logo-item reddit"}/></a>
+          <a href="/"><span className={"footer__logo-item medium"}/></a>
         </div>
       </div>
     </div>

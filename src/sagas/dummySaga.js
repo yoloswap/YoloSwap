@@ -1,6 +1,6 @@
 import { takeLatest } from 'redux-saga/effects';
 
-function* helloWorld() {
+function helloWorld() {
   console.log("dummy action has been activated by Saga");
 }
 

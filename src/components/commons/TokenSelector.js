@@ -25,7 +25,7 @@ export default class TokenSelector extends Component {
         <Dropdown onShow={() => this.handleOpenDropDown()} onHide={() => this.handleCloseDropDown()} active={this.state.isOpen}>
           <DropdownTrigger>
             <div className={"token-selector__active"}>
-              <img className={"token-selector__active-icon"} src={require("../../assets/images/tokens/eos.svg")}/>
+              <img className={"token-selector__active-icon"} src={require("../../assets/images/tokens/eos.svg")} alt=""/>
               <div className={"token-selector__active-symbol"}>EOS</div>
               <div className={'common__arrow-drop-down ' + (this.state.isOpen ? 'up' : 'down')}/>
             </div>

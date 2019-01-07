@@ -18,15 +18,18 @@
   }
 
   &__logo {
-    &-item {
-      display: inline-block;
-      width: 32px;
-      height: 32px;
-      margin-right: 20px;
+    a {
+      margin-right: 15px;
 
       &:last-child {
         margin-right: 0;
       }
+    }
+
+    &-item {
+      display: inline-block;
+      width: 32px;
+      height: 32px;
 
       &.telegram {
         background-image: url($image-path + 'logos/telegram.svg');

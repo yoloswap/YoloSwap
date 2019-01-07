@@ -22,7 +22,7 @@ const MarketView = () => (
         </tr>
         <tr>
           <td className={"common__flexbox none"}>
-            <img className={"market__table-icon"} src={require("../../assets/images/tokens/eos.svg")}/>
+            <img className={"market__table-icon"} src={require("../../assets/images/tokens/eos.svg")} alt=""/>
             <div className={"market__table-text"}>XMR/ETH</div>
           </td>
           <td className={"market__table-text"}>0.009739 ETH</td>
@@ -33,7 +33,7 @@ const MarketView = () => (
         </tr>
         <tr>
           <td className={"common__flexbox none"}>
-            <img className={"market__table-icon"} src={require("../../assets/images/tokens/eos.svg")}/>
+            <img className={"market__table-icon"} src={require("../../assets/images/tokens/eos.svg")} alt=""/>
             <div className={"market__table-text"}>OMG/ETH</div>
           </td>
           <td className={"market__table-text"}>0.009739 ETH</td>
@@ -44,7 +44,7 @@ const MarketView = () => (
         </tr>
         <tr>
           <td className={"common__flexbox none"}>
-            <img className={"market__table-icon"} src={require("../../assets/images/tokens/eos.svg")}/>
+            <img className={"market__table-icon"} src={require("../../assets/images/tokens/eos.svg")} alt=""/>
             <div className={"market__table-text"}>KNC/ETH</div>
           </td>
           <td className={"market__table-text"}>0.007812 ETH</td>
@@ -55,7 +55,7 @@ const MarketView = () => (
         </tr>
         <tr>
           <td className={"common__flexbox none"}>
-            <img className={"market__table-icon"} src={require("../../assets/images/tokens/eos.svg")}/>
+            <img className={"market__table-icon"} src={require("../../assets/images/tokens/eos.svg")} alt=""/>
             <div className={"market__table-text"}>SNT/ETH</div>
           </td>
           <td className={"market__table-text"}>0.007812 ETH</td>
@@ -66,7 +66,7 @@ const MarketView = () => (
         </tr>
         <tr>
           <td className={"common__flexbox none"}>
-            <img className={"market__table-icon"} src={require("../../assets/images/tokens/eos.svg")}/>
+            <img className={"market__table-icon"} src={require("../../assets/images/tokens/eos.svg")} alt=""/>
             <div className={"market__table-text"}>TOMO/ETH</div>
           </td>
           <td className={"market__table-text"}>0.007812 ETH</td>

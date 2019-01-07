@@ -30,7 +30,7 @@ const SwapView = (props) => (
       <div className={"swap__bot-button common__button-gradient"} onClick={() => props.handleOpenScatterModal()}>Swap Now</div>
       <div className={"swap__bot-term"}>
         <span>By Swapping, you agree to the </span>
-        <a href="#" target="_blank">Terms and Conditions</a>
+        <a href="/" target="_blank">Terms and Conditions</a>
       </div>
     </div>
     <div>{props.hahaha}</div>
