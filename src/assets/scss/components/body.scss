@@ -1,0 +1,19 @@
+.body {
+  padding: 60px 0 100px;
+  background: url($image-path + 'eos-background.png') 0 -110px no-repeat;
+  background-size: 100%;
+
+  &__title {
+    font-size: 36px;
+    text-align: center;
+    color: #e1e4eb;
+    margin-bottom: 15px;
+  }
+
+  &__sub-title {
+    font-size: 20px;
+    color: #7f8391;
+    text-align: center;
+    margin-bottom: 40px;
+  }
+}

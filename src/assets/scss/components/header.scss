@@ -1,3 +1,37 @@
 .header {
-  color: $green;
+  width: 100%;
+  padding: 15px 0;
+  box-shadow: 0 2px 134px 0 rgba(0, 0, 0, 0.51);
+  background-image: linear-gradient(to bottom, #48505a, #2f3640);
+  position: relative;
+  z-index: 1;
+
+  &__container {
+    padding: 0 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__logo {
+    width: 90px;
+    height: 61px;
+    background-image: url($image-path + 'logos/yolo.svg');
+  }
+
+  &__content {
+    display: flex;
+    align-items: center;
+
+    &-item {
+      font-size: 14px;
+      font-weight: 400;
+      color: white;
+      margin-right: 30px;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
 }
