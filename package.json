@@ -6,6 +6,8 @@
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-scripts": "2.1.2",
+    "scatterjs-core": "^2.6.0",
+    "scatterjs-plugin-eosjs": "^1.4.0",
     "eosjs": "16.0.9"
   },
   "scripts": {

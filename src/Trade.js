@@ -1,5 +1,5 @@
 import React from 'react';
-import {trade, send} from './services/network_service';
+import {trade} from './services/network_service';
 import {account} from './account.js';
 import {NETWORK_ACCOUNT} from './constants.js';
 

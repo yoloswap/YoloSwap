@@ -3,6 +3,7 @@ import {Tokens, TokensWithEOS} from './tokens/Tokens';
 import {Rate} from "./Rate.js";
 import {Balances} from "./Balances.js";
 import {TradeDemo} from "./Trade.js";
+import {User} from "./User.js";
 import './App.css';
 
 function TokenRateList(props) {
@@ -22,6 +23,10 @@ class App extends Component {
         <header className="App-header">
           Yolo Swap - Securely - Instant - Guaranteed
         </header>
+        <p>User</p>
+        <div className="user">
+          <User />
+        </div>
         <p>Balance</p>
         <div className="balances">
           <Balances tokens={TokensWithEOS} />
@@ -32,7 +37,7 @@ class App extends Component {
         </div>
         <p>Trade demo</p>
         <div className="trade">
-          <TradeDemo/>
+          {/* <TradeDemo/> */}
         </div>
       </div>
     );
