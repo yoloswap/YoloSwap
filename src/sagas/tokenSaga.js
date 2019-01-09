@@ -87,10 +87,9 @@ function* swapToken() {
     );
 
     const txId = result.transaction_id;
-    console.log(txId);
+    alert("txId" + txId);
   } catch (e) {
-    // console.log(JSON.parse(e).error.details[0].message);
-    console.log(e);
+    alert("Error: " + JSON.parse(e).error.details[0].message);
   }
 }
 
