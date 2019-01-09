@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Swap from '../swap/Swap';
 import Market from '../market/Market';
 
-export default class Body extends Component {
+class Body extends Component {
   render() {
     return (
       <div className={"body"}>
@@ -16,3 +16,5 @@ export default class Body extends Component {
     )
   }
 }
+
+export default Body;

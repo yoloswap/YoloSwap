@@ -4,9 +4,9 @@ import Eos from 'eosjs';
 // @param key: private key
 function eosFromPrivateKey(key, chain) {
   return Eos({
-   keyProvider: key,
-   httpEndpoint: chain.endpoint,
-   chain: chain.id
+    keyProvider: key,
+    httpEndpoint: chain.endpoint,
+    chainId: chain.id
   })
 }
 

@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux'
-import dummyReducer from "./dummyReducer";
+import tokenReducer from "./tokenReducer";
+import accountReducer from "./accountReducer";
 
 const reducer = combineReducers({
-  dummy: dummyReducer,
+  token: tokenReducer,
+  account: accountReducer,
 });
 
 export default reducer

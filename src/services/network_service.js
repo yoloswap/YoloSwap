@@ -89,7 +89,7 @@ async function getRates(options) {
     let arrayLength = srcSymbols.length
     let ratesArray = []
     for (var i = 0; i < arrayLength; i++) {
-        let rate = await this.getRate({
+        let rate = await getRate({
             eos:eos,
             srcSymbol:srcSymbols[i],
             destSymbol:destSymbols[i],

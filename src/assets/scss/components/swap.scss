@@ -7,7 +7,6 @@
   &__container {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     margin-bottom: 45px;
   }
 
@@ -30,6 +29,16 @@
       background-color: white;
       border: 1px solid #dfe3ea;
       padding: 14px 25px;
+      transition: all .3s;
+
+      &.error {
+        border-color: $red;
+        background-color: $red-light;
+
+        .swap__content-input {
+           background-color: $red-light;
+        }
+      }
     }
 
     &-input {
@@ -39,6 +48,7 @@
       font-size: 24px;
       font-weight: 500;
       color: #727b8f;
+      transition: all .3s;
 
       &::placeholder {
         opacity: .6;
@@ -46,17 +56,28 @@
     }
 
     &-info {
+      height: 22px;
       margin-top: 15px;
       font-size: 14px;
       font-weight: 500;
       color: #8690ad;
-      padding-left: 20px;
+      padding: 0 25px;
+      position: relative;
+      display: flex;
+      align-items: flex-start;
 
       &.right {
-        text-align: right;
-        padding-left: 0;
-        padding-right: 20px;
+        justify-content: flex-end;
       }
+    }
+
+    &-loading {
+      width: 20px;
+      height: 20px;
+      display: inline-block;
+      position: relative;
+      top: -1px;
+      margin: 0 4px;
     }
   }
 
@@ -65,6 +86,13 @@
     height: 44px;
     background-image: url($image-path + 'icons/arrow-swap.svg');
     cursor: pointer;
+    position: relative;
+    top: 40px;
+    transition: all .3s;
+
+    &:active {
+      transform: translateY(2px);
+    }
   }
 
   &__bot {

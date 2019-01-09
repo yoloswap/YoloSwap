@@ -62,15 +62,25 @@
       padding: 0 25px;
       cursor: pointer;
 
-      &.active::after {
+      &::after {
         content: '';
         display: block;
         width: 100%;
         height: 2px;
-        background-color: $blue;
         position: absolute;
         bottom: -18px;
         left: 0;
+        transition: all .3s;
+      }
+
+      &.active::after,
+      &:hover::after {
+        background-color: $blue;
+      }
+
+      &.disabled {
+        color: #ccc;
+        pointer-events: none;
       }
     }
 
@@ -129,6 +139,15 @@
           transform: rotate(180deg);
         }
       }
+
+      &.none {
+        padding: 4px 30px;
+        background-color: #ccc;
+
+        &::after {
+          display: none;
+        }
+      }
     }
 
     tr:first-child th {
@@ -152,5 +171,14 @@
         padding-left: 30px;
       }
     }
+  }
+
+  &__loading {
+    font-weight: 500;
+    color: #8690ad;
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 }

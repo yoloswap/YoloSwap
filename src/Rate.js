@@ -1,6 +1,6 @@
 import React from 'react';
 import {getRate} from './services/network_service';
-import {EOS_TOKEN} from './tokens/Tokens.js';
+import {EOS_TOKEN} from './Tokens.js';
 import {NETWORK_ACCOUNT} from './constants.js'
 import {account} from './account.js'
 

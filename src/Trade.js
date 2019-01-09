@@ -18,7 +18,7 @@ class TradeDemo extends React.Component {
         eos: account.eos,
         networkAccount: NETWORK_ACCOUNT,
         userAccount: account.account,
-        srcAmount: "1.5",
+        srcAmount: "1.5000",
         srcPrecision: 4,
         srcTokenAccount: 'eosio.token',
         srcSymbol: "EOS",

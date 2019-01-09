@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Tokens, TokensWithEOS} from './tokens/Tokens';
+import {Tokens, TokensWithEOS} from './Tokens';
 import {Rate} from "./Rate.js";
 import {Balances} from "./Balances.js";
 import {TradeDemo} from "./Trade.js";

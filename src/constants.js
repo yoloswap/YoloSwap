@@ -9,6 +9,8 @@ const chains = {
   }
 };
 
-const NETWORK_ACCOUNT = "yolonetw1112"
+const NETWORK_ACCOUNT = "yolonetw1112";
 
-export { chains, NETWORK_ACCOUNT };
+const MARKET_BASED_TOKENS = ['EOS', 'USD'];
+
+export { chains, NETWORK_ACCOUNT, MARKET_BASED_TOKENS };
