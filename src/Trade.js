@@ -14,6 +14,18 @@ class TradeDemo extends React.Component {
 
     componentDidMount(){
       console.log(account.eos)
+      // send({
+      //   eos: account.eos,
+      //   userAccount: account.account,
+      //   srcAmount: "1.5",
+      //   srcSymbol: "EOS",
+      //   toAccount: "lionofcourse"
+      // }).then((result) => {
+      //   console.log(result)
+      //   this.setState({
+      //     waiting: false
+      //   });
+      // })
       trade({
         eos: account.eos,
         networkAccount: NETWORK_ACCOUNT,
