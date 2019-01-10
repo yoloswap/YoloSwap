@@ -75,7 +75,11 @@ export default class SwapView extends Component {
           </div>
         </div>
         <Modal isActive={this.props.isScatterModalOpen} handleClose={this.props.onCloseScatterModal} title="Sign In">
-          <div className={"common__loading"}/>
+          <div className={"scatter-modal"}>
+            <div className={"scatter-modal__connecting"}>Connecting with your Scatter</div>
+            <div className={"scatter-modal__loading common__loading"}/>
+            <div className={"scatter-modal__logo"}/>
+          </div>
         </Modal>
       </div>
     )

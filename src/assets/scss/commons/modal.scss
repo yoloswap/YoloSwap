@@ -84,3 +84,26 @@
     }
   }
 }
+
+.scatter-modal {
+  padding: 40px 15px 80px;
+
+  &__connecting {
+    text-align: center;
+    font-weight: 600;
+    color: #4a5675;
+  }
+
+  &__loading {
+    width: 35px;
+    height: 35px;
+    margin: 20px auto;
+  }
+
+  &__logo {
+    width: 37px;
+    height: 67px;
+    background-image: url($image-path + 'logos/scatter.svg');
+    margin: 0 auto;
+  }
+}
