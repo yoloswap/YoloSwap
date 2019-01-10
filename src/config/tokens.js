@@ -4,7 +4,7 @@ const EOS_TOKEN = {
   'precision': 4
 };
 
-const TokensWithEOS = [
+const TOKENS = [
   EOS_TOKEN,
   {
     'name': 'SYS',
@@ -23,6 +23,4 @@ const TokensWithEOS = [
   }
 ];
 
-var Tokens = TokensWithEOS.slice(1);
-
-export {Tokens, EOS_TOKEN, TokensWithEOS};
+export { EOS_TOKEN, TOKENS };

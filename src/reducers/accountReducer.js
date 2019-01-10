@@ -1,11 +1,11 @@
 import { accountActionTypes } from '../actions/accountAction';
-import {account} from '../account.js'
 
 const initialState = {
-  name: account.account,
-  eos: account.eos,
+  eos: null,
+  account: null,
   balances: [],
-  isBalanceLoading: true,
+  isBalanceLoading: false,
+  isScatterLoading: false,
 };
 
 export default function accountReducer(state = initialState, action) {
@@ -20,6 +20,24 @@ export default function accountReducer(state = initialState, action) {
       return {
         ...state,
         isBalanceLoading: action.payload
+      }
+    }
+    case accountActionTypes.SET_SCATTER_EOS: {
+      return {
+        ...state,
+        eos: action.payload
+      }
+    }
+    case accountActionTypes.SET_SCATTER_ACCOUNT: {
+      return {
+        ...state,
+        account: action.payload
+      }
+    }
+    case accountActionTypes.SET_SCATTER_LOADING: {
+      return {
+        ...state,
+        isScatterLoading: action.payload
       }
     }
     default:

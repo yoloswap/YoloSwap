@@ -1,9 +1,26 @@
 import { takeLatest, call, put, select } from 'redux-saga/effects';
 import * as accountAction from "../actions/accountAction";
 import { getBalances } from "../services/network_service";
+import * as scatterService from "../services/scatter_service";
 
 const getTokens = state => state.token.list;
 const getAccountData = state => state.account;
+
+function* connectToScatter() {
+  yield put(accountAction.setScatterLoading(true));
+
+  try {
+    const account = yield call(scatterService.connect);
+
+    yield put(accountAction.setScatterAccount(account));
+
+    yield call(fetchBalances);
+  } catch (e) {
+    console.log(e);
+  }
+
+  yield put(accountAction.setScatterLoading(false));
+}
 
 function* fetchBalances() {
   try {
@@ -22,7 +39,7 @@ function* fetchBalances() {
       getBalances,
       {
         eos: account.eos,
-        account: account.name,
+        account: account.account.name,
         tokenSymbols: tokenSymbols,
         tokenContracts: tokenContracts,
       }
@@ -41,5 +58,5 @@ function* fetchBalances() {
 }
 
 export default function* accountWatcher() {
-  yield takeLatest(accountAction.accountActionTypes.FETCH_BALANCES, fetchBalances)
+  yield takeLatest(accountAction.accountActionTypes.CONNECT_TO_SCATTER, connectToScatter);
 }

@@ -1,8 +1,8 @@
 import { tokenActionTypes } from '../actions/tokenAction';
-import { TokensWithEOS } from '../Tokens';
+import { TOKENS } from '../config/tokens';
 
 const initialState = {
-  list: TokensWithEOS,
+  list: TOKENS,
   isMarketLoading: true,
   isTokenPairRateLoading: true,
   marketBasedToken: 'EOS',

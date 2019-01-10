@@ -3,21 +3,25 @@ import SwapView from './SwapView';
 import { connect } from 'react-redux';
 import * as tokenAction from "../../actions/tokenAction";
 import * as accountAction from "../../actions/accountAction";
+import { filterInputNumber } from "../../utils/validators";
 
 function mapStateToProps(store) {
-  const sourceToken = store.token.sourceToken;
+  const token = store.token;
+  const account = store.account;
+  const sourceToken = token.sourceToken;
 
   return {
-    tokens: store.token.list,
+    tokens: token.list,
     sourceToken: sourceToken,
-    destToken: store.token.destToken,
-    sourceAmount: store.token.sourceAmount,
-    destAmount: store.token.destAmount,
-    tokenPairRate: store.token.tokenPairRate,
-    isTokenPairRateLoading: store.token.isTokenPairRateLoading,
-    error: store.token.error,
-    tokenBalance: store.account.balances[sourceToken],
-    isBalanceLoading: store.account.isBalanceLoading,
+    destToken: token.destToken,
+    sourceAmount: token.sourceAmount,
+    destAmount: token.destAmount,
+    tokenPairRate: token.tokenPairRate,
+    isTokenPairRateLoading: token.isTokenPairRateLoading,
+    error: token.error,
+    tokenBalance: account.balances[sourceToken],
+    isBalanceLoading: account.isBalanceLoading,
+    isScatterLoading: account.isScatterLoading,
   };
 }
 
@@ -28,53 +32,41 @@ function mapDispatchToProps(dispatch) {
     setSourceAmount: (amount) => {dispatch(tokenAction.setSourceAmount(amount))},
     fetchTokenPairRate: () => {dispatch(tokenAction.fetchTokenPairRate())},
     swapToken: () => {dispatch(tokenAction.swapToken())},
-    fetchBalances: () => {dispatch(accountAction.fetchBalances())},
+    connectToScatter: () => {dispatch(accountAction.connectToScatter())},
   }
 }
 
 class Swap extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      isScatterModalOpen: false
-    }
-  }
-
   componentDidMount = () => {
     this.props.fetchTokenPairRate();
-    this.props.fetchBalances();
   };
 
-  handleOpenScatterModal = () => {
-    this.setState({ isScatterModalOpen: true })
-  };
-
-  handleCloseScatterModal = () => {
-    this.setState({ isScatterModalOpen: false })
-  };
-
-  handleOnClickSwapToken = () => {
-    this.props.setSourceToken(this.props.destToken);
-    this.props.setDestToken(this.props.sourceToken);
+  handleOnClickSwapButton = () => {
+    this.props.connectToScatter();
   };
 
   handleOnSourceAmountChange = (e) => {
-    const value = e.target.value;
-    this.props.setSourceAmount(value);
+    const isValueValid = filterInputNumber(e, e.target.value, this.props.sourceAmount);
+
+    if (!isValueValid) return;
+
+    this.props.setSourceAmount(e.target.value);
+  };
+
+  handleOnClickSwapIcon = () => {
+    this.props.setSourceToken(this.props.destToken);
+    this.props.setDestToken(this.props.sourceToken);
   };
 
   render() {
     return (
       <SwapView
-        onOpenScatterModal={this.handleOpenScatterModal}
-        onCloseScatterModal={this.handleCloseScatterModal}
+        onClickSwapButton={this.handleOnClickSwapButton}
+        onClickSwapIcon={this.handleOnClickSwapIcon}
         onSelectSourceToken={this.props.setSourceToken}
         onSelectDestToken={this.props.setDestToken}
-        onClickSwapToken={this.handleOnClickSwapToken}
         onSourceAmountChange={this.handleOnSourceAmountChange}
-        onSwapToken={this.props.swapToken}
-        isScatterModalOpen={this.state.isScatterModalOpen}
+        isScatterLoading={this.props.isScatterLoading}
         tokens={this.props.tokens}
         sourceToken={this.props.sourceToken}
         sourceAmount={this.props.sourceAmount}

@@ -41,11 +41,13 @@ export default class SwapView extends Component {
             )}
 
             <div className={"swap__content-info"}>
-              Balance: {!this.props.isBalanceLoading ? formatAmount(this.props.tokenBalance, 6) : <div className={"swap__content-loading common__loading"}/>} {this.props.sourceToken}
+              {this.props.tokenBalance && (
+                <div>Balance: {formatAmount(this.props.tokenBalance, 6)} {this.props.sourceToken}</div>
+              )}
             </div>
           </div>
 
-          <div className={"swap__icon"} onClick={() => this.props.onClickSwapToken()}/>
+          <div className={"swap__icon"} onClick={() => this.props.onClickSwapIcon()}/>
 
           <div className={"swap__content"}>
             <div className={"swap__content-title"}>To:</div>
@@ -68,13 +70,13 @@ export default class SwapView extends Component {
         </div>
 
         <div className={"swap__bot"}>
-          <div className={`swap__bot-button common__button-gradient ${disabledClass}`} onClick={() => this.props.onSwapToken()}>Swap Now</div>
+          <div className={`swap__bot-button common__button-gradient ${disabledClass}`} onClick={() => this.props.onClickSwapButton()}>Swap Now</div>
           <div className={"swap__bot-term"}>
             <span>By Swapping, you agree to the </span>
             <a href="/" target="_blank">Terms and Conditions</a>
           </div>
         </div>
-        <Modal isActive={this.props.isScatterModalOpen} handleClose={this.props.onCloseScatterModal} title="Sign In">
+        <Modal isActive={this.props.isScatterLoading} handleClose={() => false} title="Sign In">
           <div className={"scatter-modal"}>
             <div className={"scatter-modal__connecting"}>Connecting with your Scatter</div>
             <div className={"scatter-modal__loading common__loading"}/>

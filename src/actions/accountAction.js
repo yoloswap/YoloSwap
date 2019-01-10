@@ -1,12 +1,36 @@
 export const accountActionTypes = {
-  FETCH_BALANCES: 'ACCOUNT.FETCH_BALANCES',
   SET_BALANCES: 'ACCOUNT.SET_BALANCES',
   SET_BALANCE_LOADING: 'ACCOUNT.SET_BALANCE_LOADING',
+  CONNECT_TO_SCATTER: 'ACCOUNT.CONNECT_TO_SCATTER',
+  SET_SCATTER_EOS: 'ACCOUNT.SET_SCATTER_EOS',
+  SET_SCATTER_ACCOUNT: 'ACCOUNT.SET_SCATTER_ACCOUNT',
+  SET_SCATTER_LOADING: 'ACCOUNT.SET_SCATTER_LOADING',
 };
 
-export function fetchBalances() {
+export function connectToScatter() {
   return {
-    type: accountActionTypes.FETCH_BALANCES
+    type: accountActionTypes.CONNECT_TO_SCATTER
+  }
+}
+
+export function setScatterEos(eos) {
+  return {
+    type: accountActionTypes.SET_SCATTER_EOS,
+    payload: eos
+  }
+}
+
+export function setScatterAccount(account) {
+  return {
+    type: accountActionTypes.SET_SCATTER_ACCOUNT,
+    payload: account
+  }
+}
+
+export function setScatterLoading(isLoading) {
+  return {
+    type: accountActionTypes.SET_SCATTER_LOADING,
+    payload: isLoading
   }
 }
 

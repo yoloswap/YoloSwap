@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import MarketView from './MarketView';
 import { connect } from "react-redux";
-import { account } from "../../account";
-import { MARKET_BASED_TOKENS} from "../../constants";
+import { MARKET_BASED_TOKENS} from "../../config/constants";
 import { fetchMarketRates, setMarketBasedToken } from "../../actions/tokenAction";
 
 function mapStateToProps(store) {
@@ -15,8 +14,8 @@ function mapStateToProps(store) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchMarketRates: (eos, srcSymbols, destSymbols, srcAmounts) => {dispatch(fetchMarketRates(eos, srcSymbols, destSymbols, srcAmounts))},
-    setMarketBasedToken: (token) => {dispatch(setMarketBasedToken(token))},
+    fetchMarketRates: () => { dispatch(fetchMarketRates()) },
+    setMarketBasedToken: (token) => { dispatch(setMarketBasedToken(token)) },
   }
 }
 
@@ -31,17 +30,7 @@ class Market extends Component {
   }
 
   componentDidMount() {
-    let srcSymbols = [];
-    let destSymbols = [];
-    let srcAmounts = [];
-
-    this.props.tokens.forEach((token) => {
-      srcSymbols.push(token.name);
-      destSymbols.push(this.props.marketBasedToken);
-      srcAmounts.push(1);
-    });
-
-    this.props.fetchMarketRates(account.eos, srcSymbols, destSymbols, srcAmounts);
+    this.props.fetchMarketRates();
   }
 
   handleOnTypingSearch = (e) => {

@@ -27,10 +27,9 @@ export function fetchTokenPairRate() {
   }
 }
 
-export function fetchMarketRates(eos, srcSymbols, destSymbols, srcAmounts) {
+export function fetchMarketRates() {
   return {
-    type: tokenActionTypes.FETCH_MARKET_RATES,
-    payload: { eos, srcSymbols, destSymbols, srcAmounts }
+    type: tokenActionTypes.FETCH_MARKET_RATES
   }
 }
 

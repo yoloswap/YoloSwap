@@ -1,68 +1,84 @@
 import { takeLatest, call, put, select } from 'redux-saga/effects';
 import { getRates, getRate, trade } from "../services/network_service";
 import * as tokenActions from "../actions/tokenAction";
-import { NETWORK_ACCOUNT } from "../constants";
-import { EOS_TOKEN } from "../Tokens";
-import {account} from "../account";
+import { NETWORK_ACCOUNT } from "../config/constants";
+import { EOS_TOKEN } from "../config/tokens";
 
-const getTokenList = state => state.token.list;
-const getTokenData = state => state.token;
-const getAccountData = state => state.account;
+const getTokenState = state => state.token;
+const getAccountState = state => state.account;
 
-function* fetchMarketRates(action) {
+function* fetchMarketRates() {
   yield put(tokenActions.setMarketLoading(true));
 
-  const { eos, srcSymbols, destSymbols, srcAmounts } = action.payload;
+  try {
+    let srcSymbols = [], destSymbols = [], srcAmounts = [];
+    const token = yield select(getTokenState);
+    const account = yield select(getAccountState);
+    const defaultSrcAmount = 1;
 
-  const sellRates = yield call(getRates, getMarketRateParams(eos, srcSymbols, destSymbols, srcAmounts));
-  const buyRates = yield call(getRates, getMarketRateParams(eos, destSymbols, srcSymbols, srcAmounts));
-
-  const tokens = yield select(getTokenList);
-
-  const tokenWithRate = tokens.map((token, index) => {
-    return Object.assign({
-      ...token,
-      sellRate: sellRates[index],
-      buyRate: 1 / buyRates[index],
+    token.list.forEach((token) => {
+      srcSymbols.push(token.name);
+      destSymbols.push(token.marketBasedToken);
+      srcAmounts.push(defaultSrcAmount);
     });
-  });
 
-  yield put(tokenActions.setTokens(tokenWithRate));
+    const sellRates = yield call(getRates, getMarketRateParams(account.eos, srcSymbols, destSymbols, srcAmounts));
+    const buyRates = yield call(getRates, getMarketRateParams(account.eos, destSymbols, srcSymbols, srcAmounts));
+
+    const tokenWithRate = token.list.map((token, index) => {
+      return Object.assign({
+        ...token,
+        sellRate: sellRates[index],
+        buyRate: 1 / buyRates[index],
+      });
+    });
+
+    yield put(tokenActions.setTokens(tokenWithRate));
+  } catch (e) {
+    console.log(e);
+  }
+
   yield put(tokenActions.setMarketLoading(false));
 }
 
 function* fetchTokenPairRate() {
-  const tokenData = yield select(getTokenData);
+  yield put(tokenActions.setTokenPairRateLoading(true));
+
+  const tokenData = yield select(getTokenState);
 
   if (tokenData.sourceToken === tokenData.destToken) {
     yield put(tokenActions.setTokenPairRate(1));
     return;
   }
 
-  yield put(tokenActions.setTokenPairRateLoading(true));
-
+  const account = yield select(getAccountState);
   const sourceAmount = tokenData.sourceAmount ? tokenData.sourceAmount : 1;
-  const accountData = yield select(getAccountData);
 
-  const tokenPairRate = yield call(
-    getRate,
-    getRateParams(accountData.eos, tokenData.sourceToken, tokenData.destToken, sourceAmount)
-  );
+  try {
+    const tokenPairRate = yield call(
+      getRate,
+      getRateParams(account.eos, tokenData.sourceToken, tokenData.destToken, sourceAmount)
+    );
 
-  if (!tokenPairRate) {
-    yield put(tokenActions.setError('Your source amount is way too much for us to handle the swap'));
-  } else {
-    yield put(tokenActions.setError(''));
+    if (!tokenPairRate) {
+      yield put(tokenActions.setError('Your source amount is way too much for us to handle the swap'));
+    } else {
+      yield put(tokenActions.setError(''));
+    }
+
+    yield put(tokenActions.setDestAmount(tokenPairRate * sourceAmount));
+    yield put(tokenActions.setTokenPairRate(tokenPairRate));
+  } catch (e) {
+    console.log(e);
   }
 
-  yield put(tokenActions.setDestAmount(tokenPairRate * sourceAmount));
-  yield put(tokenActions.setTokenPairRate(tokenPairRate));
   yield put(tokenActions.setTokenPairRateLoading(false));
 }
 
 function* swapToken() {
-  const tokenData = yield select(getTokenData);
-  const sourceAmount = (+tokenData.sourceAmount).toFixed(4);
+  const token = yield select(getTokenState);
+  const account = yield select(getAccountState);
+  const sourceAmount = (+token.sourceAmount).toFixed(4);
 
   try {
     const result = yield call(
@@ -70,18 +86,18 @@ function* swapToken() {
       {
         eos: account.eos,
         networkAccount: NETWORK_ACCOUNT,
-        userAccount: account.account,
+        userAccount: account.account.name,
         srcAmount: sourceAmount,
         srcPrecision: 4,
         srcTokenAccount: 'eosio.token',
-        srcSymbol: tokenData.sourceToken,
+        srcSymbol: token.sourceToken,
         destPrecision: 4,
-        destSymbol: tokenData.destToken,
-        destAccount: account.account,
+        destSymbol: token.destToken,
+        destAccount: account.account.name,
         destTokenAccount: 'testtokeaaaa',
         maxDestAmount: 1000000000,
         minConversionRate: "0.00000000000001",
-        walletId: account.account,
+        walletId: account.account.name,
         hint: ""
       }
     );
