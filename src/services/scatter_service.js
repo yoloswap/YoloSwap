@@ -1,7 +1,7 @@
 import ScatterJS from "scatterjs-core";
 import Eos from "eosjs";
 import ScatterEOS from "scatterjs-plugin-eosjs";
-import * as constants from "../config/constants";
+import * as env from "../config/env";
 
 export async function connect() {
   const scatter = initiateScatter();
@@ -17,7 +17,10 @@ export async function connect() {
 
   await scatter.getIdentity(requiredFields);
 
-  return scatter.identity.accounts.find(x => x.blockchain === 'eos');
+  const account = scatter.identity.accounts.find(x => x.blockchain === 'eos');
+  const eos = getEosInstance();
+
+  return { account, eos }
 }
 
 export function getEosInstance() {
@@ -35,10 +38,10 @@ function initiateScatter() {
 
 function getNetworkObject() {
   return {
-    blockchain: constants.NETWORK_BLOCKCHAIN,
-    protocol: constants.NETWORK_PROTOCOL,
-    host: constants.NETWORK_HOST,
-    port: constants.NETWORK_PORT,
-    chainId: constants.NETWORK_CHAIN_ID
+    blockchain: env.NETWORK_BLOCKCHAIN,
+    protocol: env.NETWORK_PROTOCOL,
+    host: env.NETWORK_HOST,
+    port: env.NETWORK_PORT,
+    chainId: env.NETWORK_CHAIN_ID
   }
 }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import MarketView from './MarketView';
 import { connect } from "react-redux";
-import { MARKET_BASED_TOKENS} from "../../config/constants";
+import { MARKET_BASED_TOKENS} from "../../config/app";
 import { fetchMarketRates, setMarketBasedToken } from "../../actions/tokenAction";
 
 function mapStateToProps(store) {

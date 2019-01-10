@@ -20,6 +20,7 @@ function mapStateToProps(store) {
     isTokenPairRateLoading: token.isTokenPairRateLoading,
     error: token.error,
     tokenBalance: account.balances[sourceToken],
+    account: account.account,
     isBalanceLoading: account.isBalanceLoading,
     isScatterLoading: account.isScatterLoading,
   };
@@ -42,7 +43,11 @@ class Swap extends Component {
   };
 
   handleOnClickSwapButton = () => {
-    this.props.connectToScatter();
+    if (!this.props.account) {
+      this.props.connectToScatter();
+    } else {
+      this.props.swapToken();
+    }
   };
 
   handleOnSourceAmountChange = (e) => {

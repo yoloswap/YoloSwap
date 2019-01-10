@@ -10,9 +10,10 @@ function* connectToScatter() {
   yield put(accountAction.setScatterLoading(true));
 
   try {
-    const account = yield call(scatterService.connect);
+    const { account, eos } = yield call(scatterService.connect);
 
     yield put(accountAction.setScatterAccount(account));
+    yield put(accountAction.setScatterEos(eos));
 
     yield call(fetchBalances);
   } catch (e) {

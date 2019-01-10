@@ -122,6 +122,7 @@ async function trade(options) {
     let eos = options.eos
     let networkAccount = options.networkAccount
     let userAccount = options.userAccount 
+    let userAuthority = options.userAuthority
     let srcAmount = options.srcAmount
     let srcPrecision = options.srcPrecision
     let srcTokenAccount = options.srcTokenAccount
@@ -138,18 +139,11 @@ async function trade(options) {
     let memo = `${userAccount},${srcTokenAccount},${srcPrecision} ${srcSymbol},` +
                `${destTokenAccount},${destPrecision} ${destSymbol},${destAccount},` +
                `${maxDestAmount},${minConversionRate},${walletId},${hint}`
-    let asset = `${srcAmount} ${srcSymbol}`
+    let asset = `${srcAmount} ${srcSymbol}`;
 
-    const token = await eos.contract(srcTokenAccount);
-    const result = await token.transfer({
-      from:userAccount,
-      to:networkAccount,
-      quantity:asset,
-      memo:memo
-    }, {
-      authorization: [`${userAccount}@active`],
-    });
-    return result;
+    const transactionOptions = { authorization:[`${userAccount}@${userAuthority}`] };
+
+    return await eos.transfer(userAccount, networkAccount, asset, memo, transactionOptions);
 }
 
 async function getUserBalance(options){

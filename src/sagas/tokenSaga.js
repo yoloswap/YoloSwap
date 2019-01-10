@@ -1,8 +1,9 @@
 import { takeLatest, call, put, select } from 'redux-saga/effects';
 import { getRates, getRate, trade } from "../services/network_service";
 import * as tokenActions from "../actions/tokenAction";
-import { NETWORK_ACCOUNT } from "../config/constants";
+import { NETWORK_ACCOUNT } from "../config/env";
 import { EOS_TOKEN } from "../config/tokens";
+import { MAX_DEST_AMOUNT, MIN_CONVERSION_RATE } from "../config/app";
 
 const getTokenState = state => state.token;
 const getAccountState = state => state.account;
@@ -79,6 +80,8 @@ function* swapToken() {
   const token = yield select(getTokenState);
   const account = yield select(getAccountState);
   const sourceAmount = (+token.sourceAmount).toFixed(4);
+  const sourceToken = token.list.find((item) => token.sourceToken === item.name);
+  const destToken = token.list.find((item) => token.destToken === item.name);
 
   try {
     const result = yield call(
@@ -87,25 +90,25 @@ function* swapToken() {
         eos: account.eos,
         networkAccount: NETWORK_ACCOUNT,
         userAccount: account.account.name,
+        userAuthority: account.account.authority,
         srcAmount: sourceAmount,
-        srcPrecision: 4,
-        srcTokenAccount: 'eosio.token',
-        srcSymbol: token.sourceToken,
-        destPrecision: 4,
-        destSymbol: token.destToken,
+        srcPrecision: sourceToken.precision,
+        srcTokenAccount: sourceToken.account,
+        srcSymbol: sourceToken.name,
+        destPrecision: destToken.precision,
+        destSymbol: destToken.name,
+        destTokenAccount: destToken.account,
         destAccount: account.account.name,
-        destTokenAccount: 'testtokeaaaa',
-        maxDestAmount: 1000000000,
-        minConversionRate: "0.00000000000001",
+        maxDestAmount: MAX_DEST_AMOUNT,
+        minConversionRate: MIN_CONVERSION_RATE,
         walletId: account.account.name,
         hint: ""
       }
     );
 
-    const txId = result.transaction_id;
-    alert("txId" + txId);
+    console.log(result);
   } catch (e) {
-    alert("Error: " + JSON.parse(e).error.details[0].message);
+    console.log(e);
   }
 }
 
