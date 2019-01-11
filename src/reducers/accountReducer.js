@@ -3,19 +3,13 @@ import { accountActionTypes } from '../actions/accountAction';
 const initialState = {
   eos: null,
   account: null,
-  balances: [],
   isBalanceLoading: false,
   isScatterLoading: false,
+  isConfirmLoading: false,
 };
 
 export default function accountReducer(state = initialState, action) {
   switch (action.type) {
-    case accountActionTypes.SET_BALANCES: {
-      return {
-        ...state,
-        balances: action.payload
-      }
-    }
     case accountActionTypes.SET_BALANCE_LOADING: {
       return {
         ...state,
@@ -38,6 +32,12 @@ export default function accountReducer(state = initialState, action) {
       return {
         ...state,
         isScatterLoading: action.payload
+      }
+    }
+    case accountActionTypes.SET_SCATTER_CONFIRM_LOADING: {
+      return {
+        ...state,
+        isConfirmLoading: action.payload
       }
     }
     default:

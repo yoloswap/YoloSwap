@@ -17,7 +17,9 @@ function mapDispatchToProps(dispatch) {
 
 class Body extends Component {
   componentWillMount = () => {
-    const eos = scatterService.getEosInstance();
+    const scatter = scatterService.initiateScatter();
+    const eos = scatterService.getEosInstance(scatter);
+
     this.props.setScatterEos(eos);
   };
 

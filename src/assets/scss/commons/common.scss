@@ -1,4 +1,14 @@
 .common {
+  &__text {
+    font-size: 14px;
+    font-weight: 500;
+    color: #727b8f;
+
+    &.center {
+      text-align: center;
+    }
+  }
+
   &__flexbox {
     display: flex;
     justify-content: space-between;
@@ -21,6 +31,10 @@
 
     &:active {
       transform: translateY(2px);
+    }
+
+    &:hover {
+      background-color: $blue-light;
     }
   }
 
@@ -58,6 +72,10 @@
     height: 5px;
     background-image: url($image-path + 'icons/arrow-drop-down.svg');
     transition: all .3s;
+
+    &.grey {
+      background-image: url($image-path + 'icons/arrow-drop-down-grey.svg');
+    }
 
     &.up {
       transform: rotate(-180deg);

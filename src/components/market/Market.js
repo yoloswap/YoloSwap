@@ -2,20 +2,20 @@ import React, { Component } from 'react';
 import MarketView from './MarketView';
 import { connect } from "react-redux";
 import { MARKET_BASED_TOKENS} from "../../config/app";
-import { fetchMarketRates, setMarketBasedToken } from "../../actions/tokenAction";
+import { fetchMarketRates, setIndexToken } from "../../actions/marketAction";
 
 function mapStateToProps(store) {
   return {
-    tokens: store.token.list,
-    marketBasedToken: store.token.marketBasedToken,
-    isMarketLoading: store.token.isMarketLoading,
+    tokens: store.token.tokens,
+    indexToken: store.market.indexToken,
+    isLoading: store.market.isLoading,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     fetchMarketRates: () => { dispatch(fetchMarketRates()) },
-    setMarketBasedToken: (token) => { dispatch(setMarketBasedToken(token)) },
+    setindexToken: (token) => { dispatch(setIndexToken(token)) },
   }
 }
 
@@ -44,9 +44,9 @@ class Market extends Component {
         tokens={this.props.tokens}
         searchText={this.state.searchText}
         basedTokens={this.state.basedTokens}
-        marketBasedToken={this.props.marketBasedToken}
-        isMarketLoading={this.props.isMarketLoading}
-        onClickBasedToken={this.props.setMarketBasedToken}
+        indexToken={this.props.indexToken}
+        isLoading={this.props.isLoading}
+        onClickBasedToken={this.props.setindexToken}
         onTypingSearch={this.handleOnTypingSearch}
       />
     )

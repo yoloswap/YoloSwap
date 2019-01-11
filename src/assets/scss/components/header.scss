@@ -23,15 +23,42 @@
     display: flex;
     align-items: center;
 
-    &-item {
+    &-item,
+    &-button {
       font-size: 14px;
       font-weight: 400;
       color: white;
-      margin-right: 30px;
+    }
 
-      &:last-child {
-        margin-right: 0;
+    &-item {
+      margin-right: 30px;
+      transition: color .3s;
+
+      &:hover {
+        color: $blue-light;
       }
+    }
+
+    &-button {
+      margin-right: 0;
+    }
+
+    &-account {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    &-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #8c98aa;
+      margin-right: 10px;
+    }
+
+    &-arrow {
+      position: relative;
+      top: 1px;
     }
   }
 }

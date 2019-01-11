@@ -1,38 +1,41 @@
 import React, { Component } from 'react';
 import SwapView from './SwapView';
 import { connect } from 'react-redux';
-import * as tokenAction from "../../actions/tokenAction";
+import * as swapActions from "../../actions/swapAction";
 import * as accountAction from "../../actions/accountAction";
 import { filterInputNumber } from "../../utils/validators";
 
 function mapStateToProps(store) {
   const token = store.token;
   const account = store.account;
-  const sourceToken = token.sourceToken;
+  const swap = store.swap;
+  const tokens = token.tokens;
+  const sourceTokenSymbol = swap.sourceToken;
 
   return {
-    tokens: token.list,
-    sourceToken: sourceToken,
-    destToken: token.destToken,
-    sourceAmount: token.sourceAmount,
-    destAmount: token.destAmount,
-    tokenPairRate: token.tokenPairRate,
-    isTokenPairRateLoading: token.isTokenPairRateLoading,
-    error: token.error,
-    tokenBalance: account.balances[sourceToken],
+    tokens: tokens,
+    sourceToken: tokens.find((token) => token.name === sourceTokenSymbol),
+    sourceTokenSymbol: sourceTokenSymbol,
+    destTokenSymbol: swap.destToken,
+    sourceAmount: swap.sourceAmount,
+    destAmount: swap.destAmount,
+    tokenPairRate: swap.tokenPairRate,
+    isTokenPairRateLoading: swap.isTokenPairRateLoading,
+    error: swap.error,
     account: account.account,
     isBalanceLoading: account.isBalanceLoading,
     isScatterLoading: account.isScatterLoading,
+    isConfirmLoading: account.isConfirmLoading,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    setSourceToken: (token) => {dispatch(tokenAction.setSourceToken(token))},
-    setDestToken: (token) => {dispatch(tokenAction.setDestToken(token))},
-    setSourceAmount: (amount) => {dispatch(tokenAction.setSourceAmount(amount))},
-    fetchTokenPairRate: () => {dispatch(tokenAction.fetchTokenPairRate())},
-    swapToken: () => {dispatch(tokenAction.swapToken())},
+    setSourceToken: (token) => {dispatch(swapActions.setSourceToken(token))},
+    setDestToken: (token) => {dispatch(swapActions.setDestToken(token))},
+    setSourceAmount: (amount) => {dispatch(swapActions.setSourceAmount(amount))},
+    fetchTokenPairRate: () => {dispatch(swapActions.fetchTokenPairRate())},
+    swapToken: () => {dispatch(swapActions.swapToken())},
     connectToScatter: () => {dispatch(accountAction.connectToScatter())},
   }
 }
@@ -59,8 +62,8 @@ class Swap extends Component {
   };
 
   handleOnClickSwapIcon = () => {
-    this.props.setSourceToken(this.props.destToken);
-    this.props.setDestToken(this.props.sourceToken);
+    this.props.setSourceToken(this.props.destTokenSymbol);
+    this.props.setDestToken(this.props.sourceTokenSymbol);
   };
 
   render() {
@@ -71,16 +74,17 @@ class Swap extends Component {
         onSelectSourceToken={this.props.setSourceToken}
         onSelectDestToken={this.props.setDestToken}
         onSourceAmountChange={this.handleOnSourceAmountChange}
+        sourceToken={this.props.sourceToken}
+        sourceTokenSymbol={this.props.sourceTokenSymbol}
+        destTokenSymbol={this.props.destTokenSymbol}
         isScatterLoading={this.props.isScatterLoading}
         tokens={this.props.tokens}
-        sourceToken={this.props.sourceToken}
         sourceAmount={this.props.sourceAmount}
         destAmount={this.props.destAmount}
-        destToken={this.props.destToken}
         tokenPairRate={this.props.tokenPairRate}
         isTokenPairRateLoading={this.props.isTokenPairRateLoading}
         isBalanceLoading={this.props.isBalanceLoading}
-        tokenBalance={this.props.tokenBalance}
+        isConfirmLoading={this.props.isConfirmLoading}
         error={this.props.error}
       />
     )

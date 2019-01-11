@@ -18,22 +18,27 @@ export async function connect() {
   await scatter.getIdentity(requiredFields);
 
   const account = scatter.identity.accounts.find(x => x.blockchain === 'eos');
-  const eos = getEosInstance();
+  const eos = getEosInstance(scatter, network);
 
   return { account, eos }
 }
 
-export function getEosInstance() {
+export async function disconnect() {
   const scatter = initiateScatter();
-  const network = getNetworkObject();
 
-  return scatter.eos(network, Eos, {});
+  scatter.forgetIdentity();
 }
 
-function initiateScatter() {
+export function initiateScatter() {
   ScatterJS.plugins(new ScatterEOS());
 
   return ScatterJS.scatter;
+}
+
+export function getEosInstance(scatter, network = null) {
+  network = network ? network : getNetworkObject();
+
+  return scatter.eos(network, Eos, {});
 }
 
 function getNetworkObject() {

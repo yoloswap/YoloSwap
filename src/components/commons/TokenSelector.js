@@ -36,7 +36,7 @@ export default class TokenSelector extends Component {
       }).map((token, index) =>
         <div className={"token-selector__item"} key={index} onClick={() => this.handleOnClickToken(token.name)}>
           <div className={"token-selector__item-symbol"}>{token.name}</div>
-          {(this.props.showBalance && token.balance) && (
+          {(this.props.showBalance && token.balance >= 0) && (
             <div className={"token-selector__item-balance"}>{token.balance} {token.name}</div>
           )}
         </div>
