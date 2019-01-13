@@ -53,7 +53,7 @@ async function getRate(options) {
         if (tokenSymbol == reservesReply.rows[t].symbol.substring(2)) {
             for (var i = 0; i < reservesReply.rows[t].num_reserves; i++) {
                 let reserveName = reservesReply.rows[t].reserve_contracts[i];
-                let currentRate = await getRate({
+                let currentRate = await getRateReserve({
                     eos:eos,
                     reserveAccount:reserveName,
                     eosTokenAccount:eosTokenAccount,
