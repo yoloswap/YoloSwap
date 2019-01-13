@@ -33,8 +33,6 @@ async function getEnabled(options){
 }
 
 async function getRate(options) {
-    // TODO: missing slippageRate calculation and handling
-
     let eos = options.eos
     let srcSymbol = options.srcSymbol
     let destSymbol = options.destSymbol
@@ -44,33 +42,30 @@ async function getRate(options) {
 
     let reservesReply = await eos.getTableRows({
         code: networkAccount,
-        scope:networkAccount,
+        scope: networkAccount,
         table:"reservespert",
         json: true
     })
 
     let bestRate = 0
-    let reserveContractsList = reservesReply.rows[0].reserve_contracts
-    let arrayLength = reservesReply.rows[0].num_reserves
-    for (var i = 0; i < arrayLength; i++) {
-        let reserveName = reserveContractsList[i];
-        let currentRate = await getRateReserve({
-            eos:eos,
-            reserveAccount:reserveName,
-            eosTokenAccount:eosTokenAccount,
-            srcSymbol:srcSymbol,
-            destSymbol:destSymbol,
-            srcAmount:srcAmount
-        })
-        // console.log("param - reserveAccount: " + reserveName);
-        // console.log("param - eosTokenAccount: " + eosTokenAccount);
-        // console.log("param - srcSymbol: " + srcSymbol);
-        // console.log("param - destSymbol: " + destSymbol);
-        // console.log("param - srcAmount: " + srcAmount);
-        // console.log("reserveName: " + reserveName);
-        // console.log("currrentRate: " + currentRate);
-        if(currentRate > bestRate) {
-            bestRate = currentRate
+    let tokenSymbol = (srcSymbol == "EOS" ? destSymbol : srcSymbol)
+    for (var t = 0; t < reservesReply.rows.length; t++) {
+        if (tokenSymbol == reservesReply.rows[t].symbol.substring(2)) {
+            for (var i = 0; i < reservesReply.rows[t].num_reserves; i++) {
+                let reserveName = reservesReply.rows[t].reserve_contracts[i];
+                let currentRate = await getRate({
+                    eos:eos,
+                    reserveAccount:reserveName,
+                    eosTokenAccount:eosTokenAccount,
+                    srcSymbol:srcSymbol,
+                    destSymbol:destSymbol,
+                    srcAmount:srcAmount
+                })
+                if(currentRate > bestRate) {
+                    bestRate = currentRate
+                }
+            }
+            break;
         }
     }
     return bestRate
