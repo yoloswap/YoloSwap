@@ -13,21 +13,33 @@ function* fetchMarketRates() {
   yield put(marketActions.setLoading(true));
 
   try {
+    let sameTokenIndex = null;
     let srcSymbols = [], destSymbols = [], srcAmounts = [];
     let tokens = yield select(getTokens);
     const market = yield select(getMarketState);
     const account = yield select(getAccountState);
     const defaultSrcAmount = 1;
+    const defaultSellAndBuyRate = 1;
 
-    tokens.forEach((token) => {
+    tokens.forEach((token, index) => {
+      if (token.name === market.indexToken) {
+        sameTokenIndex = index;
+        return;
+      }
+
       srcSymbols.push(token.name);
       destSymbols.push(market.indexToken);
       srcAmounts.push(defaultSrcAmount);
     });
 
-    const sellRates = yield call(getRates, getMarketRateParams(account.eos, srcSymbols, destSymbols, srcAmounts));
-    const buyRates = yield call(getRates, getMarketRateParams(account.eos, destSymbols, srcSymbols, srcAmounts));
+    let sellRates = yield call(getRates, getMarketRateParams(account.eos, srcSymbols, destSymbols, srcAmounts));
+    let buyRates = yield call(getRates, getMarketRateParams(account.eos, destSymbols, srcSymbols, srcAmounts));
     tokens = yield select(getTokens);
+
+    if (sameTokenIndex !== null) {
+      sellRates.splice(sameTokenIndex, 0, defaultSellAndBuyRate);
+      buyRates.splice(sameTokenIndex, 0, defaultSellAndBuyRate);
+    }
 
     const tokensWithRate = tokens.map((token, index) => {
       token.sellRate = sellRates[index];

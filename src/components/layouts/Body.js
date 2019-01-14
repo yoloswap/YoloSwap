@@ -11,7 +11,8 @@ function mapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
-    setScatterEos: (eos) => {dispatch(accountAction.setScatterEos(eos))}
+    setScatterEos: (eos) => {dispatch(accountAction.setScatterEos(eos))},
+    connectToScatter: (needIdentity) => {dispatch(accountAction.connectToScatter(needIdentity))}
   }
 }
 
@@ -21,6 +22,10 @@ class Body extends Component {
     const eos = scatterService.getEosInstance(scatter);
 
     this.props.setScatterEos(eos);
+
+    document.addEventListener('scatterLoaded', () => {
+      this.props.connectToScatter(false);
+    });
   };
 
   render() {

@@ -8,9 +8,10 @@ export const accountActionTypes = {
   SET_SCATTER_CONFIRM_LOADING: 'ACCOUNT.SET_SCATTER_CONFIRM_LOADING',
 };
 
-export function connectToScatter() {
+export function connectToScatter(isIdentityNeeded = true) {
   return {
-    type: accountActionTypes.CONNECT_TO_SCATTER
+    type: accountActionTypes.CONNECT_TO_SCATTER,
+    payload: isIdentityNeeded
   }
 }
 

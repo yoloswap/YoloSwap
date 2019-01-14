@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from "react-redux";
 import * as accountAction from "../../actions/accountAction";
-import Dropdown, { DropdownTrigger, DropdownContent } from "react-simple-dropdown";
+// import Dropdown, { DropdownTrigger, DropdownContent } from "react-simple-dropdown";
 
 function mapStateToProps(store) {
   const account = store.account;

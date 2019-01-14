@@ -7,16 +7,20 @@ import * as scatterService from "../services/scatter_service";
 const getTokens = state => state.token.tokens;
 const getAccountData = state => state.account;
 
-function* connectToScatter() {
+function* connectToScatter(action) {
   yield put(accountAction.setScatterLoading(true));
 
   try {
-    const { account, eos } = yield call(scatterService.connect);
+    const isIdentityNeeded = action.payload;
 
-    yield put(accountAction.setScatterAccount(account));
-    yield put(accountAction.setScatterEos(eos));
+    const result = yield call(scatterService.connect, isIdentityNeeded);
 
-    yield call(fetchBalances);
+    if (result) {
+      yield put(accountAction.setScatterAccount(result.account));
+      yield put(accountAction.setScatterEos(result.eos));
+
+      yield call(fetchBalances);
+    }
   } catch (e) {
     console.log(e);
   }

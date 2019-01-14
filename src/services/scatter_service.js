@@ -3,18 +3,22 @@ import Eos from "eosjs";
 import ScatterEOS from "scatterjs-plugin-eosjs";
 import * as env from "../config/env";
 
-export async function connect() {
+export async function connect(isIdentityNeeded = true) {
   const scatter = initiateScatter();
   const network = getNetworkObject();
 
-  const connected = await ScatterJS.scatter.connect('yolo');
+  const connected = await scatter.connect('yolo');
 
   if(!connected) return false;
 
   window.ScatterJS = null;
 
-  const requiredFields = { accounts:[network] };
 
+  if (!scatter.identity && !isIdentityNeeded) {
+    return false;
+  }
+
+  const requiredFields = { accounts:[network] };
   await scatter.getIdentity(requiredFields);
 
   const account = scatter.identity.accounts.find(x => x.blockchain === 'eos');
