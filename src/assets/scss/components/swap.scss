@@ -42,6 +42,7 @@
     }
 
     &-input {
+      width: calc(100% - 110px);
       outline: none;
       border: none;
       text-align: right;
@@ -66,6 +67,11 @@
       display: flex;
       align-items: flex-start;
 
+      .common__flexbox {
+        height: 100%;
+        align-items: flex-start;
+      }
+
       &.right {
         justify-content: flex-end;
       }
@@ -88,10 +94,15 @@
     cursor: pointer;
     position: relative;
     top: 40px;
+    border-radius: 50%;
     transition: all .3s;
 
+    &:hover {
+      box-shadow: 0 2px 3px 0 #eee;
+    }
+
     &:active {
-      transform: translateY(2px);
+      top: 42px;
     }
   }
 
@@ -107,6 +118,33 @@
       font-weight: 500;
       font-style: italic;
       color: #9ea1aa;
+    }
+  }
+
+  @media (max-width: 750px) {
+    padding: 30px 20px 40px;
+    border-radius: 0;
+
+    &__container {
+      display: block;
+    }
+
+    &__content {
+      width: 100%;
+
+      &-info {
+        height: auto;
+      }
+
+      &-info.right {
+        justify-content: flex-start;
+      }
+    }
+
+    &__icon {
+      position: initial;
+      margin: 15px auto;
+      transform: rotate(90deg);
     }
   }
 }

@@ -18,14 +18,15 @@ function* connectToScatter(action) {
     if (result) {
       yield put(accountAction.setScatterAccount(result.account));
       yield put(accountAction.setScatterEos(result.eos));
-
+      yield put(accountAction.setScatterLoading(false));
       yield call(fetchBalances);
+    } else {
+      yield put(accountAction.setScatterLoading(false));
     }
   } catch (e) {
     console.log(e);
+    yield put(accountAction.setScatterLoading(false));
   }
-
-  yield put(accountAction.setScatterLoading(false));
 }
 
 function* disconnectFromScatter() {

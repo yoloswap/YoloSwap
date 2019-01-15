@@ -29,30 +29,32 @@ export default class MarketView extends Component {
           </div>
         </div>
 
-        <table className={"market__table"}>
-          <tbody>
-          <tr>
-            <th className={"market__table-select common__flexbox"}>
-              {this.props.basedTokens.map((basedToken, index) => {
-                return (
-                  <div
-                    key={index}
-                    className={`market__table-option ${this.props.indexToken === basedToken ? 'active' : 'disabled'}`}
-                    onClick={() => this.props.onClickBasedToken(basedToken)}>
-                    {basedToken}
-                  </div>
-                )
-              })}
-            </th>
-            <th className={"market__table-header"}>Sell Price</th>
-            <th className={"market__table-header"}>Buy Price</th>
-            <th className={"market__table-header"}>24hr Change</th>
-          </tr>
-          {!this.props.isLoading && (
-            getTokenList()
-          )}
-          </tbody>
-        </table>
+        <div className={"market__table-container"}>
+          <table className={"market__table"}>
+            <tbody>
+            <tr>
+              <th className={"market__table-select common__flexbox"}>
+                {this.props.basedTokens.map((basedToken, index) => {
+                  return (
+                    <div
+                      key={index}
+                      className={`market__table-option ${this.props.indexToken === basedToken ? 'active' : 'disabled'}`}
+                      onClick={() => this.props.onClickBasedToken(basedToken)}>
+                      {basedToken}
+                    </div>
+                  )
+                })}
+              </th>
+              <th className={"market__table-header"}>Sell Price</th>
+              <th className={"market__table-header"}>Buy Price</th>
+              <th className={"market__table-header"}>24hr Change</th>
+            </tr>
+            {!this.props.isLoading && (
+              getTokenList()
+            )}
+            </tbody>
+          </table>
+        </div>
 
         {this.props.isLoading && (
           <div className={"market__loading"}>

@@ -13,6 +13,7 @@
     }
 
     &-input {
+      max-width: 50%;
       position: relative;
 
       input {
@@ -49,6 +50,7 @@
     border-collapse: collapse;
 
     &-select {
+      min-width: 180px;
       padding-bottom: 18px;
       padding-left: 60px;
       justify-content: initial;
@@ -85,6 +87,7 @@
     }
 
     &-header {
+      min-width: 150px;
       font-size: 12px;
       font-weight: 600;
       color: $blue;
@@ -180,5 +183,52 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+
+  @media (max-width: 750px) {
+    padding: 0;
+
+    &__header {
+      padding: 0 20px;
+    }
+
+    &__table {
+      &-container {
+        overflow-x: auto;
+        overflow-y: hidden;
+      }
+
+      &-select {
+        padding-left: 20px;
+      }
+
+      &-option {
+        padding: 0 15px;
+      }
+
+      td:first-child {
+        padding-left: 20px;
+      }
+    }
+  }
+
+  @media (max-width: 450px) {
+    &__header {
+      display: block;
+
+      &-title {
+        margin-bottom: 30px;
+        text-align: center;
+      }
+
+      &-input {
+        padding: 0 20px;
+        max-width: 100%;
+
+        &::after {
+          right: 40px;
+        }
+      }
+    }
   }
 }

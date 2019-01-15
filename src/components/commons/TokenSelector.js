@@ -53,7 +53,7 @@ export default class TokenSelector extends Component {
               <div className={'common__arrow-drop-down ' + (this.state.isOpen ? 'up' : 'down')}/>
             </div>
           </DropdownTrigger>
-          <DropdownContent>
+          <DropdownContent className={"common__fade-in"}>
             <div className={"token-selector__container"}>
               <div className={"token-selector__input-container"}>
                 <input className={"token-selector__input"} placeholder='Search' type="text" value={this.state.searchText} onChange={(e) => this.handleOnTypingSearch(e)}/>

@@ -83,6 +83,7 @@ class Swap extends Component {
         destAmount={this.props.destAmount}
         tokenPairRate={this.props.tokenPairRate}
         isTokenPairRateLoading={this.props.isTokenPairRateLoading}
+        account={this.props.account}
         isBalanceLoading={this.props.isBalanceLoading}
         isConfirmLoading={this.props.isConfirmLoading}
         error={this.props.error}

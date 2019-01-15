@@ -31,9 +31,11 @@ class Body extends Component {
   render() {
     return (
       <div className={"body"}>
-        <div className={"container"}>
-          <div className={"body__title"}>No Deposit, No Orderbook, Competitive Spreads</div>
-          <div className={"body__sub-title"}>A simple way to exchange tokens. Over 70 tokens supported</div>
+        <div className={"body__container container"}>
+          <div className={"body__content"}>
+            <div className={"body__title"}>No Deposit, No Orderbook, Competitive Spreads</div>
+            <div className={"body__sub-title"}>A simple way to exchange tokens. Over 70 tokens supported</div>
+          </div>
           <Swap/>
           <Market/>
         </div>
