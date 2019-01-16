@@ -74,10 +74,18 @@ function* swapToken() {
 
 function* fetchTokenPairRate() {
   const swap = yield select(getSwapState);
+  const tokens = yield select(getTokens);
+  const sourceToken = tokens.find((token) => token.name === swap.sourceToken);
 
   if (swap.sourceToken === swap.destToken) {
     yield put(swapActions.setTokenPairRate(1));
     yield put(swapActions.setDestAmount(swap.sourceAmount));
+    return;
+  }
+
+  if (swap.sourceAmount > sourceToken.balance) {
+    yield put(swapActions.setError('Your source amount is bigger than your real balance'));
+    yield put(swapActions.setTokenPairRateLoading(false));
     return;
   }
 
@@ -94,8 +102,6 @@ function* fetchTokenPairRate() {
 
     if (!tokenPairRate) {
       yield put(swapActions.setError('Your source amount is invalid or way too much for us to handle the swap'));
-    } else {
-      yield put(swapActions.setError(''));
     }
 
     yield put(swapActions.setDestAmount(tokenPairRate * sourceAmount));

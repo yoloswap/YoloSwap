@@ -33,7 +33,8 @@ export default function swapReducer(state = initialState, action) {
     case swapActionTypes.SET_SOURCE_AMOUNT: {
       return {
         ...state,
-        sourceAmount: action.payload
+        sourceAmount: action.payload,
+        error: ''
       }
     }
     case swapActionTypes.SET_DEST_AMOUNT: {
