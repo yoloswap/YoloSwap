@@ -39,6 +39,7 @@ function mapDispatchToProps(dispatch) {
     swapToken: () => {dispatch(swapActions.swapToken())},
     setError: (message) => {dispatch(swapActions.setError(message))},
     connectToScatter: () => {dispatch(accountAction.connectToScatter())},
+    setScatterLoading: (isLoading) => {dispatch(accountAction.setScatterLoading(isLoading))},
   }
 }
 
@@ -73,6 +74,10 @@ class Swap extends Component {
     this.props.setDestToken(this.props.sourceTokenSymbol);
   };
 
+  handleCloseScatterModal = () => {
+    this.props.setScatterLoading(false);
+  };
+
   render() {
     return (
       <SwapView
@@ -81,6 +86,7 @@ class Swap extends Component {
         onSelectSourceToken={this.props.setSourceToken}
         onSelectDestToken={this.props.setDestToken}
         onSourceAmountChange={this.handleOnSourceAmountChange}
+        onCloseScatterModal={this.handleCloseScatterModal}
         tx={this.props.tx}
         sourceToken={this.props.sourceToken}
         sourceTokenSymbol={this.props.sourceTokenSymbol}

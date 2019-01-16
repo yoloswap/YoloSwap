@@ -13,9 +13,8 @@ export async function connect(isIdentityNeeded = true) {
 
   window.ScatterJS = null;
 
-
   if (!scatter.identity && !isIdentityNeeded) {
-    return false;
+    return;
   }
 
   const requiredFields = { accounts:[network] };

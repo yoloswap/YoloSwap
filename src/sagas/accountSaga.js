@@ -1,6 +1,7 @@
 import { takeLatest, call, put, select } from 'redux-saga/effects';
 import * as tokenAction from "../actions/tokenAction";
-import * as accountAction from "../actions/accountAction";
+import * as accountActions from "../actions/accountAction";
+import * as globalActions from "../actions/globalAction";
 import { getBalances } from "../services/network_service";
 import * as scatterService from "../services/scatter_service";
 
@@ -8,7 +9,7 @@ const getTokens = state => state.token.tokens;
 const getAccountData = state => state.account;
 
 function* connectToScatter(action) {
-  yield put(accountAction.setScatterLoading(true));
+  yield put(accountActions.setScatterLoading(true));
 
   try {
     const isIdentityNeeded = action.payload;
@@ -16,23 +17,29 @@ function* connectToScatter(action) {
     const result = yield call(scatterService.connect, isIdentityNeeded);
 
     if (result) {
-      yield put(accountAction.setScatterAccount(result.account));
-      yield put(accountAction.setScatterEos(result.eos));
-      yield put(accountAction.setScatterLoading(false));
+      yield put(accountActions.setScatterAccount(result.account));
+      yield put(accountActions.setScatterEos(result.eos));
+      yield put(accountActions.setScatterLoading(false));
       yield call(fetchBalances);
+    } else if (result === false) {
+      yield put(accountActions.setScatterLoading(false));
+      yield put(globalActions.setGlobalError(
+        true,
+        'There is something wrong with your Scatter. You either does not have Scatter installed or it has been locked or refused to connect'
+      ));
     } else {
-      yield put(accountAction.setScatterLoading(false));
+      yield put(accountActions.setScatterLoading(false));
     }
   } catch (e) {
     console.log(e);
-    yield put(accountAction.setScatterLoading(false));
+    yield put(accountActions.setScatterLoading(false));
   }
 }
 
 function* disconnectFromScatter() {
   yield call(scatterService.disconnect);
 
-  yield put(accountAction.setScatterAccount(null));
+  yield put(accountActions.setScatterAccount(null));
 
   const tokens = yield select(getTokens);
   const tokensWithoutBalance = tokens.map((token) => {
@@ -44,7 +51,7 @@ function* disconnectFromScatter() {
 
 function* fetchBalances() {
   try {
-    yield put(accountAction.setBalanceLoading(true));
+    yield put(accountActions.setBalanceLoading(true));
 
     const tokens = yield select(getTokens);
     const account = yield select(getAccountData);
@@ -75,11 +82,11 @@ function* fetchBalances() {
     console.log(e);
   }
 
-  yield put(accountAction.setBalanceLoading(false));
+  yield put(accountActions.setBalanceLoading(false));
 }
 
 export default function* accountWatcher() {
-  yield takeLatest(accountAction.accountActionTypes.CONNECT_TO_SCATTER, connectToScatter);
-  yield takeLatest(accountAction.accountActionTypes.DISCONNECT_FROM_SCATTER, disconnectFromScatter);
-  yield takeLatest(accountAction.accountActionTypes.FETCH_BALANCE, fetchBalances);
+  yield takeLatest(accountActions.accountActionTypes.CONNECT_TO_SCATTER, connectToScatter);
+  yield takeLatest(accountActions.accountActionTypes.DISCONNECT_FROM_SCATTER, disconnectFromScatter);
+  yield takeLatest(accountActions.accountActionTypes.FETCH_BALANCE, fetchBalances);
 }
