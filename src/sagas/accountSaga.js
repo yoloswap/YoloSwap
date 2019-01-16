@@ -81,4 +81,5 @@ function* fetchBalances() {
 export default function* accountWatcher() {
   yield takeLatest(accountAction.accountActionTypes.CONNECT_TO_SCATTER, connectToScatter);
   yield takeLatest(accountAction.accountActionTypes.DISCONNECT_FROM_SCATTER, disconnectFromScatter);
+  yield takeLatest(accountAction.accountActionTypes.FETCH_BALANCE, fetchBalances);
 }

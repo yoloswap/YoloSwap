@@ -2,6 +2,7 @@ import { delay } from 'redux-saga';
 import { takeLatest, call, put, select } from 'redux-saga/effects';
 import { getRate, trade } from "../services/network_service";
 import * as swapActions from "../actions/swapAction";
+import * as accountActions from "../actions/accountAction";
 import { NETWORK_ACCOUNT } from "../config/env";
 import { EOS_TOKEN } from "../config/tokens";
 import { MAX_DEST_AMOUNT, MIN_CONVERSION_RATE } from "../config/app";
@@ -49,6 +50,7 @@ function* swapToken() {
     yield call(delay, 1000);
     yield put(swapActions.setTxBroadcasting(false));
     yield put(swapActions.setTxId(result.transaction_id));
+    yield put(accountActions.fetchBalance());
     yield call(delay, 5000);
     yield put(swapActions.resetTx());
   } catch (e) {
