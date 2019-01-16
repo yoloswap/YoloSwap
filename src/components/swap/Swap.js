@@ -21,6 +21,7 @@ function mapStateToProps(store) {
     destAmount: swap.destAmount,
     tokenPairRate: swap.tokenPairRate,
     isTokenPairRateLoading: swap.isTokenPairRateLoading,
+    tx: swap.tx,
     error: swap.error,
     account: account.account,
     isBalanceLoading: account.isBalanceLoading,
@@ -36,6 +37,7 @@ function mapDispatchToProps(dispatch) {
     setSourceAmount: (amount) => {dispatch(swapActions.setSourceAmount(amount))},
     fetchTokenPairRate: () => {dispatch(swapActions.fetchTokenPairRate())},
     swapToken: () => {dispatch(swapActions.swapToken())},
+    setError: (message) => {dispatch(swapActions.setError(message))},
     connectToScatter: () => {dispatch(accountAction.connectToScatter())},
   }
 }
@@ -46,6 +48,11 @@ class Swap extends Component {
   };
 
   handleOnClickSwapButton = () => {
+    if (!this.props.sourceAmount) {
+      this.props.setError("Source amount is required to make a swap");
+      return;
+    }
+
     if (!this.props.account) {
       this.props.connectToScatter();
     } else {
@@ -74,6 +81,7 @@ class Swap extends Component {
         onSelectSourceToken={this.props.setSourceToken}
         onSelectDestToken={this.props.setDestToken}
         onSourceAmountChange={this.handleOnSourceAmountChange}
+        tx={this.props.tx}
         sourceToken={this.props.sourceToken}
         sourceTokenSymbol={this.props.sourceTokenSymbol}
         destTokenSymbol={this.props.destTokenSymbol}

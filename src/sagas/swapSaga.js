@@ -1,7 +1,7 @@
+import { delay } from 'redux-saga';
 import { takeLatest, call, put, select } from 'redux-saga/effects';
 import { getRate, trade } from "../services/network_service";
 import * as swapActions from "../actions/swapAction";
-import * as accountActions from "../actions/accountAction";
 import { NETWORK_ACCOUNT } from "../config/env";
 import { EOS_TOKEN } from "../config/tokens";
 import { MAX_DEST_AMOUNT, MIN_CONVERSION_RATE } from "../config/app";
@@ -15,13 +15,13 @@ function* swapToken() {
   const swap = yield select(getSwapState);
   const account = yield select(getAccountState);
 
-  yield put(accountActions.setScatterConfirmLoading(true));
-
   const sourceAmount = (+swap.sourceAmount).toFixed(4);
   const sourceToken = tokens.find((item) => swap.sourceToken === item.name);
   const destToken = tokens.find((item) => swap.destToken === item.name);
 
   try {
+    yield put(swapActions.setTxConfirming(true));
+
     const result = yield call(
       trade,
       {
@@ -44,12 +44,30 @@ function* swapToken() {
       }
     );
 
-    console.log(result);
+    yield put(swapActions.setTxConfirming(false));
+    yield put(swapActions.setTxBroadcasting(true));
+    yield call(delay, 1000);
+    yield put(swapActions.setTxBroadcasting(false));
+    yield put(swapActions.setTxId(result.transaction_id));
+    yield call(delay, 5000);
+    yield put(swapActions.resetTx());
   } catch (e) {
-    console.log(e);
-  }
+    yield put(swapActions.resetTx());
 
-  yield put(accountActions.setScatterConfirmLoading(false));
+    if (e.message) {
+      yield put(swapActions.setTxError(e.message));
+    } else {
+      const error = JSON.parse(e);
+      if (error.error.details[0]) {
+        yield put(swapActions.setTxError(error.message + ": " + error.error.details[0].message));
+      } else {
+        yield put(swapActions.setTxError(error.error.what));
+      }
+    }
+
+    yield call(delay, 3000);
+    yield put(swapActions.setTxError(''));
+  }
 }
 
 function* fetchTokenPairRate() {
@@ -73,7 +91,7 @@ function* fetchTokenPairRate() {
     );
 
     if (!tokenPairRate) {
-      yield put(swapActions.setError('Your source amount is way too much for us to handle the swap'));
+      yield put(swapActions.setError('Your source amount is invalid or way too much for us to handle the swap'));
     } else {
       yield put(swapActions.setError(''));
     }

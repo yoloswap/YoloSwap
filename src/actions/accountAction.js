@@ -5,7 +5,6 @@ export const accountActionTypes = {
   SET_SCATTER_EOS: 'ACCOUNT.SET_SCATTER_EOS',
   SET_SCATTER_ACCOUNT: 'ACCOUNT.SET_SCATTER_ACCOUNT',
   SET_SCATTER_LOADING: 'ACCOUNT.SET_SCATTER_LOADING',
-  SET_SCATTER_CONFIRM_LOADING: 'ACCOUNT.SET_SCATTER_CONFIRM_LOADING',
 };
 
 export function connectToScatter(isIdentityNeeded = true) {
@@ -45,13 +44,6 @@ export function setScatterLoading(isLoading) {
 export function setBalanceLoading(isLoading) {
   return {
     type: accountActionTypes.SET_BALANCE_LOADING,
-    payload: isLoading
-  }
-}
-
-export function setScatterConfirmLoading(isLoading) {
-  return {
-    type: accountActionTypes.SET_SCATTER_CONFIRM_LOADING,
     payload: isLoading
   }
 }

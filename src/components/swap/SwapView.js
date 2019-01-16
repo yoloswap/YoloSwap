@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Modal from '../commons/Modal';
 import TokenSelector from '../commons/TokenSelector';
 import { formatAmount } from "../../utils/helpers";
+import { TX_URL } from '../../config/env';
 
 export default class SwapView extends Component {
   render() {
@@ -15,7 +16,8 @@ export default class SwapView extends Component {
       if (error) isError = true;
     });
 
-    const disabledClass = (isError || !this.props.sourceAmount || this.props.isTokenPairRateLoading) ? 'disabled' : '';
+    const disabledClass = (isError || this.props.isTokenPairRateLoading) ? 'disabled' : '';
+    const isButtonHidden = this.props.tx.isConfirming || this.props.tx.isBroadcasting || this.props.tx.id || this.props.tx.error;
 
     return (
       <div className={"swap container"}>
@@ -67,15 +69,31 @@ export default class SwapView extends Component {
           </div>
         </div>
 
-        <div className={"common__text fade-in center"}>{this.props.isConfirmLoading ? 'Waiting for confirmation from your wallet…' : ''}</div>
+        {this.props.tx.isConfirming && (
+          <div className={"swap__text common__fade-in"}>Waiting for confirmation from your wallet…</div>
+        )}
 
-        <div className={"swap__bot"}>
-          <div className={`swap__bot-button common__button-gradient ${disabledClass}`} onClick={() => this.props.onClickSwapButton()}>Swap Now</div>
-          <div className={"swap__bot-term"}>
-            <span>By Swapping, you agree to the </span>
-            <a href="/" target="_blank">Terms and Conditions</a>
+        {this.props.tx.isBroadcasting && (
+          <div className={"swap__text common__fade-in loading"}>Waiting for the transaction to be mined</div>
+        )}
+
+        {this.props.tx.error && (
+          <div className={"swap__text common__fade-in error"}>{this.props.tx.error}</div>
+        )}
+
+        {this.props.tx.id && (
+          <div className={"swap__text common__fade-in"}>Successfully! The <a href={`${TX_URL}${this.props.tx.id}`} target="_blank">transaction</a> is mined</div>
+        )}
+
+        {!isButtonHidden && (
+          <div className={"swap__bot common__fade-in"}>
+            <div className={`swap__bot-button common__button-gradient ${disabledClass}`} onClick={() => this.props.onClickSwapButton()}>Swap Now</div>
+            <div className={"swap__bot-term"}>
+              <span>By Swapping, you agree to the </span>
+              <a href="/" target="_blank">Terms and Conditions</a>
+            </div>
           </div>
-        </div>
+        )}
         <Modal isActive={this.props.isScatterLoading} handleClose={() => false} title="Sign In">
           <div className={"scatter-modal"}>
             <div className={"scatter-modal__connecting"}>Connecting with your Scatter</div>

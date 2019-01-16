@@ -5,7 +5,6 @@ const initialState = {
   account: null,
   isBalanceLoading: false,
   isScatterLoading: false,
-  isConfirmLoading: false,
 };
 
 export default function accountReducer(state = initialState, action) {
@@ -32,12 +31,6 @@ export default function accountReducer(state = initialState, action) {
       return {
         ...state,
         isScatterLoading: action.payload
-      }
-    }
-    case accountActionTypes.SET_SCATTER_CONFIRM_LOADING: {
-      return {
-        ...state,
-        isConfirmLoading: action.payload
       }
     }
     default:

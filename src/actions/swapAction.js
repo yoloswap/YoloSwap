@@ -7,6 +7,11 @@ export const swapActionTypes = {
   SET_DEST_TOKEN: 'SWAP.SET_DEST_TOKEN',
   SET_SOURCE_AMOUNT: 'SWAP.SET_SOURCE_AMOUNT',
   SET_DEST_AMOUNT: 'SWAP.SET_DEST_AMOUNT',
+  SET_TX_CONFIRMING: 'SWAP.SET_TX_CONFIRMING',
+  SET_TX_BROADCASTING: 'SWAP.SET_TX_BROADCASTING',
+  SET_TX_ID: 'SWAP.SET_TX_ID',
+  SET_TX_ERROR: 'SWAP.SET_TX_ERROR',
+  RESET_TX: 'SWAP.RESET_TX',
   SET_ERROR: 'SWAP.SET_ERROR',
 };
 
@@ -68,5 +73,39 @@ export function setError(message) {
   return {
     type: swapActionTypes.SET_ERROR,
     payload: message
+  }
+}
+
+export function setTxConfirming(isConfirming) {
+  return {
+    type: swapActionTypes.SET_TX_CONFIRMING,
+    payload: isConfirming
+  }
+}
+
+export function setTxBroadcasting(isBroadcasting) {
+  return {
+    type: swapActionTypes.SET_TX_BROADCASTING,
+    payload: isBroadcasting
+  }
+}
+
+export function setTxId(txId) {
+  return {
+    type: swapActionTypes.SET_TX_ID,
+    payload: txId
+  }
+}
+
+export function setTxError(message) {
+  return {
+    type: swapActionTypes.SET_TX_ERROR,
+    payload: message
+  }
+}
+
+export function resetTx() {
+  return {
+    type: swapActionTypes.RESET_TX
   }
 }

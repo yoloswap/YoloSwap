@@ -34,10 +34,21 @@
     color: #adb9c9;
     box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.34);
     background: #2f3640 linear-gradient(to bottom, #48505a, #2f3640);
-    padding: 23px 0;
+    padding: 23px 30px;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    text-align: center;
+    position: relative;
+  }
+
+  &__close-btn {
+    width: 16px;
+    height: 15px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 30px;
+    background-image: url($image-path + 'icons/close.svg');
+    cursor: pointer;
   }
 
   &__content {
@@ -50,27 +61,6 @@
     border-radius: 10px;
     box-shadow: 0 12px 64px 0 rgba(19, 23, 32, 0.81);
     transition: all .3s;
-  }
-
-  &__close-btn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    font-size: 20px;
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 40px;
-    height: 40px;
-    background: $blue no-repeat center;
-    border-radius: 0 7px 0 5px;
-    cursor: pointer;
-    transition: background-color .3s;
-
-    &:hover {
-      background-color: $blue-light;
-    }
   }
 
   &--active {
@@ -105,5 +95,28 @@
     height: 67px;
     background-image: url($image-path + 'logos/scatter.svg');
     margin: 0 auto;
+  }
+}
+
+.error-modal {
+  padding: 50px 30px;
+
+  &__message {
+    font-weight: 600;
+    color: #4a5675;
+    padding-left: 35px;
+    position: relative;
+    line-height: 1.5;
+
+    &::before {
+      content: '';
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      background-image: url($image-path + 'icons/error.svg');
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
   }
 }

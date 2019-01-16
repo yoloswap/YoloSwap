@@ -121,6 +121,34 @@
     }
   }
 
+  &__text {
+    font-size: 14px;
+    font-weight: 500;
+    color: #727b8f;
+    text-align: center;
+    margin-bottom: 50px;
+
+    &.loading::before {
+      content: '';
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      background-image: url($image-path + 'icons/loading-circle.gif');
+      margin-right: 7px;
+      top: 3px;
+      position: relative;
+    }
+
+    &.error {
+      color: $red;
+    }
+
+    a {
+      font-weight: 600;
+      color: $blue;
+    }
+  }
+
   @media (max-width: 750px) {
     padding: 30px 20px 40px;
     border-radius: 0;

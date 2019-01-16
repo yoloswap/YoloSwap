@@ -1,18 +1,24 @@
 import React, { Component } from 'react';
 import Swap from '../swap/Swap';
 import Market from '../market/Market';
-import * as accountAction from "../../actions/accountAction";
+import * as accountActions from "../../actions/accountAction";
+import * as globalActions from "../../actions/globalAction";
 import { connect } from "react-redux";
 import * as scatterService from '../../services/scatter_service';
+import Modal from '../commons/Modal';
 
-function mapStateToProps() {
-  return {};
+function mapStateToProps(state) {
+  return {
+    isGlobalErrorActive: state.global.isErrorActive,
+    globalErrorMessage: state.global.errorMessage,
+  };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    setScatterEos: (eos) => {dispatch(accountAction.setScatterEos(eos))},
-    connectToScatter: (needIdentity) => {dispatch(accountAction.connectToScatter(needIdentity))}
+    setScatterEos: (eos) => {dispatch(accountActions.setScatterEos(eos))},
+    connectToScatter: (needIdentity) => {dispatch(accountActions.connectToScatter(needIdentity))},
+    unsetGlobalError: () => {dispatch(globalActions.setGlobalError(false))},
   }
 }
 
@@ -38,6 +44,11 @@ class Body extends Component {
           </div>
           <Swap/>
           <Market/>
+          <Modal isActive={this.props.isGlobalErrorActive} handleClose={() => this.props.unsetGlobalError()} title="Error" maxWidth="450">
+            <div className={"error-modal"}>
+              <div className={"error-modal__message"}>{this.props.globalErrorMessage}</div>
+            </div>
+          </Modal>
         </div>
       </div>
     )

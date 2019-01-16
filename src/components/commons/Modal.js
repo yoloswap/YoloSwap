@@ -10,9 +10,12 @@ export default class Modal extends Component {
   render() {
     return (
       <div className={"modal-overlay" + (this.props.isActive ? " modal-overlay--active" : "")} onClick={this.handleClose}>
-        <div className={"modal" + (this.props.isActive ? " modal--active" : "")}>
+        <div className={"modal" + (this.props.isActive ? " modal--active" : "")} style={this.props.maxWidth ? {maxWidth: `${this.props.maxWidth}px`} : {}}>
           <div className={"modal__content"}>
-            <div className={"modal__header"}>{this.props.title}</div>
+            <div className={"modal__header"}>
+              <div className={"modal__close-btn"} onClick={this.handleClose}/>
+              <div>{this.props.title}</div>
+             </div>
             {this.props.children}
           </div>
         </div>
