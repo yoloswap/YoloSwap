@@ -51,6 +51,7 @@ class Header extends Component {
 
   signOutFromScatter = () => {
     this.props.disconnectFromScatter();
+    this.handleCloseAccountDropDown();
     this.handleCloseMobileMenu();
   };
 
@@ -64,7 +65,7 @@ class Header extends Component {
             <div className={"header__mobile-opener-bar"}/>
           </div>
           <div className={"header__content"}>
-            <a href="/" className={"header__content-item"}>YOLO</a>
+            <a href="/" className={"header__content-item active"}>YOLO</a>
             <a href="/" className={"header__content-item"}>FAQ</a>
             <a href="/" className={"header__content-item"}>CONTACT US</a>
             <a href="/" className={"header__content-item"}>BLOG</a>

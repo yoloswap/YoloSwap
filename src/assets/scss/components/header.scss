@@ -32,10 +32,41 @@
 
     &-item {
       margin-right: 30px;
+      position: relative;
       transition: color .3s;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left:0;
+        right: 0;
+        margin: 0 auto;
+        width: 100%;
+        height: 2px;
+        background-color: $blue;
+        box-shadow: 0 4px 14px 0 rgba(56, 155, 252, 0.82);
+        transform: translateY(10px);
+        opacity: 0;
+        transition: all .3s;
+      }
+
+      &.active {
+        color: $blue-light;
+
+        &::after {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
 
       &:hover {
         color: $blue-light;
+
+        &::after {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
     }
 
