@@ -116,7 +116,8 @@ function getRateParams(eos, srcSymbol, destSymbol, srcAmount) {
 
 function* validateValidInput(swap, sourceToken) {
   const sourceAmount = swap.sourceAmount;
-  const decimals = sourceAmount.split(".")[1];
+  const sourceTokenDecimals = sourceToken.precision;
+  const sourceAmountDecimals = sourceAmount.split(".")[1];
 
   yield put(swapActions.setError(''));
 
@@ -124,8 +125,8 @@ function* validateValidInput(swap, sourceToken) {
     return false;
   }
 
-  if (decimals && decimals.length > 4) {
-    yield put(swapActions.setError(`Your source amount's decimals should be no longer than 4 characters`));
+  if (sourceAmountDecimals && sourceAmountDecimals.length > sourceTokenDecimals) {
+    yield put(swapActions.setError(`Your source amount's decimals should be no longer than ${sourceTokenDecimals} characters`));
     yield put(swapActions.setTokenPairRateLoading(false));
     return false;
   }
@@ -138,12 +139,6 @@ function* validateValidInput(swap, sourceToken) {
 
   if (sourceAmount > sourceToken.balance) {
     yield put(swapActions.setError('Your source amount is bigger than your real balance'));
-    yield put(swapActions.setTokenPairRateLoading(false));
-    return false;
-  }
-
-  if (sourceAmount && sourceAmount < MIN_SOURCE_AMOUNT) {
-    yield put(swapActions.setError(`Your source amount must be at least ${MIN_SOURCE_AMOUNT}`));
     yield put(swapActions.setTokenPairRateLoading(false));
     return false;
   }
