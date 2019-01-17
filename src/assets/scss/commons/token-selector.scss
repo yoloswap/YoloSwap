@@ -22,7 +22,6 @@
 
   &__container {
     max-width: 200px;
-    padding: 25px 20px;
   }
 
   &__input {
@@ -42,6 +41,7 @@
 
     &-container {
       position: relative;
+      padding: 25px 20px 0;
 
       &::after {
         content: '';
@@ -49,23 +49,20 @@
         height: 20px;
         display: block;
         position: absolute;
-        top: -3px;
-        right: 0;
+        top: 20px;
+        right: 20px;
         background-image: url($image-path + 'icons/search.svg');
       }
     }
   }
 
   &__item {
-    margin-bottom: 10px;
     cursor: pointer;
+    padding: 7px 20px;
+    transition: background-color .3s;
 
     &:last-child {
-      margin-bottom: 0;
-    }
-
-    &-container {
-
+      margin-bottom: 15px;
     }
 
     &-symbol,
@@ -78,6 +75,10 @@
     &-symbol {
       font-weight: 600;
       margin-bottom: 1px;
+    }
+
+    &:hover {
+      background: #eee;
     }
   }
 }

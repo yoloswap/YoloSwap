@@ -97,14 +97,15 @@
       padding-bottom: 18px;
       text-transform: uppercase;
 
-      &::before {
+      // Should enable when we have sort function for the table
+      /*&::before {
         content: '';
         display: inline-block;
         width: 11px;
         height: 11px;
         background-image: url($image-path + 'icons/arrow-blue-up.svg');
         margin-right: 8px;
-      }
+      }*/
     }
 
     &-icon {

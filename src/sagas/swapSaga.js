@@ -75,8 +75,8 @@ function* swapToken() {
 function* fetchTokenPairRate() {
   const swap = yield select(getSwapState);
   const tokens = yield select(getTokens);
-  const sourceToken = tokens.find((token) => token.name === swap.sourceToken);
   const account = yield select(getAccountState);
+  const sourceToken = tokens.find((token) => token.name === swap.sourceToken);
   const sourceAmount = swap.sourceAmount ? swap.sourceAmount : 1;
   const isValidInput = yield call(validateValidInput, swap, sourceToken);
 
@@ -116,8 +116,17 @@ function getRateParams(eos, srcSymbol, destSymbol, srcAmount) {
 
 function* validateValidInput(swap, sourceToken) {
   const sourceAmount = swap.sourceAmount;
+  const decimals = sourceAmount.split(".")[1];
+
+  yield put(swapActions.setError(''));
 
   if (sourceAmount !== '' && !sourceAmount) {
+    return false;
+  }
+
+  if (decimals && decimals.length > 4) {
+    yield put(swapActions.setError(`Your source amount's decimals should be no longer than 4 characters`));
+    yield put(swapActions.setTokenPairRateLoading(false));
     return false;
   }
 
