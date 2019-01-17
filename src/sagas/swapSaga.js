@@ -5,7 +5,7 @@ import * as swapActions from "../actions/swapAction";
 import * as accountActions from "../actions/accountAction";
 import { NETWORK_ACCOUNT } from "../config/env";
 import { EOS_TOKEN } from "../config/tokens";
-import { MAX_DEST_AMOUNT, MIN_CONVERSION_RATE } from "../config/app";
+import { MAX_DEST_AMOUNT, MIN_CONVERSION_RATE, MIN_SOURCE_AMOUNT } from "../config/app";
 
 const getTokens = state => state.token.tokens;
 const getSwapState = state => state.swap;
@@ -76,23 +76,13 @@ function* fetchTokenPairRate() {
   const swap = yield select(getSwapState);
   const tokens = yield select(getTokens);
   const sourceToken = tokens.find((token) => token.name === swap.sourceToken);
-
-  if (swap.sourceToken === swap.destToken) {
-    yield put(swapActions.setTokenPairRate(1));
-    yield put(swapActions.setDestAmount(swap.sourceAmount));
-    return;
-  }
-
-  if (swap.sourceAmount > sourceToken.balance) {
-    yield put(swapActions.setError('Your source amount is bigger than your real balance'));
-    yield put(swapActions.setTokenPairRateLoading(false));
-    return;
-  }
-
-  yield put(swapActions.setTokenPairRateLoading(true));
-
   const account = yield select(getAccountState);
   const sourceAmount = swap.sourceAmount ? swap.sourceAmount : 1;
+  const isValidInput = yield call(validateValidInput, swap, sourceToken);
+
+  if (!isValidInput) return;
+
+  yield put(swapActions.setTokenPairRateLoading(true));
 
   try {
     const tokenPairRate = yield call(
@@ -122,6 +112,34 @@ function getRateParams(eos, srcSymbol, destSymbol, srcAmount) {
     networkAccount: NETWORK_ACCOUNT,
     eosTokenAccount: EOS_TOKEN.account
   };
+}
+
+function* validateValidInput(swap, sourceToken) {
+  const sourceAmount = swap.sourceAmount;
+
+  if (sourceAmount !== '' && !sourceAmount) {
+    return false;
+  }
+
+  if (swap.sourceToken === swap.destToken) {
+    yield put(swapActions.setTokenPairRate(1));
+    yield put(swapActions.setDestAmount(sourceAmount));
+    return false;
+  }
+
+  if (sourceAmount > sourceToken.balance) {
+    yield put(swapActions.setError('Your source amount is bigger than your real balance'));
+    yield put(swapActions.setTokenPairRateLoading(false));
+    return false;
+  }
+
+  if (sourceAmount && sourceAmount < MIN_SOURCE_AMOUNT) {
+    yield put(swapActions.setError(`Your source amount must be at least ${MIN_SOURCE_AMOUNT}`));
+    yield put(swapActions.setTokenPairRateLoading(false));
+    return false;
+  }
+
+  return true;
 }
 
 export default function* swapWatcher() {
