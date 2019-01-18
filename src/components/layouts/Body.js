@@ -6,11 +6,12 @@ import * as globalActions from "../../actions/globalAction";
 import { connect } from "react-redux";
 import * as scatterService from '../../services/scatter_service';
 import Modal from '../commons/Modal';
+import ModalScatter from '../commons/ModalScatter';
+import { SCATTER_ERROR_TYPE } from '../../config/app';
 
 function mapStateToProps(state) {
   return {
-    isGlobalErrorActive: state.global.isErrorActive,
-    globalErrorMessage: state.global.errorMessage,
+    global: state.global,
   };
 }
 
@@ -44,9 +45,15 @@ class Body extends Component {
           </div>
           <Swap/>
           <Market/>
-          <Modal isActive={this.props.isGlobalErrorActive} handleClose={() => this.props.unsetGlobalError()} title="Error" maxWidth="450">
+          <Modal isActive={this.props.global.isErrorActive} handleClose={() => this.props.unsetGlobalError()} title="Error">
             <div className={"error-modal"}>
-              <div className={"error-modal__message"}>{this.props.globalErrorMessage}</div>
+              {this.props.global.errorType !== SCATTER_ERROR_TYPE && (
+                <div className={"error-modal__message"}>{this.props.global.errorMessage}</div>
+              )}
+
+              {this.props.global.errorType === SCATTER_ERROR_TYPE && (
+                <ModalScatter/>
+              )}
             </div>
           </Modal>
         </div>

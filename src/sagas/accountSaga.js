@@ -4,6 +4,7 @@ import * as accountActions from "../actions/accountAction";
 import * as globalActions from "../actions/globalAction";
 import { getBalances } from "../services/network_service";
 import * as scatterService from "../services/scatter_service";
+import { SCATTER_ERROR_TYPE } from '../config/app';
 
 const getTokens = state => state.token.tokens;
 const getAccountData = state => state.account;
@@ -23,15 +24,11 @@ function* connectToScatter(action) {
       yield call(fetchBalances);
     } else if (result === false) {
       yield put(accountActions.setScatterLoading(false));
-      yield put(globalActions.setGlobalError(
-        true,
-        'There is something wrong with your Scatter. You either does not have Scatter installed or it has been locked or refused to connect'
-      ));
+      yield put(globalActions.setGlobalError(true, '', SCATTER_ERROR_TYPE));
     } else {
       yield put(accountActions.setScatterLoading(false));
     }
   } catch (e) {
-    console.log(e);
     yield put(accountActions.setScatterLoading(false));
   }
 }
