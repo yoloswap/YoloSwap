@@ -16,9 +16,9 @@ function* swapToken() {
   const swap = yield select(getSwapState);
   const account = yield select(getAccountState);
 
-  const sourceAmount = (+swap.sourceAmount).toFixed(4);
   const sourceToken = tokens.find((item) => swap.sourceToken === item.name);
   const destToken = tokens.find((item) => swap.destToken === item.name);
+  const sourceAmount = (+swap.sourceAmount).toFixed(sourceToken.precision);
 
   try {
     yield put(swapActions.setTxConfirming(true));
