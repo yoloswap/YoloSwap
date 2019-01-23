@@ -7,19 +7,44 @@ const EOS_TOKEN = {
 const TOKENS = [
   EOS_TOKEN,
   {
-    'name': 'SYS',
-    'account': 'testtokeaaaa',
-    'precision': 4
-  },
-  {
     'name': 'NTA',
-    'account': 'testtokeaaaa',
+    'account': 'testtokeaaab',
     'precision': 4
   },
   {
     'name': 'OTA',
     'account': 'testtokeaaaa',
     'precision': 4
+  },
+  {
+    'name': 'OTB',
+    'account': 'testtokeaaaa',
+    'precision': 3
+  },
+  {
+    'name': 'NTC',
+    'account': 'testtokeaaab',
+    'precision': 2
+  },
+  {
+    'name': 'OTC',
+    'account': 'testtokeaaaa',
+    'precision': 2
+  },
+  {
+    'name': 'NTD',
+    'account': 'testtokeaaab',
+    'precision': 1
+  },
+  {
+    'name': 'OTD',
+    'account': 'testtokeaaaa',
+    'precision': 1
+  },
+  {
+    'name': 'NTB',
+    'account': 'testtokeaaab',
+    'precision': 3
   }
 ];
 
