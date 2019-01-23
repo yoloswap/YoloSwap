@@ -29,19 +29,13 @@ function* swapToken() {
         eos: account.eos,
         networkAccount: NETWORK_ACCOUNT,
         userAccount: account.account.name,
-        userAuthority: account.account.authority,
         srcAmount: sourceAmount,
-        srcPrecision: sourceToken.precision,
         srcTokenAccount: sourceToken.account,
         srcSymbol: sourceToken.name,
         destPrecision: destToken.precision,
         destSymbol: destToken.name,
-        destTokenAccount: destToken.account,
         destAccount: account.account.name,
-        maxDestAmount: MAX_DEST_AMOUNT,
         minConversionRate: MIN_CONVERSION_RATE,
-        walletId: account.account.name,
-        hint: ""
       }
     );
 

@@ -116,29 +116,21 @@ async function send(options) {
 async function trade(options) {
     let eos = options.eos
     let networkAccount = options.networkAccount
-    let userAccount = options.userAccount 
-    let userAuthority = options.userAuthority
+    let userAccount = options.userAccount
     let srcAmount = options.srcAmount
-    let srcPrecision = options.srcPrecision
     let srcTokenAccount = options.srcTokenAccount
     let srcSymbol = options.srcSymbol
     let destPrecision = options.destPrecision
     let destSymbol = options.destSymbol
-    let destTokenAccount = options.destTokenAccount
     let destAccount = options.destAccount
-    let maxDestAmount = options.maxDestAmount
     let minConversionRate = options.minConversionRate
-    let walletId = options.walletId
-    let hint = options.hint
 
-    let memo = `${userAccount},${srcTokenAccount},${srcPrecision} ${srcSymbol},` +
-               `${destTokenAccount},${destPrecision} ${destSymbol},${destAccount},` +
-               `${maxDestAmount},${minConversionRate},${walletId},${hint}`
-    let asset = `${srcAmount} ${srcSymbol}`;
+    let memo = `${destPrecision} ${destSymbol},${destAccount},${minConversionRate}`
+    let asset = `${srcAmount} ${srcSymbol}`
 
-    const transactionOptions = { authorization:[`${userAccount}@${userAuthority}`] };
-
-    return await eos.transfer(userAccount, networkAccount, asset, memo, transactionOptions);
+    const token = await eos.contract(srcTokenAccount);
+    await token.transfer({from:userAccount, to:networkAccount, quantity:asset, memo:memo},
+                         {authorization: [`${userAccount}@active`]});
 }
 
 async function getUserBalance(options){
