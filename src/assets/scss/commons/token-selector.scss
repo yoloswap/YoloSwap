@@ -22,6 +22,7 @@
 
   &__container {
     max-width: 200px;
+    padding-bottom: 20px;
   }
 
   &__input {
@@ -58,11 +59,30 @@
 
   &__item {
     cursor: pointer;
-    padding: 7px 20px;
-    transition: background-color .3s;
+    padding: 0 20px 14px;
 
     &:last-child {
-      margin-bottom: 15px;
+      padding-bottom: 0;
+    }
+
+    &-container {
+      max-height: 190px;
+      overflow: auto;
+      margin-right: 20px;
+
+      &::-webkit-scrollbar-track {
+        border-radius: 8px;
+        background-color: rgba(163, 165, 175, .2);
+      }
+
+      &::-webkit-scrollbar {
+        width: 4px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        border-radius: 8px;
+        background-color: #c7cce2;
+      }
     }
 
     &-symbol,
@@ -70,6 +90,7 @@
       font-size: 14px;
       font-weight: 500;
       color: #474d5f;
+      transition: color .3s;
     }
 
     &-symbol {
@@ -78,7 +99,10 @@
     }
 
     &:hover {
-      background: #eee;
+      .token-selector__item-symbol,
+      .token-selector__item-balance {
+        color: $blue-light;
+      }
     }
   }
 }
