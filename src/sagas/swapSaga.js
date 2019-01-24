@@ -5,7 +5,7 @@ import * as swapActions from "../actions/swapAction";
 import * as accountActions from "../actions/accountAction";
 import { NETWORK_ACCOUNT } from "../config/env";
 import { EOS_TOKEN } from "../config/tokens";
-import { MAX_DEST_AMOUNT, MIN_CONVERSION_RATE } from "../config/app";
+import { MIN_CONVERSION_RATE } from "../config/app";
 
 const getTokens = state => state.token.tokens;
 const getSwapState = state => state.swap;
