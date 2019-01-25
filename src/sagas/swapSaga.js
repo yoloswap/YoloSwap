@@ -62,7 +62,7 @@ function* swapToken() {
     }
 
     yield put(accountActions.fetchBalance());
-    yield call(delay, 5000);
+    yield call(delay, 3000);
     yield put(swapActions.setTxError(''));
   }
 }

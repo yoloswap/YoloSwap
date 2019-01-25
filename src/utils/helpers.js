@@ -1,3 +1,7 @@
 export function formatAmount(amount, precision) {
-  return parseFloat((+amount).toFixed(precision))
+  if (amount === undefined) return;
+
+  const amountString = amount.toString();
+
+  return parseFloat(amountString.slice(0, (amountString.indexOf('.')) + (precision + 1)));
 }

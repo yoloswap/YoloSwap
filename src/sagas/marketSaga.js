@@ -22,13 +22,13 @@ function* fetchMarketRates() {
     const defaultSellAndBuyRate = 1;
 
     tokens.forEach((token, index) => {
-      if (token.name === market.indexToken) {
+      if (token.name === market.indexToken.name) {
         sameTokenIndex = index;
         return;
       }
 
       srcSymbols.push(token.name);
-      destSymbols.push(market.indexToken);
+      destSymbols.push(market.indexToken.name);
       srcAmounts.push(defaultSrcAmount);
     });
 

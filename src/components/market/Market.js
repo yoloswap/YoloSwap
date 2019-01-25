@@ -15,7 +15,7 @@ function mapStateToProps(store) {
 function mapDispatchToProps(dispatch) {
   return {
     fetchMarketRates: () => { dispatch(fetchMarketRates()) },
-    setindexToken: (token) => { dispatch(setIndexToken(token)) },
+    setIndexToken: (token) => { dispatch(setIndexToken(token)) },
   }
 }
 
@@ -46,7 +46,7 @@ class Market extends Component {
         basedTokens={this.state.basedTokens}
         indexToken={this.props.indexToken}
         isLoading={this.props.isLoading}
-        onClickBasedToken={this.props.setindexToken}
+        onClickBasedToken={this.props.setIndexToken}
         onTypingSearch={this.handleOnTypingSearch}
       />
     )

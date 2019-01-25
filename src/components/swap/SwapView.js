@@ -44,7 +44,9 @@ export default class SwapView extends Component {
 
             <div className={"swap__content-info"}>
               {this.props.account !== null && (
-                <div className={"common__flexbox"}>Balance: {this.props.isBalanceLoading ? <div className={"swap__content-loading common__loading"}/> : formatAmount(this.props.sourceToken.balance, 6)} {this.props.sourceTokenSymbol}</div>
+                <div className={"common__flexbox"}>
+                  Balance: {this.props.isBalanceLoading ? <div className={"swap__content-loading common__loading"}/> : this.props.sourceToken.balance} {this.props.sourceTokenSymbol}
+                </div>
               )}
             </div>
           </div>
@@ -58,7 +60,7 @@ export default class SwapView extends Component {
                 tokens={this.props.tokens}
               />
               <div className={"swap__content-input"}>
-                {this.props.sourceAmount ? this.props.isTokenPairRateLoading ? 'Loading...' : formatAmount(this.props.destAmount, 6) : 0}
+                {this.props.sourceAmount ? this.props.isTokenPairRateLoading ? 'Loading...' : formatAmount(this.props.destAmount, this.props.destToken.precision) : 0}
               </div>
             </div>
             <div className={"swap__content-info right"}>

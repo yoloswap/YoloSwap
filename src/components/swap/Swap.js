@@ -11,12 +11,14 @@ function mapStateToProps(store) {
   const swap = store.swap;
   const tokens = token.tokens;
   const sourceTokenSymbol = swap.sourceToken;
+  const destTokenSymbol = swap.destToken;
 
   return {
     tokens: tokens,
     sourceToken: tokens.find((token) => token.name === sourceTokenSymbol),
+    destToken: tokens.find((token) => token.name === destTokenSymbol),
     sourceTokenSymbol: sourceTokenSymbol,
-    destTokenSymbol: swap.destToken,
+    destTokenSymbol: destTokenSymbol,
     sourceAmount: swap.sourceAmount,
     destAmount: swap.destAmount,
     tokenPairRate: swap.tokenPairRate,
@@ -89,6 +91,7 @@ class Swap extends Component {
         onCloseScatterModal={this.handleCloseScatterModal}
         tx={this.props.tx}
         sourceToken={this.props.sourceToken}
+        destToken={this.props.destToken}
         sourceTokenSymbol={this.props.sourceTokenSymbol}
         destTokenSymbol={this.props.destTokenSymbol}
         isScatterLoading={this.props.isScatterLoading}

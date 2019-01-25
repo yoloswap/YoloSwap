@@ -1,18 +1,23 @@
 import React, { Component } from 'react';
+import { formatAmount } from "../../utils/helpers";
 
 export default class MarketView extends Component {
   render() {
     const getTokenList = () => {
       return this.props.tokens.filter((token) => {
-        return token.name.includes(this.props.searchText) && !token.name.includes(this.props.indexToken);
+        return token.name.includes(this.props.searchText) && !token.name.includes(this.props.indexToken.name);
       }).map((token, index) =>
         <tr key={index} className={"common__fade-in"}>
           <td className={"common__flexbox none"}>
             <img className={"market__table-icon"} src={require("../../assets/images/tokens/eos.svg")} alt=""/>
-            <div className={"market__table-text"}>{token.name}/{this.props.indexToken}</div>
+            <div className={"market__table-text"}>{token.name}/{this.props.indexToken.name}</div>
           </td>
-          <td className={"market__table-text"}>{token.sellRate ? token.sellRate.toFixed(6) : 0} {this.props.indexToken}</td>
-          <td className={"market__table-text"}>{token.buyRate ? token.buyRate.toFixed(6) : 0} {this.props.indexToken}</td>
+          <td className={"market__table-text"}>
+            {token.sellRate ? formatAmount(token.sellRate, this.props.indexToken.precision) : 0} {this.props.indexToken.name}
+          </td>
+          <td className={"market__table-text"}>
+            {token.buyRate ? formatAmount(token.buyRate, this.props.indexToken.precision) : 0} {this.props.indexToken.name}
+          </td>
           <td>
             <span className={"market__table-change none"}>---</span>
           </td>
@@ -23,7 +28,7 @@ export default class MarketView extends Component {
     return (
       <div className={"market"}>
         <div className={"market__header common__flexbox"}>
-          <div className={"market__header-title"}>{this.props.indexToken} Market</div>
+          <div className={"market__header-title"}>{this.props.indexToken.name} Market</div>
           <div className={"market__header-input"}>
             <input type="text" placeholder="Search" value={this.props.searchText} onChange={(e) => this.props.onTypingSearch(e)}/>
           </div>
@@ -38,7 +43,7 @@ export default class MarketView extends Component {
                   return (
                     <div
                       key={index}
-                      className={`market__table-option ${this.props.indexToken === basedToken ? 'active' : 'disabled'}`}
+                      className={`market__table-option ${this.props.indexToken.name === basedToken ? 'active' : 'disabled'}`}
                       onClick={() => this.props.onClickBasedToken(basedToken)}>
                       {basedToken}
                     </div>
