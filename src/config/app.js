@@ -1,6 +1,6 @@
 const MARKET_BASED_TOKENS = ['EOS', 'USD'];
 const DEFAULT_SRC_TOKEN = 'EOS';
-const DEFAULT_DEST_TOKEN = 'NTA';
+const DEFAULT_DEST_TOKEN = 'IQ';
 const MIN_CONVERSION_RATE = "0.000001";
 const SCATTER_ERROR_TYPE = 'scatter';
 
