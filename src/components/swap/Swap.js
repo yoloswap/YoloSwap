@@ -68,8 +68,8 @@ class Swap extends Component {
   };
 
   handleOnClickSwapIcon = () => {
-    this.props.setSourceToken(this.props.destToken.symbol);
-    this.props.setDestToken(this.props.sourceToken.symbol);
+    this.props.setSourceToken(this.props.destToken);
+    this.props.setDestToken(this.props.sourceToken);
   };
 
   handleCloseScatterModal = () => {

@@ -76,7 +76,7 @@ export default class SwapView extends Component {
         )}
 
         {this.props.tx.isBroadcasting && (
-          <div className={"swap__text common__fade-in loading"}>Waiting for the transaction to be mined</div>
+          <div className={"swap__text common__fade-in loading"}>Waiting for the transaction to be accepted</div>
         )}
 
         {this.props.tx.error && (
