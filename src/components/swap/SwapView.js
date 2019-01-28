@@ -9,6 +9,7 @@ export default class SwapView extends Component {
     let isError = false;
     let errors = {
       sameToken: this.props.sourceToken.symbol === this.props.destToken.symbol,
+      noneDestAmount: this.props.sourceAmount && !formatAmount(this.props.destAmount, this.props.destToken.precision),
       commonError: this.props.error
     };
 
@@ -36,6 +37,10 @@ export default class SwapView extends Component {
 
             {errors.sameToken && (
               <div className={"common__error under-input"}>Cannot exchange the same token</div>
+            )}
+
+            {errors.noneDestAmount && (
+              <div className={"common__error under-input"}>Your source amount is too small to make the swap</div>
             )}
 
             {errors.commonError && (

@@ -85,7 +85,9 @@ function* fetchTokenPairRate() {
       yield put(swapActions.setError('Your source amount is invalid or way too much for us to handle the swap'));
     }
 
-    yield put(swapActions.setDestAmount(tokenPairRate * sourceAmount));
+    const destAmount = (tokenPairRate * sourceAmount).toFixed(swap.destToken.precision);
+
+    yield put(swapActions.setDestAmount(destAmount));
     yield put(swapActions.setTokenPairRate(tokenPairRate));
   } catch (e) {
     console.log(e);
@@ -117,22 +119,20 @@ function* validateValidInput(swap) {
     return false;
   }
 
-  if (sourceAmountDecimals && sourceAmountDecimals.length > sourceTokenDecimals) {
-    yield put(swapActions.setError(`Your source amount's decimals should be no longer than ${sourceTokenDecimals} characters`));
-    yield put(swapActions.setTokenPairRateLoading(false));
-    return false;
-  }
-
   if (swap.sourceToken.symbol === swap.destToken.symbol) {
     yield put(swapActions.setTokenPairRate(1));
     yield put(swapActions.setDestAmount(sourceAmount));
     return false;
   }
 
+  if (sourceAmountDecimals && sourceAmountDecimals.length > sourceTokenDecimals) {
+    yield put(swapActions.setError(`Your source amount's decimals should be no longer than ${sourceTokenDecimals} characters`));
+    yield put(swapActions.setTokenPairRateLoading(false));
+  }
+
   if (sourceAmount > sourceToken.balance) {
     yield put(swapActions.setError('Your source amount is bigger than your real balance'));
     yield put(swapActions.setTokenPairRateLoading(false));
-    return false;
   }
 
   return true;
