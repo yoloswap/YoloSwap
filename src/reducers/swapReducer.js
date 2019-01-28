@@ -1,9 +1,9 @@
 import { swapActionTypes } from '../actions/swapAction';
-import { DEFAULT_SRC_TOKEN, DEFAULT_DEST_TOKEN } from '../config/app';
+import { EOS_TOKEN, TOKENS } from '../config/tokens';
 
 const initialState = {
-  sourceToken: DEFAULT_SRC_TOKEN,
-  destToken: DEFAULT_DEST_TOKEN,
+  sourceToken: EOS_TOKEN,
+  destToken: TOKENS[1],
   sourceAmount: '',
   destAmount: 0,
   tokenPairRate: 0,

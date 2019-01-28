@@ -8,7 +8,7 @@ export default class SwapView extends Component {
   render() {
     let isError = false;
     let errors = {
-      sameToken: this.props.sourceTokenSymbol === this.props.destTokenSymbol,
+      sameToken: this.props.sourceToken.symbol === this.props.destToken.symbol,
       commonError: this.props.error
     };
 
@@ -26,7 +26,7 @@ export default class SwapView extends Component {
             <div className={"swap__content-title"}>From:</div>
             <div className={`swap__content-box ${isError ? 'error' : ''}`}>
               <TokenSelector
-                selectedToken={this.props.sourceTokenSymbol}
+                selectedToken={this.props.sourceToken}
                 onSelectedToken={this.props.onSelectSourceToken}
                 tokens={this.props.tokens}
                 showBalance={true}
@@ -45,7 +45,7 @@ export default class SwapView extends Component {
             <div className={"swap__content-info"}>
               {this.props.account !== null && (
                 <div className={"common__flexbox"}>
-                  Balance: {this.props.isBalanceLoading ? <div className={"swap__content-loading common__loading"}/> : this.props.sourceToken.balance} {this.props.sourceTokenSymbol}
+                  Balance: {this.props.isBalanceLoading ? <div className={"swap__content-loading common__loading"}/> : this.props.sourceToken.balance} {this.props.sourceToken.symbol}
                 </div>
               )}
             </div>
@@ -55,7 +55,7 @@ export default class SwapView extends Component {
             <div className={"swap__content-title"}>To:</div>
             <div className={"swap__content-box"}>
               <TokenSelector
-                selectedToken={this.props.destTokenSymbol}
+                selectedToken={this.props.destToken}
                 onSelectedToken={this.props.onSelectDestToken}
                 tokens={this.props.tokens}
               />
@@ -64,9 +64,9 @@ export default class SwapView extends Component {
               </div>
             </div>
             <div className={"swap__content-info right"}>
-              1 {this.props.sourceTokenSymbol} = {!this.props.isTokenPairRateLoading ?
+              {this.props.sourceToken.symbol}/{this.props.destToken.symbol} = {!this.props.isTokenPairRateLoading ?
               formatAmount(this.props.tokenPairRate, 6) :
-              <div className={"swap__content-loading common__loading"}/>} {this.props.destTokenSymbol}
+              <div className={"swap__content-loading common__loading"}/>}
             </div>
           </div>
         </div>

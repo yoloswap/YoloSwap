@@ -55,7 +55,7 @@ function* fetchBalances() {
     let tokenSymbols = [], tokenContracts = [];
 
     tokens.forEach((token) => {
-      tokenSymbols.push(token.name);
+      tokenSymbols.push(token.symbol);
       tokenContracts.push(token.account);
     });
 

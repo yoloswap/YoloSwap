@@ -7,6 +7,7 @@ import { logger } from 'redux-logger';
 import reducer from './reducers';
 import App from './components/layouts/App';
 import rootSaga from './sagas';
+import * as serviceWorker from './serviceWorker';
 
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(
@@ -22,3 +23,5 @@ render(
   </Provider>,
   document.getElementById('root'),
 );
+
+serviceWorker.unregister();

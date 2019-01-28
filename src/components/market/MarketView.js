@@ -9,14 +9,14 @@ export default class MarketView extends Component {
       }).map((token, index) =>
         <tr key={index} className={"common__fade-in"}>
           <td className={"common__flexbox none"}>
-            <img className={"market__table-icon"} src={require("../../assets/images/tokens/eos.svg")} alt=""/>
-            <div className={"market__table-text"}>{token.name}/{this.props.indexToken.name}</div>
+            <img className={"market__table-icon"} src={require(`../../assets/images/tokens/${token.logo}`)} alt=""/>
+            <div className={"market__table-text"}>{token.symbol}/{this.props.indexToken.name}</div>
           </td>
           <td className={"market__table-text"}>
-            {token.sellRate ? formatAmount(token.sellRate, this.props.indexToken.precision) : 0} {this.props.indexToken.name}
+            {token.sellRate ? formatAmount(token.sellRate, 6) : 0} {this.props.indexToken.name}
           </td>
           <td className={"market__table-text"}>
-            {token.buyRate ? formatAmount(token.buyRate, this.props.indexToken.precision) : 0} {this.props.indexToken.name}
+            {token.buyRate ? formatAmount(token.buyRate, 6) : 0} {this.props.indexToken.name}
           </td>
           <td>
             <span className={"market__table-change none"}>---</span>

@@ -7,17 +7,15 @@ import { NETWORK_ACCOUNT } from "../config/env";
 import { EOS_TOKEN } from "../config/tokens";
 import { MIN_CONVERSION_RATE } from "../config/app";
 
-const getTokens = state => state.token.tokens;
 const getSwapState = state => state.swap;
 const getAccountState = state => state.account;
 
 function* swapToken() {
-  const tokens = yield select(getTokens);
   const swap = yield select(getSwapState);
   const account = yield select(getAccountState);
 
-  const sourceToken = tokens.find((item) => swap.sourceToken === item.name);
-  const destToken = tokens.find((item) => swap.destToken === item.name);
+  const sourceToken = swap.sourceToken;
+  const destToken = swap.destToken;
   const sourceAmount = (+swap.sourceAmount).toFixed(sourceToken.precision);
 
   try {
@@ -31,9 +29,9 @@ function* swapToken() {
         userAccount: account.account.name,
         srcAmount: sourceAmount,
         srcTokenAccount: sourceToken.account,
-        srcSymbol: sourceToken.name,
+        srcSymbol: sourceToken.symbol,
         destPrecision: destToken.precision,
-        destSymbol: destToken.name,
+        destSymbol: destToken.symbol,
         destAccount: account.account.name,
         minConversionRate: MIN_CONVERSION_RATE,
       }
@@ -69,11 +67,9 @@ function* swapToken() {
 
 function* fetchTokenPairRate() {
   const swap = yield select(getSwapState);
-  const tokens = yield select(getTokens);
   const account = yield select(getAccountState);
-  const sourceToken = tokens.find((token) => token.name === swap.sourceToken);
   const sourceAmount = swap.sourceAmount ? swap.sourceAmount : 1;
-  const isValidInput = yield call(validateValidInput, swap, sourceToken);
+  const isValidInput = yield call(validateValidInput, swap);
 
   if (!isValidInput) return;
 
@@ -82,7 +78,7 @@ function* fetchTokenPairRate() {
   try {
     const tokenPairRate = yield call(
       getRate,
-      getRateParams(account.eos, swap.sourceToken, swap.destToken, sourceAmount)
+      getRateParams(account.eos, swap.sourceToken.symbol, swap.destToken.symbol, sourceAmount)
     );
 
     if (!tokenPairRate) {
@@ -109,7 +105,8 @@ function getRateParams(eos, srcSymbol, destSymbol, srcAmount) {
   };
 }
 
-function* validateValidInput(swap, sourceToken) {
+function* validateValidInput(swap) {
+  const sourceToken = swap.sourceToken;
   const sourceAmount = swap.sourceAmount;
   const sourceTokenDecimals = sourceToken.precision;
   const sourceAmountDecimals = sourceAmount.split(".")[1];
@@ -126,7 +123,7 @@ function* validateValidInput(swap, sourceToken) {
     return false;
   }
 
-  if (swap.sourceToken === swap.destToken) {
+  if (swap.sourceToken.symbol === swap.destToken.symbol) {
     yield put(swapActions.setTokenPairRate(1));
     yield put(swapActions.setDestAmount(sourceAmount));
     return false;

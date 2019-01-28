@@ -24,20 +24,20 @@ export default class TokenSelector extends Component {
     this.setState({ searchText: value });
   };
 
-  handleOnClickToken = (tokenName) => {
-    this.props.onSelectedToken(tokenName);
+  handleOnClickToken = (token) => {
+    this.props.onSelectedToken(token);
     this.handleCloseDropDown();
   };
 
   render() {
     const getTokenList = () => {
       return this.props.tokens.filter((token) => {
-        return token.name.includes(this.state.searchText);
+        return token.symbol.includes(this.state.searchText);
       }).map((token, index) =>
-        <div className={"token-selector__item"} key={index} onClick={() => this.handleOnClickToken(token.name)}>
-          <div className={"token-selector__item-symbol"}>{token.name}</div>
+        <div className={"token-selector__item"} key={index} onClick={() => this.handleOnClickToken(token)}>
+          <div className={"token-selector__item-symbol"}>{token.symbol}</div>
           {(this.props.showBalance && token.balance >= 0) && (
-            <div className={"token-selector__item-balance"}>{token.balance} {token.name}</div>
+            <div className={"token-selector__item-balance"}>{token.balance} {token.symbol}</div>
           )}
         </div>
       );
@@ -48,8 +48,8 @@ export default class TokenSelector extends Component {
         <Dropdown onShow={() => this.handleOpenDropDown()} onHide={() => this.handleCloseDropDown()} active={this.state.isOpen}>
           <DropdownTrigger>
             <div className={"token-selector__active"}>
-              <img className={"token-selector__active-icon"} src={require("../../assets/images/tokens/eos.svg")} alt=""/>
-              <div className={"token-selector__active-symbol"}>{this.props.selectedToken}</div>
+              <img className={"token-selector__active-icon"} src={require(`../../assets/images/tokens/${this.props.selectedToken.logo}`)} alt=""/>
+              <div className={"token-selector__active-symbol"}>{this.props.selectedToken.symbol}</div>
               <div className={'common__arrow-drop-down ' + (this.state.isOpen ? 'up' : 'down')}/>
             </div>
           </DropdownTrigger>

@@ -10,15 +10,11 @@ function mapStateToProps(store) {
   const account = store.account;
   const swap = store.swap;
   const tokens = token.tokens;
-  const sourceTokenSymbol = swap.sourceToken;
-  const destTokenSymbol = swap.destToken;
 
   return {
     tokens: tokens,
-    sourceToken: tokens.find((token) => token.name === sourceTokenSymbol),
-    destToken: tokens.find((token) => token.name === destTokenSymbol),
-    sourceTokenSymbol: sourceTokenSymbol,
-    destTokenSymbol: destTokenSymbol,
+    sourceToken: swap.sourceToken,
+    destToken: swap.destToken,
     sourceAmount: swap.sourceAmount,
     destAmount: swap.destAmount,
     tokenPairRate: swap.tokenPairRate,
@@ -72,8 +68,8 @@ class Swap extends Component {
   };
 
   handleOnClickSwapIcon = () => {
-    this.props.setSourceToken(this.props.destTokenSymbol);
-    this.props.setDestToken(this.props.sourceTokenSymbol);
+    this.props.setSourceToken(this.props.destToken.symbol);
+    this.props.setDestToken(this.props.sourceToken.symbol);
   };
 
   handleCloseScatterModal = () => {
@@ -92,18 +88,16 @@ class Swap extends Component {
         tx={this.props.tx}
         sourceToken={this.props.sourceToken}
         destToken={this.props.destToken}
-        sourceTokenSymbol={this.props.sourceTokenSymbol}
-        destTokenSymbol={this.props.destTokenSymbol}
-        isScatterLoading={this.props.isScatterLoading}
-        tokens={this.props.tokens}
         sourceAmount={this.props.sourceAmount}
         destAmount={this.props.destAmount}
+        tokens={this.props.tokens}
         tokenPairRate={this.props.tokenPairRate}
-        isTokenPairRateLoading={this.props.isTokenPairRateLoading}
         account={this.props.account}
+        error={this.props.error}
+        isTokenPairRateLoading={this.props.isTokenPairRateLoading}
         isBalanceLoading={this.props.isBalanceLoading}
         isConfirmLoading={this.props.isConfirmLoading}
-        error={this.props.error}
+        isScatterLoading={this.props.isScatterLoading}
       />
     )
   }
