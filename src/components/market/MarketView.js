@@ -5,7 +5,7 @@ export default class MarketView extends Component {
   render() {
     const getTokenList = () => {
       return this.props.tokens.filter((token) => {
-        return token.name.includes(this.props.searchText) && !token.name.includes(this.props.indexToken.name);
+        return token.symbol.includes(this.props.searchText) && !token.symbol.includes(this.props.indexToken.symbol);
       }).map((token, index) =>
         <tr key={index} className={"common__fade-in"}>
           <td className={"common__flexbox none"}>
@@ -43,8 +43,9 @@ export default class MarketView extends Component {
                   return (
                     <div
                       key={index}
-                      className={`market__table-option ${this.props.indexToken.name === basedToken ? 'active' : 'disabled'}`}
-                      onClick={() => this.props.onClickBasedToken(basedToken)}>
+                      className={`market__table-option ${this.props.indexToken.symbol === basedToken ? 'active' : 'disabled'}`}
+                      // onClick={() => this.props.onClickBasedToken(basedToken)}
+                    >
                       {basedToken}
                     </div>
                   )
