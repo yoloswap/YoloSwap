@@ -21,7 +21,7 @@ function mapStateToProps(store) {
     isTokenPairRateLoading: swap.isTokenPairRateLoading,
     tx: swap.tx,
     error: swap.error,
-    account: account.account,
+    isAccountImported: !!account.account,
     isBalanceLoading: account.isBalanceLoading,
     isScatterLoading: account.isScatterLoading,
     isConfirmLoading: account.isConfirmLoading,
@@ -42,24 +42,32 @@ function mapDispatchToProps(dispatch) {
 }
 
 class Swap extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isSwapBalanceBoxActive: false
+    }
+  }
+
   componentDidMount = () => {
     this.props.fetchTokenPairRate();
   };
 
-  handleOnClickSwapButton = () => {
+  handleClickSwapButton = () => {
     if (!this.props.sourceAmount) {
       this.props.setError("Source amount is required to make a swap");
       return;
     }
 
-    if (!this.props.account) {
+    if (!this.props.isAccountImported) {
       this.props.connectToScatter();
     } else {
       this.props.swapToken();
     }
   };
 
-  handleOnSourceAmountChange = (e) => {
+  handleSourceAmountChange = (e) => {
     const isValueValid = filterInputNumber(e, e.target.value, this.props.sourceAmount);
 
     if (!isValueValid) return;
@@ -67,7 +75,7 @@ class Swap extends Component {
     this.props.setSourceAmount(e.target.value);
   };
 
-  handleOnClickSwapIcon = () => {
+  handleClickSwapIcon = () => {
     this.props.setSourceToken(this.props.destToken);
     this.props.setDestToken(this.props.sourceToken);
   };
@@ -76,15 +84,34 @@ class Swap extends Component {
     this.props.setScatterLoading(false);
   };
 
+  handleOpenSwapBalanceBox = () => {
+    this.setState({ isSwapBalanceBoxActive: true });
+  };
+
+  handleCloseSwapBalanceBox = () => {
+    this.setState({ isSwapBalanceBoxActive: false })
+  };
+
+  addSrcAmountByBalancePercentage = (balancePercentage) => {
+    const srcTokenBalance = this.props.sourceToken.balance;
+    const sourceAmountByPercentage = (srcTokenBalance * (balancePercentage / 100)).toFixed(this.props.sourceToken.precision);
+
+    this.props.setSourceAmount(sourceAmountByPercentage);
+    this.handleCloseSwapBalanceBox();
+  };
+
   render() {
     return (
       <SwapView
-        onClickSwapButton={this.handleOnClickSwapButton}
-        onClickSwapIcon={this.handleOnClickSwapIcon}
-        onSelectSourceToken={this.props.setSourceToken}
-        onSelectDestToken={this.props.setDestToken}
-        onSourceAmountChange={this.handleOnSourceAmountChange}
-        onCloseScatterModal={this.handleCloseScatterModal}
+        handleClickSwapButton={this.handleClickSwapButton}
+        handleClickSwapIcon={this.handleClickSwapIcon}
+        handleSelectSourceToken={this.props.setSourceToken}
+        handleSelectDestToken={this.props.setDestToken}
+        handleSourceAmountChange={this.handleSourceAmountChange}
+        handleCloseScatterModal={this.handleCloseScatterModal}
+        handleOpenSwapBalanceBox={this.handleOpenSwapBalanceBox}
+        handleCloseSwapBalanceBox={this.handleCloseSwapBalanceBox}
+        addSrcAmountByBalancePercentage={this.addSrcAmountByBalancePercentage}
         tx={this.props.tx}
         sourceToken={this.props.sourceToken}
         destToken={this.props.destToken}
@@ -92,8 +119,9 @@ class Swap extends Component {
         destAmount={this.props.destAmount}
         tokens={this.props.tokens}
         tokenPairRate={this.props.tokenPairRate}
-        account={this.props.account}
         error={this.props.error}
+        isSwapBalanceBoxActive={this.state.isSwapBalanceBoxActive}
+        isAccountImported={this.props.isAccountImported}
         isTokenPairRateLoading={this.props.isTokenPairRateLoading}
         isBalanceLoading={this.props.isBalanceLoading}
         isConfirmLoading={this.props.isConfirmLoading}

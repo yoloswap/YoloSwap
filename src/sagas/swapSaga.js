@@ -81,11 +81,13 @@ function* fetchTokenPairRate() {
       getRateParams(account.eos, swap.sourceToken.symbol, swap.destToken.symbol, sourceAmount)
     );
 
+    const destAmount = getDestAmount(tokenPairRate, sourceAmount, swap.destToken.precision);
+
     if (!tokenPairRate) {
       yield put(swapActions.setError('Your source amount is invalid or way too much for us to handle the swap'));
+    } else if (swap.sourceAmount > 0 && !destAmount) {
+      yield put(swapActions.setError('Your source amount is too small to make the swap'));
     }
-
-    const destAmount = getDestAmount(tokenPairRate, sourceAmount, swap.destToken.precision);
 
     yield put(swapActions.setDestAmount(destAmount));
     yield put(swapActions.setTokenPairRate(tokenPairRate));
@@ -110,16 +112,16 @@ function getRateParams(eos, srcSymbol, destSymbol, srcAmount) {
 function getDestAmount(tokenPairRate, sourceAmount, destTokenPrecision) {
   let destAmount = (tokenPairRate * sourceAmount).toFixed(destTokenPrecision);
 
-  if (destAmount !== 0) {
+  if (!destAmount) {
     destAmount = tokenPairRate * sourceAmount;
   }
 
-  return destAmount;
+  return parseFloat(destAmount);
 }
 
 function* validateValidInput(swap) {
   const sourceToken = swap.sourceToken;
-  const sourceAmount = swap.sourceAmount;
+  const sourceAmount = swap.sourceAmount.toString();
   const sourceTokenDecimals = sourceToken.precision;
   const sourceAmountDecimals = sourceAmount.split(".")[1];
 

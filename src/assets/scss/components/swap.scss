@@ -31,12 +31,24 @@
       padding: 14px 25px;
       transition: all .3s;
 
-      &.error {
+      &--error {
         border-color: $red;
         background-color: $red-light;
 
         .swap__content-input {
            background-color: $red-light;
+        }
+      }
+
+      &--imported {
+        position: relative;
+
+        .swap__content-input {
+          padding-right: 20px;
+        }
+
+        .swap__content-dropdown-container {
+          display: block;
         }
       }
     }
@@ -54,6 +66,34 @@
 
       &::placeholder {
         opacity: .6;
+      }
+    }
+
+    &-dropdown-container {
+      display: none;
+      position: absolute;
+      right: 15px;
+    }
+
+    &-dropdown-box {
+      width: 190px;
+      border-radius: 10px;
+      padding: 10px 0;
+      font-size: 14px;
+      font-weight: 500;
+      color: #5a5e67;
+      line-height: 2.14;
+      top: 24px;
+      right: 0;
+
+      div {
+        padding: 0 20px;
+        cursor: pointer;
+        transition: background-color .3s;
+
+        &:hover {
+          background-color: #eee;
+        }
       }
     }
 
