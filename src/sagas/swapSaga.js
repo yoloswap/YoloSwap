@@ -85,7 +85,7 @@ function* fetchTokenPairRate() {
       yield put(swapActions.setError('Your source amount is invalid or way too much for us to handle the swap'));
     }
 
-    const destAmount = (tokenPairRate * sourceAmount).toFixed(swap.destToken.precision);
+    const destAmount = getDestAmount(tokenPairRate, sourceAmount, swap.destToken.precision);
 
     yield put(swapActions.setDestAmount(destAmount));
     yield put(swapActions.setTokenPairRate(tokenPairRate));
@@ -105,6 +105,16 @@ function getRateParams(eos, srcSymbol, destSymbol, srcAmount) {
     networkAccount: NETWORK_ACCOUNT,
     eosTokenAccount: EOS_TOKEN.account
   };
+}
+
+function getDestAmount(tokenPairRate, sourceAmount, destTokenPrecision) {
+  let destAmount = (tokenPairRate * sourceAmount).toFixed(destTokenPrecision);
+
+  if (destAmount !== 0) {
+    destAmount = tokenPairRate * sourceAmount;
+  }
+
+  return destAmount;
 }
 
 function* validateValidInput(swap) {
