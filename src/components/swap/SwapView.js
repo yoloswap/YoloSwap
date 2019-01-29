@@ -89,7 +89,7 @@ export default class SwapView extends Component {
         )}
 
         {this.props.tx.id && (
-          <div className={"swap__text common__fade-in"}>Successfully! The <a rel="noopener noreferrer" href={`${TX_URL}${this.props.tx.id}`} target="_blank">transaction</a> is mined</div>
+          <div className={"swap__text common__fade-in"}>Successfully! The <a rel="noopener noreferrer" href={`${TX_URL}${this.props.tx.id}`} target="_blank">transaction</a> is accepted</div>
         )}
 
         {!isButtonHidden && (
