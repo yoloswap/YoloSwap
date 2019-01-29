@@ -5,7 +5,7 @@ export default class MarketView extends Component {
   render() {
     const getTokenList = () => {
       return this.props.tokens.filter((token) => {
-        return token.symbol.includes(this.props.searchText) && !token.symbol.includes(this.props.indexToken.symbol);
+        return token.symbol.includes(this.props.searchText) && (token.symbol !== this.props.indexToken.symbol);
       }).map((token, index) =>
         <tr key={index} className={"common__fade-in"}>
           <td className={"common__flexbox none"}>
