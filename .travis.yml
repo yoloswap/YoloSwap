@@ -13,28 +13,21 @@ env:
   global:
     - CI=false
 
-services:
-  - docker
+script:
+  - echo "npm test temporarily disabled"
 
 install:
   - npm install
-
-script:
-  # - npm test
   - npm run build
 
-after_success:
-  - docker --version
-  - docker build -f Dockerfile -t kybernetwork/yolo:$TRAVIS_COMMIT .
-
 deploy:
-  - provider: script
-    script: bash .travis/docker_push.sh
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    bucket: dev-yolo.knstats.com
+    region: ap-southeast-1
+    acl: public_read
+    local_dir: build
+    skip_cleanup: true
     on:
-      all_branches: true
-
-  - provider: script
-    script: bash .travis/awx_job_launch.sh $TRAVIS_BRANCH
-    on:
-      all_branches: true
-      condition: $TRAVIS_BRANCH =~ ^develop$
+      branch: develop
