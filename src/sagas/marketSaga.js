@@ -11,7 +11,7 @@ const getTokens = state => state.token.tokens;
 const getMarketState = state => state.market;
 const getAccountState = state => state.account;
 
-function* fetchMarketRatesChannel() {
+function *fetchMarketRatesChannel() {
   yield call(fetchMarketRates);
 
   while (true) {
@@ -19,7 +19,7 @@ function* fetchMarketRatesChannel() {
   }
 }
 
-function* fetchMarketRates(isBackgroundLoading = false) {
+function *fetchMarketRates(isBackgroundLoading = false) {
   yield call(setLoading, true, isBackgroundLoading);
 
   try {
@@ -78,7 +78,7 @@ function getMarketRateParams(eos, srcSymbols, destSymbols, srcAmounts) {
   };
 }
 
-function* setLoading(isLoading, isBackgroundLoading = false) {
+function *setLoading(isLoading, isBackgroundLoading = false) {
   if (isBackgroundLoading) {
     yield put(marketActions.setBackgroundLoading(isLoading));
   } else {

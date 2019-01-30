@@ -7,16 +7,7 @@ import Dropdown, { DropdownTrigger, DropdownContent } from "react-simple-dropdow
 
 export default class SwapView extends Component {
   render() {
-    let isError = false;
-    let errors = {
-      sameToken: this.props.sourceToken.symbol === this.props.destToken.symbol,
-      commonError: this.props.error
-    };
-
-    Object.values(errors).forEach((error) => {
-      if (error) isError = true;
-    });
-
+    const isError = !!this.props.error;
     const isSwapBalanceBoxShown = this.props.isAccountImported && !this.props.isBalanceLoading;
     const disabledClass = (isError || this.props.isTokenPairRateLoading) ? 'disabled' : '';
     const isButtonHidden = this.props.tx.isConfirming || this.props.tx.isBroadcasting || this.props.tx.id || this.props.tx.error;
@@ -51,12 +42,8 @@ export default class SwapView extends Component {
               </Dropdown>
             </div>
 
-            {errors.sameToken && (
-              <div className={"common__error under-input"}>Cannot exchange the same token</div>
-            )}
-
-            {errors.commonError && (
-              <div className={"common__error under-input"}>{errors.commonError}</div>
+            {this.props.error && (
+              <div className={"common__error under-input"}>{this.props.error}</div>
             )}
 
             <div className={"swap__content-info"}>
