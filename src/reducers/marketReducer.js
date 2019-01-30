@@ -3,6 +3,7 @@ import { EOS_TOKEN } from "../config/tokens";
 
 const initialState = {
   isLoading: true,
+  isBackgroundLoading: false,
   indexToken: EOS_TOKEN,
 };
 
@@ -18,6 +19,12 @@ export default function marketReducer(state = initialState, action) {
       return {
         ...state,
         isLoading: action.payload
+      }
+    }
+    case marketActionTypes.SET_BACKGROUND_LOADING: {
+      return {
+        ...state,
+        isBackgroundLoading: action.payload
       }
     }
     default:

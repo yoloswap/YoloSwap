@@ -56,6 +56,7 @@
       padding-bottom: 18px;
       padding-left: 60px;
       justify-content: initial;
+      position: relative;
     }
 
     &-option {
@@ -157,6 +158,16 @@
           display: none;
         }
       }
+    }
+
+    &-bg-loading {
+      width: 25px;
+      height: 25px;
+      position: absolute;
+      top: -4px;
+      left: 10px;
+      background-image: url($image-path + 'icons/loading-circle-2.gif');
+      background-size: contain;
     }
 
     tr:first-child th {

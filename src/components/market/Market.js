@@ -9,6 +9,7 @@ function mapStateToProps(store) {
     tokens: store.token.tokens,
     indexToken: store.market.indexToken,
     isLoading: store.market.isLoading,
+    isBackgroundLoading: store.market.isBackgroundLoading,
   };
 }
 
@@ -46,6 +47,7 @@ class Market extends Component {
         basedTokens={this.state.basedTokens}
         indexToken={this.props.indexToken}
         isLoading={this.props.isLoading}
+        isBackgroundLoading={this.props.isBackgroundLoading}
         onClickBasedToken={this.props.setIndexToken}
         onTypingSearch={this.handleOnTypingSearch}
       />

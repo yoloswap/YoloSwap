@@ -55,10 +55,6 @@ export default class SwapView extends Component {
               <div className={"common__error under-input"}>Cannot exchange the same token</div>
             )}
 
-            {/*{errors.noneDestAmount && (*/}
-              {/*<div className={"common__error under-input"}>Your source amount is too small to make the swap</div>*/}
-            {/*)}*/}
-
             {errors.commonError && (
               <div className={"common__error under-input"}>{errors.commonError}</div>
             )}

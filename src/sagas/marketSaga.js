@@ -1,7 +1,9 @@
+import { delay } from 'redux-saga';
 import { takeLatest, call, put, select } from 'redux-saga/effects';
 import { getRates } from "../services/network_service";
 import * as marketActions from "../actions/marketAction";
 import * as tokenActions from "../actions/tokenAction";
+import { MARKET_RATE_FETCHING_INTERVAL } from "../config/app";
 import { NETWORK_ACCOUNT } from "../config/env";
 import { EOS_TOKEN } from "../config/tokens";
 
@@ -9,8 +11,16 @@ const getTokens = state => state.token.tokens;
 const getMarketState = state => state.market;
 const getAccountState = state => state.account;
 
-function* fetchMarketRates() {
-  yield put(marketActions.setLoading(true));
+function* fetchMarketRatesChannel() {
+  yield call(fetchMarketRates);
+
+  while (true) {
+    yield call(fetchMarketRates, true);
+  }
+}
+
+function* fetchMarketRates(isBackgroundLoading = false) {
+  yield call(setLoading, true, isBackgroundLoading);
 
   try {
     let sameTokenIndex = null;
@@ -52,7 +62,9 @@ function* fetchMarketRates() {
     console.log(e);
   }
 
-  yield put(marketActions.setLoading(false));
+  yield call(setLoading, false, isBackgroundLoading);
+
+  yield call(delay, MARKET_RATE_FETCHING_INTERVAL);
 }
 
 function getMarketRateParams(eos, srcSymbols, destSymbols, srcAmounts) {
@@ -66,6 +78,15 @@ function getMarketRateParams(eos, srcSymbols, destSymbols, srcAmounts) {
   };
 }
 
+function* setLoading(isLoading, isBackgroundLoading = false) {
+  if (isBackgroundLoading) {
+    yield put(marketActions.setBackgroundLoading(isLoading));
+  } else {
+    yield put(marketActions.setLoading(isLoading));
+  }
+}
+
 export default function* marketWatcher() {
-  yield takeLatest(marketActions.marketActionTypes.FETCH_MARKET_RATES, fetchMarketRates);
+  yield takeLatest(
+    marketActions.marketActionTypes.FETCH_MARKET_RATES, fetchMarketRatesChannel);
 }

@@ -39,6 +39,9 @@ export default class MarketView extends Component {
             <tbody>
             <tr>
               <th className={"market__table-select common__flexbox"}>
+                {this.props.isBackgroundLoading && (
+                  <div className={"market__table-bg-loading common__fade-in"}/>
+                )}
                 {this.props.basedTokens.map((basedToken, index) => {
                   return (
                     <div
