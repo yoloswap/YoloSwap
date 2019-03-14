@@ -9,18 +9,18 @@ const EOS_TOKEN = {
 const TOKENS = [
   EOS_TOKEN,
   {
-    "name": "Everipedia",
-    "symbol": "IQ",
-    "account": "testtokeaaaa",
-    "precision": 3,
-    "logo": "iq.png",
-  },
-  {
     "name": "Crypto Pix",
     "symbol": "PXS",
     "account": "testtokeaaaa",
     "precision": 4,
     "logo": "pxs.svg",
+  },
+  {
+    "name": "Everipedia",
+    "symbol": "IQ",
+    "account": "testtokeaaaa",
+    "precision": 3,
+    "logo": "iq.png",
   },
   {
     "name": "HireVibes",

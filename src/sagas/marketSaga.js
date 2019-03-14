@@ -53,7 +53,7 @@ function *fetchMarketRates(isBackgroundLoading = false) {
 
     const tokensWithRate = tokens.map((token, index) => {
       token.sellRate = sellRates[index];
-      token.buyRate = 1 / buyRates[index];
+      token.buyRate = buyRates[index] ? 1 / buyRates[index] : 0;
       return token;
     });
 

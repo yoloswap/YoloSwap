@@ -83,8 +83,10 @@ function *fetchTokenPairRate() {
 
     const destAmount = getDestAmount(tokenPairRate, sourceAmount, swap.destToken.precision);
 
-    if (!tokenPairRate) {
+    if (!tokenPairRate && sourceAmount > MAX_SRC_AMOUNT_BY_EOS) {
       yield put(swapActions.setError(`Your source amount exceeds our max capacity of ${MAX_SRC_AMOUNT_BY_EOS} EOS in value`));
+    } else if (!tokenPairRate && sourceAmount <= MAX_SRC_AMOUNT_BY_EOS) {
+      yield put(swapActions.setError(`This pair in under maintenance`));
     } else if (swap.sourceAmount > 0 && !destAmount) {
       yield put(swapActions.setError('Your source amount is too small to make the swap'));
     }
