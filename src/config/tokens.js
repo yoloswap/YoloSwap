@@ -1,9 +1,16 @@
 const EOS_TOKEN = {
+  "id": "eos",
   "name": "EOS",
   "symbol": "EOS",
   "account": "eosio.token",
   "precision": 4,
   "logo": "eos.svg",
+};
+
+const USD = {
+  "id": "usd",
+  "name": "USD",
+  "symbol": "USD",
 };
 
 const TOKENS = [
@@ -59,4 +66,4 @@ const TOKENS = [
   }
 ];
 
-export { EOS_TOKEN, TOKENS };
+export { EOS_TOKEN, TOKENS, USD };

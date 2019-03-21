@@ -9,7 +9,7 @@ import { SCATTER_ERROR_TYPE } from '../config/app';
 const getTokens = state => state.token.tokens;
 const getAccountData = state => state.account;
 
-function *connectToScatter(action) {
+function* connectToScatter(action) {
   yield put(accountActions.setScatterLoading(true));
 
   try {
@@ -33,7 +33,7 @@ function *connectToScatter(action) {
   }
 }
 
-function *disconnectFromScatter() {
+function* disconnectFromScatter() {
   yield call(scatterService.disconnect);
 
   yield put(accountActions.setScatterAccount(null));
@@ -46,7 +46,7 @@ function *disconnectFromScatter() {
   yield put(tokenAction.setTokens(tokensWithoutBalance));
 }
 
-function *fetchBalances() {
+function* fetchBalances() {
   try {
     yield put(accountActions.setBalanceLoading(true));
 

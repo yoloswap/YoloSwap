@@ -1,4 +1,4 @@
-export function formatAmount(amount, precision) {
+export function formatAmount(amount, precision = 6) {
   if (amount === undefined) return;
 
   const amountString = amount.toString();

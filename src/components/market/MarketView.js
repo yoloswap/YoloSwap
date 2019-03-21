@@ -1,28 +1,40 @@
 import React, { Component } from 'react';
 import { formatAmount } from "../../utils/helpers";
+import { MARKET_BASED_TOKENS } from "../../config/app";
+import { EOS_TOKEN, USD } from "../../config/tokens";
 
 export default class MarketView extends Component {
   render() {
     const getTokenList = () => {
       return this.props.tokens.filter((token) => {
-        return token.symbol.includes(this.props.searchText) && (token.symbol !== this.props.indexToken.symbol);
+        return token.symbol.includes(this.props.searchText) && (token.symbol !== EOS_TOKEN.symbol);
       }).map((token, index) =>
         <tr key={index} className={"common__fade-in"}>
-          <td className={"common__flexbox none"}>
+          <td className={"market__table-td market__table-first-col common__flexbox none"}>
             <img className={"market__table-icon"} src={require(`../../assets/images/tokens/${token.logo}`)} alt=""/>
             <div className={"market__table-text"}>{token.symbol}</div>
           </td>
-          <td className={"market__table-text"}>
-            {token.sellRate ? formatAmount(token.sellRate, 6) : 0}
+          <td className={"market__table-td market__table-text"}>
+            {renderRate(token.sellRate, token.sellRateUsd)}
           </td>
-          <td className={"market__table-text"}>
-            {token.buyRate ? formatAmount(token.buyRate, 6) : 0}
+          <td className={"market__table-td market__table-text"}>
+            {renderRate(token.buyRate, token.buyRateUsd)}
           </td>
-          <td>
+          <td className={"market__table-td market__table-last-col"}>
             <span className={"market__table-change none"}>---</span>
           </td>
         </tr>
       );
+    };
+
+    const renderRate = (tokenBasedRate, usdRate) => {
+      let rate = tokenBasedRate;
+
+      if (this.props.indexToken.id === USD.id) {
+        rate = usdRate;
+      }
+
+      return <td className={"market__table-text"}>{rate ? formatAmount(rate) : 0}</td>
     };
 
     return (
@@ -42,14 +54,14 @@ export default class MarketView extends Component {
                 {this.props.isBackgroundLoading && (
                   <div className={"market__table-bg-loading common__fade-in"}/>
                 )}
-                {this.props.basedTokens.map((basedToken, index) => {
+                {MARKET_BASED_TOKENS.map((basedToken, index) => {
                   return (
                     <div
                       key={index}
-                      className={`market__table-option ${this.props.indexToken.symbol === basedToken ? 'active' : 'disabled'}`}
-                      // onClick={() => this.props.onClickBasedToken(basedToken)}
+                      className={`market__table-option ${this.props.indexToken.id === basedToken.id ? 'active' : ''}`}
+                      onClick={() => this.props.onClickBasedToken(basedToken)}
                     >
-                      {basedToken}
+                      {basedToken.symbol}
                     </div>
                   )
                 })}

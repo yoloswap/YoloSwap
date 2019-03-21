@@ -6,12 +6,14 @@ import * as tokenActions from "../actions/tokenAction";
 import { MARKET_RATE_FETCHING_INTERVAL } from "../config/app";
 import { NETWORK_ACCOUNT } from "../config/env";
 import { EOS_TOKEN } from "../config/tokens";
+import { callFetchMarketRates } from "../services/api_service";
+import { getUSDRateById } from "../services/coingecko_service";
 
 const getTokens = state => state.token.tokens;
 const getMarketState = state => state.market;
 const getAccountState = state => state.account;
 
-function *fetchMarketRatesChannel() {
+function* fetchMarketRatesChannel() {
   yield call(fetchMarketRates);
 
   while (true) {
@@ -19,43 +21,15 @@ function *fetchMarketRatesChannel() {
   }
 }
 
-function *fetchMarketRates(isBackgroundLoading = false) {
+function* fetchMarketRates(isBackgroundLoading = false) {
   yield call(setLoading, true, isBackgroundLoading);
 
   try {
-    let sameTokenIndex = null;
-    let srcSymbols = [], destSymbols = [], srcAmounts = [];
-    let tokens = yield select(getTokens);
-    const market = yield select(getMarketState);
-    const account = yield select(getAccountState);
-    const defaultSrcAmount = 1;
-    const defaultSellAndBuyRate = 1;
+    let tokensWithRate = yield call(getTokensWithRateFromAPI);
 
-    tokens.forEach((token, index) => {
-      if (token.symbol === market.indexToken.symbol) {
-        sameTokenIndex = index;
-        return;
-      }
-
-      srcSymbols.push(token.symbol);
-      destSymbols.push(market.indexToken.symbol);
-      srcAmounts.push(defaultSrcAmount);
-    });
-
-    let sellRates = yield call(getRates, getMarketRateParams(account.eos, srcSymbols, destSymbols, srcAmounts));
-    let buyRates = yield call(getRates, getMarketRateParams(account.eos, destSymbols, srcSymbols, srcAmounts));
-    tokens = yield select(getTokens);
-
-    if (sameTokenIndex !== null) {
-      sellRates.splice(sameTokenIndex, 0, defaultSellAndBuyRate);
-      buyRates.splice(sameTokenIndex, 0, defaultSellAndBuyRate);
+    if (!tokensWithRate) {
+      tokensWithRate = yield call(getTokensWithRateFromBlockChain);
     }
-
-    const tokensWithRate = tokens.map((token, index) => {
-      token.sellRate = sellRates[index];
-      token.buyRate = buyRates[index] ? 1 / buyRates[index] : 0;
-      return token;
-    });
 
     yield put(tokenActions.setTokens(tokensWithRate));
   } catch (e) {
@@ -65,6 +39,76 @@ function *fetchMarketRates(isBackgroundLoading = false) {
   yield call(setLoading, false, isBackgroundLoading);
 
   yield call(delay, MARKET_RATE_FETCHING_INTERVAL);
+}
+
+function* getTokensWithRateFromAPI() {
+  let tokens = yield select(getTokens);
+  let marketRateData;
+
+  try {
+    marketRateData = yield call(callFetchMarketRates);
+  } catch (e) {
+    return false;
+  }
+
+  if (!marketRateData.length) {
+    return false;
+  }
+
+  return tokens.map((token, index) => {
+    if (token.symbol === EOS_TOKEN.symbol) {
+      return token;
+    }
+
+    const tokenMarketRate = marketRateData[index - 1];
+
+    token.sellRate = tokenMarketRate.sellRate;
+    token.buyRate = tokenMarketRate.buyRate;
+    token.sellRateUsd = tokenMarketRate.sellRateUsd;
+    token.buyRateUsd = tokenMarketRate.buyRateUsd;
+
+    return token;
+  });
+}
+
+function* getTokensWithRateFromBlockChain() {
+  let srcSymbols = [], destSymbols = [], srcAmounts = [];
+  const market = yield select(getMarketState);
+  const account = yield select(getAccountState);
+  let tokens = yield select(getTokens);
+
+  tokens.forEach((token) => {
+    if (token.symbol === market.indexToken.symbol) {
+      return;
+    }
+
+    srcSymbols.push(token.symbol);
+    destSymbols.push(market.indexToken.symbol);
+    srcAmounts.push(1);
+  });
+
+  let sellRates = yield call(getRates, getMarketRateParams(account.eos, srcSymbols, destSymbols, srcAmounts));
+  let buyRates = yield call(getRates, getMarketRateParams(account.eos, destSymbols, srcSymbols, srcAmounts));
+  const coinGeckoResponse = yield call(getUSDRateById, EOS_TOKEN.id);
+
+  const eosUSDPrice = coinGeckoResponse[0] && coinGeckoResponse[0].current_price ? coinGeckoResponse[0].current_price : 0;
+  tokens = yield select(getTokens);
+
+  return tokens.map((token, index) => {
+    if (token.symbol === EOS_TOKEN.symbol) {
+      return token;
+    }
+
+    const sellRate = sellRates[index - 1];
+    const buyRate = buyRates[index - 1] ? 1 / buyRates[index - 1] : 0;
+
+    token.sellRate = sellRate;
+    token.buyRate = buyRate;
+    token.sellRateUsd = eosUSDPrice * sellRate;
+    token.buyRateUsd = eosUSDPrice * buyRate;
+
+    return token;
+  });
 }
 
 function getMarketRateParams(eos, srcSymbols, destSymbols, srcAmounts) {
@@ -78,7 +122,7 @@ function getMarketRateParams(eos, srcSymbols, destSymbols, srcAmounts) {
   };
 }
 
-function *setLoading(isLoading, isBackgroundLoading = false) {
+function* setLoading(isLoading, isBackgroundLoading = false) {
   if (isBackgroundLoading) {
     yield put(marketActions.setBackgroundLoading(isLoading));
   } else {

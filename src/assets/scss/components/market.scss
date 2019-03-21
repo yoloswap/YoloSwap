@@ -53,19 +53,20 @@
 
     &-select {
       min-width: 180px;
-      padding-bottom: 18px;
-      padding-left: 60px;
+      padding-left: 50px;
       justify-content: initial;
       position: relative;
     }
 
     &-option {
+      height: 32px;
       font-size: 12px;
       font-weight: 600;
-      color: $blue;
+      color: $grey;
       position: relative;
       padding: 0 25px;
-      //cursor: pointer;
+      cursor: pointer;
+      transition: color .3s;
 
       &::after {
         content: '';
@@ -73,19 +74,18 @@
         width: 100%;
         height: 2px;
         position: absolute;
-        bottom: -18px;
+        bottom: -1px;
         left: 0;
         transition: all .3s;
       }
 
-      &.active::after,
-      &:hover::after {
-        background-color: $blue;
-      }
+      &.active,
+      &:hover {
+        color: $blue;
 
-      &.disabled {
-        color: #ccc;
-        pointer-events: none;
+        &::after {
+          background-color: $blue;
+        }
       }
     }
 
@@ -97,16 +97,20 @@
       text-align: left;
       padding-bottom: 18px;
       text-transform: uppercase;
+      cursor: pointer;
 
-      // Should enable when we have sort function for the table
-      /*&::before {
+      &::before {
         content: '';
         display: inline-block;
         width: 11px;
         height: 11px;
         background-image: url($image-path + 'icons/arrow-blue-up.svg');
         margin-right: 8px;
-      }*/
+      }
+
+      &:last-child {
+        padding-right: 30px;
+      }
     }
 
     &-icon {
@@ -170,6 +174,18 @@
       background-size: contain;
     }
 
+    &-td {
+      padding: 13px 0;
+    }
+
+    &-first-col {
+      padding-left: 30px;
+    }
+
+    &-last-col {
+      padding-right: 30px;
+    }
+
     tr:first-child th {
       border-bottom: 1px solid #dce4ee;
     }
@@ -181,15 +197,6 @@
     th:last-child,
     td:last-child {
       text-align: right;
-      padding-right: 20px;
-    }
-
-    td {
-      padding: 13px 0;
-
-      &:first-child {
-        padding-left: 30px;
-      }
     }
   }
 

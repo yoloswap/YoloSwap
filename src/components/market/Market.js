@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import MarketView from './MarketView';
 import { connect } from "react-redux";
-import { MARKET_BASED_TOKENS} from "../../config/app";
 import { fetchMarketRates, setIndexToken } from "../../actions/marketAction";
 
 function mapStateToProps(store) {
@@ -25,8 +24,7 @@ class Market extends Component {
     super(props);
 
     this.state = {
-      searchText: '',
-      basedTokens: MARKET_BASED_TOKENS
+      searchText: ''
     }
   }
 
@@ -44,7 +42,6 @@ class Market extends Component {
       <MarketView
         tokens={this.props.tokens}
         searchText={this.state.searchText}
-        basedTokens={this.state.basedTokens}
         indexToken={this.props.indexToken}
         isLoading={this.props.isLoading}
         isBackgroundLoading={this.props.isBackgroundLoading}

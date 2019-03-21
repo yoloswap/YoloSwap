@@ -10,7 +10,7 @@ import { MIN_CONVERSION_RATE, MAX_SRC_AMOUNT_BY_EOS } from "../config/app";
 const getSwapState = state => state.swap;
 const getAccountState = state => state.account;
 
-function *swapToken() {
+function* swapToken() {
   const swap = yield select(getSwapState);
   const account = yield select(getAccountState);
 
@@ -65,7 +65,7 @@ function *swapToken() {
   }
 }
 
-function *fetchTokenPairRate() {
+function* fetchTokenPairRate() {
   const swap = yield select(getSwapState);
   const account = yield select(getAccountState);
   const sourceAmount = swap.sourceAmount ? swap.sourceAmount : 1;
@@ -86,7 +86,7 @@ function *fetchTokenPairRate() {
     if (!tokenPairRate && sourceAmount > MAX_SRC_AMOUNT_BY_EOS) {
       yield put(swapActions.setError(`Your source amount exceeds our max capacity of ${MAX_SRC_AMOUNT_BY_EOS} EOS in value`));
     } else if (!tokenPairRate && sourceAmount <= MAX_SRC_AMOUNT_BY_EOS) {
-      yield put(swapActions.setError(`This pair in under maintenance`));
+      yield put(swapActions.setError(`Our reserves cannot handle your amount at the moment. Please try again later.`));
     } else if (swap.sourceAmount > 0 && !destAmount) {
       yield put(swapActions.setError('Your source amount is too small to make the swap'));
     }
@@ -100,7 +100,7 @@ function *fetchTokenPairRate() {
   yield put(swapActions.setTokenPairRateLoading(false));
 }
 
-function *validateValidInput(swap) {
+function* validateValidInput(swap) {
   const sourceToken = swap.sourceToken;
   const sourceAmount = swap.sourceAmount.toString();
   const sourceTokenDecimals = sourceToken.precision;
@@ -131,7 +131,7 @@ function *validateValidInput(swap) {
   return true;
 }
 
-function *setError(errorMessage) {
+function* setError(errorMessage) {
   yield put(swapActions.setError(errorMessage));
   yield put(swapActions.setTokenPairRateLoading(false));
   yield put(swapActions.setTokenPairRate(0));
