@@ -53,7 +53,7 @@
 
     &-select {
       min-width: 180px;
-      padding-left: 50px;
+      padding-left: 51px;
       justify-content: initial;
       position: relative;
     }
@@ -99,17 +99,32 @@
       text-transform: uppercase;
       cursor: pointer;
 
+      &:last-child {
+        padding-right: 30px;
+      }
+
       &::before {
-        content: '';
         display: inline-block;
         width: 11px;
         height: 11px;
-        background-image: url($image-path + 'icons/arrow-blue-up.svg');
         margin-right: 8px;
+        background-image: url($image-path + 'icons/arrow-blue-up.svg');
+        transform: scale(0.4);
+        animation: scale-up .3s forwards;
+        transition: transform .3s;
       }
 
-      &:last-child {
-        padding-right: 30px;
+      &.asc::before,
+      &.desc::before {
+       content: '';
+      }
+
+      &.desc::before {
+        animation: scale-up-with-rotating .3s forwards;
+      }
+
+      &.disabled {
+        cursor: initial;
       }
     }
 

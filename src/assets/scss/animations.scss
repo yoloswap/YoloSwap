@@ -4,3 +4,15 @@
     transform: translateY(0);
   }
 }
+
+@keyframes scale-up {
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes scale-up-with-rotating {
+  to {
+    transform: scale(1) rotate(180deg);
+  }
+}

@@ -24,17 +24,32 @@ class Market extends Component {
     super(props);
 
     this.state = {
-      searchText: ''
+      searchText: '',
+      sortDirection: '',
+      sortKey: ''
     }
-  }
+  };
 
   componentDidMount() {
     this.props.fetchMarketRates();
-  }
+  };
 
   handleOnTypingSearch = (e) => {
     const value = e.target.value.toUpperCase();
     this.setState({ searchText: value });
+  };
+
+  activateSorting = (sortKey) => {
+    this.setState({ sortKey: sortKey });
+    this.toggleSortDirection();
+  };
+
+  toggleSortDirection = () => {
+    if (this.state.sortDirection === 'asc') {
+      this.setState({ sortDirection: 'desc' });
+    } else {
+      this.setState({ sortDirection: 'asc' });
+    }
   };
 
   render() {
@@ -45,6 +60,9 @@ class Market extends Component {
         indexToken={this.props.indexToken}
         isLoading={this.props.isLoading}
         isBackgroundLoading={this.props.isBackgroundLoading}
+        sortDirection={this.state.sortDirection}
+        sortKey={this.state.sortKey}
+        activateSorting={this.activateSorting}
         onClickBasedToken={this.props.setIndexToken}
         onTypingSearch={this.handleOnTypingSearch}
       />
