@@ -1,4 +1,5 @@
 const EOS_TOKEN = {
+  "id": 'eos',
   "name": "EOS",
   "symbol": "EOS",
   "account": "eosio.token",
