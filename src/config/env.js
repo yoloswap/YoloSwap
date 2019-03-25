@@ -8,7 +8,12 @@ const NETWORK_HOST = 'jungle2.cryptolions.io';
 const NETWORK_CHAIN_ID = 'e70aaab8997e1dfce58fbfac80cbbb8fecec7b99cf982a9444273cbc64c41473';
 const TX_URL = 'https://jungle.bloks.io/transaction/';
 const COINGECKO_URL = 'https://api.coingecko.com/api/v3/';
-const API_URL = 'http://localhost:3002/';
+
+let API_URL = 'http://localhost:3002/';
+
+if (process.env.NODE_ENV === 'production') {
+  API_URL = 'https://yolo-backend.knstats.com/';
+}
 
 export { NETWORK_ACCOUNT, NETWORK_BLOCKCHAIN, NETWORK_PROTOCOL, NETWORK_PORT, NETWORK_HOST, NETWORK_CHAIN_ID, TX_URL,
   COINGECKO_URL, API_URL }
