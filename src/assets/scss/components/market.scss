@@ -52,13 +52,14 @@
     border-collapse: collapse;
 
     &-select {
-      min-width: 180px;
-      padding-left: 51px;
-      justify-content: initial;
+      text-align: left;
+      min-width: 250px;
+      padding: 0 30px 0 51px;
       position: relative;
     }
 
     &-option {
+      display: inline-block;
       height: 32px;
       font-size: 12px;
       font-weight: 600;
@@ -98,8 +99,6 @@
       padding-bottom: 18px;
       text-transform: uppercase;
       cursor: pointer;
-      position: relative;
-      top: -1px;
 
       &:last-child {
         padding-right: 30px;
@@ -185,7 +184,7 @@
       width: 16px;
       height: 16px;
       position: absolute;
-      top: 1px;
+      top: 2px;
       left: 30px;
       background-image: url($image-path + 'icons/loading-circle-2.gif');
       background-size: contain;
@@ -237,10 +236,6 @@
       &-container {
         overflow-x: auto;
         overflow-y: hidden;
-      }
-
-      &-select {
-        padding-left: 20px;
       }
 
       &-bg-loading {
