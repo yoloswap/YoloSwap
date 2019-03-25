@@ -98,6 +98,8 @@
       padding-bottom: 18px;
       text-transform: uppercase;
       cursor: pointer;
+      position: relative;
+      top: -1px;
 
       &:last-child {
         padding-right: 30px;
