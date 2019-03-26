@@ -12,7 +12,7 @@ const COINGECKO_URL = 'https://api.coingecko.com/api/v3/';
 let API_URL = 'http://localhost:3002/';
 
 if (process.env.NODE_ENV === 'production') {
-  API_URL = 'https://yolo-backend.knstats.com/';
+  API_URL = 'https://dev-yolo-backend.knstats.com/';
 }
 
 export { NETWORK_ACCOUNT, NETWORK_BLOCKCHAIN, NETWORK_PROTOCOL, NETWORK_PORT, NETWORK_HOST, NETWORK_CHAIN_ID, TX_URL,
