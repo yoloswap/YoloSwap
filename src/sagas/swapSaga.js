@@ -5,7 +5,7 @@ import * as swapActions from "../actions/swapAction";
 import * as accountActions from "../actions/accountAction";
 import { NETWORK_ACCOUNT } from "../config/env";
 import { EOS_TOKEN } from "../config/tokens";
-import { MIN_CONVERSION_RATE, MAX_SRC_AMOUNT_BY_EOS } from "../config/app";
+import { MIN_CONVERSION_RATE } from "../config/app";
 
 const getSwapState = state => state.swap;
 const getAccountState = state => state.account;
@@ -29,6 +29,7 @@ function* swapToken() {
         userAccount: account.account.name,
         srcAmount: sourceAmount,
         srcTokenAccount: sourceToken.account,
+        destTokenAccount: destToken.account,
         srcSymbol: sourceToken.symbol,
         destPrecision: destToken.precision,
         destSymbol: destToken.symbol,
@@ -83,9 +84,7 @@ function* fetchTokenPairRate() {
 
     const destAmount = getDestAmount(tokenPairRate, sourceAmount, swap.destToken.precision);
 
-    if (!tokenPairRate && sourceAmount > MAX_SRC_AMOUNT_BY_EOS) {
-      yield put(swapActions.setError(`Your source amount exceeds our max capacity of ${MAX_SRC_AMOUNT_BY_EOS} EOS in value`));
-    } else if (!tokenPairRate && sourceAmount <= MAX_SRC_AMOUNT_BY_EOS) {
+    if (!tokenPairRate) {
       yield put(swapActions.setError(`Our reserves cannot handle your amount at the moment. Please try again later.`));
     } else if (swap.sourceAmount > 0 && !destAmount) {
       yield put(swapActions.setError('Your source amount is too small to make the swap'));
