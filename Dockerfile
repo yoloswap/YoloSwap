@@ -1,10 +1,10 @@
 FROM node:8 as build-env
 COPY . /yolo/
 WORKDIR /yolo
-RUN npm install && npm run build
+RUN npm install
 
 FROM node:8-slim
 COPY --from=build-env /yolo /yolo
-WORKDIR /yolo
-EXPOSE 3000
-CMD ["npm", "start"]
+WORKDIR /yolo/server
+EXPOSE 3002
+CMD ["node", "server.js"]
