@@ -10,7 +10,6 @@ import { callFetchMarketRates } from "../services/api_service";
 import { getUSDRateById } from "../services/coingecko_service";
 
 const getTokens = state => state.token.tokens;
-const getMarketState = state => state.market;
 const getAccountState = state => state.account;
 
 function* fetchMarketRatesChannel() {
@@ -73,17 +72,16 @@ function* getTokensWithRateFromAPI() {
 
 function* getTokensWithRateFromBlockChain() {
   let srcSymbols = [], destSymbols = [], srcAmounts = [];
-  const market = yield select(getMarketState);
   const account = yield select(getAccountState);
   let tokens = yield select(getTokens);
 
   tokens.forEach((token) => {
-    if (token.symbol === market.indexToken.symbol) {
+    if (token.symbol === EOS_TOKEN.symbol) {
       return;
     }
 
     srcSymbols.push(token.symbol);
-    destSymbols.push(market.indexToken.symbol);
+    destSymbols.push(EOS_TOKEN.symbol);
     srcAmounts.push(1);
   });
 

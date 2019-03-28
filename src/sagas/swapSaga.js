@@ -43,6 +43,7 @@ function* swapToken() {
     yield call(delay, 1000);
     yield put(swapActions.setTxBroadcasting(false));
     yield put(swapActions.setTxId(result.transaction_id));
+    yield put(swapActions.setSourceAmount(''));
     yield put(accountActions.fetchBalance());
     yield call(delay, 5000);
     yield put(swapActions.resetTx());
