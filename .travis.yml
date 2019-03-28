@@ -20,6 +20,10 @@ install:
   - npm install
   - npm run build
 
+after_success:
+  - docker --version
+  - docker build -f Dockerfile -t kybernetwork/yolo:$TRAVIS_COMMIT .
+
 deploy:
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY_ID
