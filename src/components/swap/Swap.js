@@ -54,6 +54,11 @@ class Swap extends Component {
     this.props.fetchTokenPairRate();
   };
 
+  handleSetSourceToken = (token) => {
+    this.props.setSourceToken(token);
+    this.resetSourceAmount(token);
+  };
+
   handleClickSwapButton = () => {
     if (!this.props.sourceAmount) {
       this.props.setError("Source amount is required to make a swap");
@@ -78,6 +83,7 @@ class Swap extends Component {
   handleClickSwapIcon = () => {
     this.props.setSourceToken(this.props.destToken);
     this.props.setDestToken(this.props.sourceToken);
+    this.resetSourceAmount(this.props.destToken);
   };
 
   handleCloseScatterModal = () => {
@@ -100,12 +106,18 @@ class Swap extends Component {
     this.handleCloseSwapBalanceBox();
   };
 
+  resetSourceAmount = (token) => {
+    if (token.symbol !== this.props.sourceToken.symbol) {
+      this.props.setSourceAmount('');
+    }
+  };
+
   render() {
     return (
       <SwapView
         handleClickSwapButton={this.handleClickSwapButton}
         handleClickSwapIcon={this.handleClickSwapIcon}
-        handleSelectSourceToken={this.props.setSourceToken}
+        handleSelectSourceToken={this.handleSetSourceToken}
         handleSelectDestToken={this.props.setDestToken}
         handleSourceAmountChange={this.handleSourceAmountChange}
         handleCloseScatterModal={this.handleCloseScatterModal}
