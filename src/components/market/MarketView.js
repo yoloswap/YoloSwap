@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { formatAmount } from "../../utils/helpers";
-import { MARKET_BASED_TOKENS } from "../../config/app";
-import { EOS_TOKEN, USD } from "../../config/tokens";
+import appConfig from "../../config/app";
+import envConfig from "../../config/env";
 import { sortBy } from 'underscore';
 
 export default class MarketView extends Component {
@@ -18,7 +18,7 @@ export default class MarketView extends Component {
       }
 
       return sortedTokens.map((token, index) => {
-        if (!token.symbol.includes(this.props.searchText) || (token.symbol === EOS_TOKEN.symbol)) {
+        if (!token.symbol.includes(this.props.searchText) || (token.symbol === envConfig.EOS.symbol)) {
           return null;
         }
 
@@ -45,7 +45,7 @@ export default class MarketView extends Component {
     const renderRate = (tokenBasedRate, usdRate) => {
       let rate = tokenBasedRate;
 
-      if (this.props.indexToken.id === USD.id) {
+      if (this.props.indexToken.id === envConfig.USD.id) {
         rate = usdRate;
       }
 
@@ -77,7 +77,7 @@ export default class MarketView extends Component {
                 {this.props.isBackgroundLoading && (
                   <div className={"market__table-bg-loading common__fade-in"}/>
                 )}
-                {MARKET_BASED_TOKENS.map((basedToken, index) => {
+                {appConfig.MARKET_BASED_TOKENS.map((basedToken, index) => {
                   return (
                     <div
                       key={index}

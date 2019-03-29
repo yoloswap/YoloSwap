@@ -1,20 +1,30 @@
-const EOS_TOKEN = {
-  "id": "eos",
-  "name": "EOS",
-  "symbol": "EOS",
-  "account": "eosio.token",
-  "precision": 4,
-  "logo": "eos.svg",
+const envConfig = {
+  NETWORK_BLOCKCHAIN: 'eos',
+  NETWORK_PROTOCOL: 'https',
+  NETWORK_PORT: '443',
+  NETWORK_ACCOUNT: 'yolonetw1121',
+  NETWORK_HOST: 'jungle2.cryptolions.io',
+  NETWORK_CHAIN_ID: 'e70aaab8997e1dfce58fbfac80cbbb8fecec7b99cf982a9444273cbc64c41473',
+  TX_URL: 'https://jungle.bloks.io/transaction/',
+  COINGECKO_URL: 'https://api.coingecko.com/api/v3/',
+  API_URL: 'https://dev-yolo-backend.knstats.com/',
+  EOS: {
+    "id": "eos",
+    "name": "EOS",
+    "symbol": "EOS",
+    "account": "eosio.token",
+    "precision": 4,
+    "logo": "eos.svg",
+  },
+  USD: {
+    "id": "usd",
+    "name": "USD",
+    "symbol": "USD",
+  }
 };
 
-const USD = {
-  "id": "usd",
-  "name": "USD",
-  "symbol": "USD",
-};
-
-const TOKENS = [
-  EOS_TOKEN,
+envConfig.TOKENS = [
+  envConfig.EOS,
   {
     "name": "Crypto Pix",
     "symbol": "PXS",
@@ -66,4 +76,4 @@ const TOKENS = [
   }
 ];
 
-export { EOS_TOKEN, TOKENS, USD };
+export default envConfig;

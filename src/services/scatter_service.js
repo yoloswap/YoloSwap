@@ -1,7 +1,7 @@
 import ScatterJS from "scatterjs-core";
 import Eos from "eosjs";
 import ScatterEOS from "scatterjs-plugin-eosjs";
-import * as env from "../config/env";
+import envConfig from "../config/env";
 
 export async function connect(isIdentityNeeded = true) {
   const scatter = initiateScatter();
@@ -46,10 +46,10 @@ export function getEosInstance(scatter, network = null) {
 
 function getNetworkObject() {
   return {
-    blockchain: env.NETWORK_BLOCKCHAIN,
-    protocol: env.NETWORK_PROTOCOL,
-    host: env.NETWORK_HOST,
-    port: env.NETWORK_PORT,
-    chainId: env.NETWORK_CHAIN_ID
+    blockchain: envConfig.NETWORK_BLOCKCHAIN,
+    protocol: envConfig.NETWORK_PROTOCOL,
+    host: envConfig.NETWORK_HOST,
+    port: envConfig.NETWORK_PORT,
+    chainId: envConfig.NETWORK_CHAIN_ID
   }
 }

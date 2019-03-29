@@ -1,8 +1,10 @@
-import { EOS_TOKEN, USD } from "./tokens";
+import envConfig from "./env";
 
-const MARKET_BASED_TOKENS = [EOS_TOKEN, USD];
-const MARKET_RATE_FETCHING_INTERVAL = 10000;
-const MIN_CONVERSION_RATE = "0.000001";
-const SCATTER_ERROR_TYPE = 'scatter';
+const appConfig = {
+  MARKET_BASED_TOKENS: [envConfig.EOS, envConfig.USD],
+  MARKET_RATE_FETCHING_INTERVAL: 10000,
+  MIN_CONVERSION_RATE: "0.000001",
+  SCATTER_ERROR_TYPE: 'scatter',
+};
 
-export { MARKET_BASED_TOKENS, MIN_CONVERSION_RATE, SCATTER_ERROR_TYPE, MARKET_RATE_FETCHING_INTERVAL }
+export default appConfig;

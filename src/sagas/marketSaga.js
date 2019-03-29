@@ -3,9 +3,8 @@ import { takeLatest, call, put, select } from 'redux-saga/effects';
 import { getRates } from "../services/network_service";
 import * as marketActions from "../actions/marketAction";
 import * as tokenActions from "../actions/tokenAction";
-import { MARKET_RATE_FETCHING_INTERVAL } from "../config/app";
-import { NETWORK_ACCOUNT } from "../config/env";
-import { EOS_TOKEN } from "../config/tokens";
+import appConfig from "../config/app";
+import envConfig from "../config/env";
 import { callFetchMarketRates } from "../services/api_service";
 import { getUSDRateById } from "../services/coingecko_service";
 
@@ -37,7 +36,7 @@ function* fetchMarketRates(isBackgroundLoading = false) {
 
   yield call(setLoading, false, isBackgroundLoading);
 
-  yield call(delay, MARKET_RATE_FETCHING_INTERVAL);
+  yield call(delay, appConfig.MARKET_RATE_FETCHING_INTERVAL);
 }
 
 function* getTokensWithRateFromAPI() {
@@ -55,7 +54,7 @@ function* getTokensWithRateFromAPI() {
   }
 
   return tokens.map((token, index) => {
-    if (token.symbol === EOS_TOKEN.symbol) {
+    if (token.symbol === envConfig.EOS.symbol) {
       return token;
     }
 
@@ -76,24 +75,24 @@ function* getTokensWithRateFromBlockChain() {
   let tokens = yield select(getTokens);
 
   tokens.forEach((token) => {
-    if (token.symbol === EOS_TOKEN.symbol) {
+    if (token.symbol === envConfig.EOS.symbol) {
       return;
     }
 
     srcSymbols.push(token.symbol);
-    destSymbols.push(EOS_TOKEN.symbol);
+    destSymbols.push(envConfig.EOS.symbol);
     srcAmounts.push(1);
   });
 
   let sellRates = yield call(getRates, getMarketRateParams(account.eos, srcSymbols, destSymbols, srcAmounts));
   let buyRates = yield call(getRates, getMarketRateParams(account.eos, destSymbols, srcSymbols, srcAmounts));
-  const coinGeckoResponse = yield call(getUSDRateById, EOS_TOKEN.id);
+  const coinGeckoResponse = yield call(getUSDRateById, envConfig.EOS.id);
 
   const eosUSDPrice = coinGeckoResponse[0] && coinGeckoResponse[0].current_price ? coinGeckoResponse[0].current_price : 0;
   tokens = yield select(getTokens);
 
   return tokens.map((token, index) => {
-    if (token.symbol === EOS_TOKEN.symbol) {
+    if (token.symbol === envConfig.EOS.symbol) {
       return token;
     }
 
@@ -115,8 +114,8 @@ function getMarketRateParams(eos, srcSymbols, destSymbols, srcAmounts) {
     srcSymbols: srcSymbols,
     destSymbols: destSymbols,
     srcAmounts: srcAmounts,
-    networkAccount: NETWORK_ACCOUNT,
-    eosTokenAccount: EOS_TOKEN.account
+    networkAccount: envConfig.NETWORK_ACCOUNT,
+    eosTokenAccount: envConfig.EOS.account
   };
 }
 

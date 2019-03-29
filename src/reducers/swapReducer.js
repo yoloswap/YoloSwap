@@ -1,9 +1,9 @@
 import { swapActionTypes } from '../actions/swapAction';
-import { EOS_TOKEN, TOKENS } from '../config/tokens';
+import envConfig from '../config/env';
 
 const initialState = {
-  sourceToken: EOS_TOKEN,
-  destToken: TOKENS[1],
+  sourceToken: envConfig.EOS,
+  destToken: envConfig.TOKENS[1],
   sourceAmount: '',
   destAmount: 0,
   tokenPairRate: 0,

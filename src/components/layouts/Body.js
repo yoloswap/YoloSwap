@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import * as scatterService from '../../services/scatter_service';
 import Modal from '../commons/Modal';
 import ModalScatter from '../commons/ModalScatter';
-import { SCATTER_ERROR_TYPE } from '../../config/app';
+import appConfig from '../../config/app';
 
 function mapStateToProps(state) {
   return {
@@ -47,11 +47,11 @@ class Body extends Component {
           <Market/>
           <Modal isActive={this.props.global.isErrorActive} handleClose={() => this.props.unsetGlobalError()} title="Error">
             <div className={"error-modal"}>
-              {this.props.global.errorType !== SCATTER_ERROR_TYPE && (
+              {this.props.global.errorType !== appConfig.SCATTER_ERROR_TYPE && (
                 <div className={"error-modal__message"}>{this.props.global.errorMessage}</div>
               )}
 
-              {this.props.global.errorType === SCATTER_ERROR_TYPE && (
+              {this.props.global.errorType === appConfig.SCATTER_ERROR_TYPE && (
                 <ModalScatter/>
               )}
             </div>

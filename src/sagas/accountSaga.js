@@ -4,7 +4,7 @@ import * as accountActions from "../actions/accountAction";
 import * as globalActions from "../actions/globalAction";
 import { getBalances } from "../services/network_service";
 import * as scatterService from "../services/scatter_service";
-import { SCATTER_ERROR_TYPE } from '../config/app';
+import appConfig from '../config/app';
 
 const getTokens = state => state.token.tokens;
 const getAccountData = state => state.account;
@@ -24,7 +24,7 @@ function* connectToScatter(action) {
       yield call(fetchBalances);
     } else if (result === false) {
       yield put(accountActions.setScatterLoading(false));
-      yield put(globalActions.setGlobalError(true, '', SCATTER_ERROR_TYPE));
+      yield put(globalActions.setGlobalError(true, '', appConfig.SCATTER_ERROR_TYPE));
     } else {
       yield put(accountActions.setScatterLoading(false));
     }
@@ -70,7 +70,7 @@ function* fetchBalances() {
     );
 
     const tokensWithBalance = tokens.map((token, index) => {
-      token.balance = balances[index]
+      token.balance = balances[index];
       return token;
     });
 

@@ -1,7 +1,7 @@
-import { API_URL } from "../config/env";
+import envConfig from "../config/env";
 
 export function callFetchMarketRates() {
-  return fetch(`${API_URL}fetchMarketRates`).then(function (response) {
+  return fetch(`${envConfig.API_URL}fetchMarketRates`).then(function (response) {
     return response.json();
   });
 }

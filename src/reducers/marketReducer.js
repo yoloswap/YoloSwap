@@ -1,10 +1,10 @@
 import { marketActionTypes } from '../actions/marketAction';
-import { EOS_TOKEN } from "../config/tokens";
+import envConfig from "../config/env";
 
 const initialState = {
   isLoading: true,
   isBackgroundLoading: false,
-  indexToken: EOS_TOKEN,
+  indexToken: envConfig.EOS,
 };
 
 export default function marketReducer(state = initialState, action) {

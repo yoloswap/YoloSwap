@@ -3,9 +3,8 @@ import { takeLatest, call, put, select } from 'redux-saga/effects';
 import { getRate, trade } from "../services/network_service";
 import * as swapActions from "../actions/swapAction";
 import * as accountActions from "../actions/accountAction";
-import { NETWORK_ACCOUNT } from "../config/env";
-import { EOS_TOKEN } from "../config/tokens";
-import { MIN_CONVERSION_RATE } from "../config/app";
+import envConfig from "../config/env";
+import appConfig from "../config/app";
 
 const getSwapState = state => state.swap;
 const getAccountState = state => state.account;
@@ -25,7 +24,7 @@ function* swapToken() {
       trade,
       {
         eos: account.eos,
-        networkAccount: NETWORK_ACCOUNT,
+        networkAccount: envConfig.NETWORK_ACCOUNT,
         userAccount: account.account.name,
         srcAmount: sourceAmount,
         srcTokenAccount: sourceToken.account,
@@ -34,7 +33,7 @@ function* swapToken() {
         destPrecision: destToken.precision,
         destSymbol: destToken.symbol,
         destAccount: account.account.name,
-        minConversionRate: MIN_CONVERSION_RATE,
+        minConversionRate: appConfig.MIN_CONVERSION_RATE,
       }
     );
 
@@ -144,8 +143,8 @@ function getRateParams(eos, srcSymbol, destSymbol, srcAmount) {
     srcSymbol: srcSymbol,
     destSymbol: destSymbol,
     srcAmount: srcAmount,
-    networkAccount: NETWORK_ACCOUNT,
-    eosTokenAccount: EOS_TOKEN.account
+    networkAccount: envConfig.NETWORK_ACCOUNT,
+    eosTokenAccount: envConfig.EOS.account
   };
 }
 

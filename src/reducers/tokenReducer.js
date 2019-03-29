@@ -1,8 +1,8 @@
 import { tokenActionTypes } from '../actions/tokenAction';
-import { TOKENS } from '../config/tokens';
+import envConfig from '../config/env';
 
 const initialState = {
-  tokens: TOKENS,
+  tokens: envConfig.TOKENS,
 };
 
 export default function tokenReducer(state = initialState, action) {

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Modal from '../commons/Modal';
 import TokenSelector from '../commons/TokenSelector';
 import { formatAmount } from "../../utils/helpers";
-import { TX_URL } from '../../config/env';
+import envConfig from '../../config/env';
 import Dropdown, { DropdownTrigger, DropdownContent } from "react-simple-dropdown";
 
 export default class SwapView extends Component {
@@ -88,7 +88,7 @@ export default class SwapView extends Component {
         )}
 
         {this.props.tx.id && (
-          <div className={"swap__text common__fade-in"}>Successfully! The <a rel="noopener noreferrer" href={`${TX_URL}${this.props.tx.id}`} target="_blank">transaction</a> is accepted</div>
+          <div className={"swap__text common__fade-in"}>Successfully! The <a rel="noopener noreferrer" href={`${envConfig.TX_URL}${this.props.tx.id}`} target="_blank">transaction</a> is accepted</div>
         )}
 
         {!isButtonHidden && (

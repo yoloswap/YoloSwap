@@ -10,9 +10,15 @@ import rootSaga from './sagas';
 import * as serviceWorker from './serviceWorker';
 
 const sagaMiddleware = createSagaMiddleware();
+
+let middleware = [sagaMiddleware];
+if (process.env.REACT_APP_ENV === 'development') {
+  middleware = [...middleware, logger]
+}
+
 const store = createStore(
   reducer,
-  applyMiddleware(sagaMiddleware, logger),
+  applyMiddleware(...middleware),
 );
 
 sagaMiddleware.run(rootSaga);
