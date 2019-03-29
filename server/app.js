@@ -2,25 +2,24 @@ import Eos from 'eosjs';
 import cors from 'cors';
 import express from 'express';
 import { getRates } from "../src/services/network_service";
-import { NETWORK_ACCOUNT, NETWORK_CHAIN_ID, NETWORK_HOST } from "../src/config/env";
-import { EOS_TOKEN, TOKENS } from "../src/config/tokens";
+import envConfig from "../src/config/env";
 import { getUSDRateById } from "../src/services/coingecko_service";
 const app = express();
 const port = 3002;
 const rateFetchingInterval = 10000;
 const eos = Eos({
-  httpEndpoint: 'https://' + NETWORK_HOST,
-  chainId: NETWORK_CHAIN_ID,
+  httpEndpoint: 'https://' + envConfig.NETWORK_HOST,
+  chainId: envConfig.NETWORK_CHAIN_ID,
 });
 let rates = [], srcAmounts = [], srcSymbols = [], destSymbols = [];
 
-TOKENS.forEach((token) => {
-  if (token.symbol === EOS_TOKEN.symbol) {
+envConfig.TOKENS.forEach((token) => {
+  if (token.symbol === envConfig.EOS.symbol) {
     return;
   }
 
   srcSymbols.push(token.symbol);
-  destSymbols.push(EOS_TOKEN.symbol);
+  destSymbols.push(envConfig.EOS.symbol);
   srcAmounts.push(1);
 });
 
@@ -38,7 +37,7 @@ async function fetchMarketRatesInterval() {
   try {
     const sellRates = await getRates(createRateParams(srcSymbols, destSymbols));
     const buyRates = await getRates(createRateParams(destSymbols, srcSymbols));
-    const coinGeckoResponse = await getUSDRateById(EOS_TOKEN.id);
+    const coinGeckoResponse = await getUSDRateById(envConfig.EOS.id);
     const eosUSDPrice = coinGeckoResponse[0] && coinGeckoResponse[0].current_price ? coinGeckoResponse[0].current_price : 0;
     let tokenRates = [];
 
@@ -67,8 +66,8 @@ function createRateParams(srcSymbols, destSymbols) {
     srcSymbols: srcSymbols,
     destSymbols: destSymbols,
     srcAmounts: srcAmounts,
-    networkAccount: NETWORK_ACCOUNT,
-    eosTokenAccount: EOS_TOKEN.account,
+    networkAccount: envConfig.NETWORK_ACCOUNT,
+    eosTokenAccount: envConfig.EOS.account,
   }
 }
 
