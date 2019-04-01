@@ -16,7 +16,7 @@ env:
 matrix:
   include:
     - env:
-        - REACT_ENV: develop
+        - REACT_ENV: dev
     - env:
         - REACT_ENV: staging
 
