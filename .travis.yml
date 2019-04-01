@@ -13,12 +13,19 @@ env:
   global:
     - CI=false
 
+matrix:
+  include:
+    - env:
+        - REACT_ENV: develop
+    - env:
+        - REACT_ENV: staging
+
 script:
   - echo "npm test temporarily disabled"
 
 install:
   - npm install
-  - npm run build
+  - npm run build-$REACT_ENV
 
 after_success:
   - docker --version
@@ -28,7 +35,7 @@ deploy:
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY_ID
     secret_access_key: $AWS_SECRET_ACCESS_KEY
-    bucket: dev-yolo.knstats.com
+    bucket: $REACT_ENV-yolo.knstats.com
     region: ap-southeast-1
     acl: public_read
     local_dir: build
