@@ -9,7 +9,7 @@
     left: 0;
     width: 100%;
     height: 650px;
-    background: url($image-path + 'eos-background.png') bottom;
+    background: url($image-path + 'backgrounds/home.svg') bottom;
     background-size: cover;
     z-index: -1;
   }
@@ -21,13 +21,13 @@
   &__title {
     font-size: 36px;
     text-align: center;
-    color: #e1e4eb;
+    color: white;
     margin-bottom: 15px;
   }
 
   &__sub-title {
     font-size: 20px;
-    color: #7f8391;
+    color: white;
     text-align: center;
     margin-bottom: 40px;
   }
@@ -38,7 +38,7 @@
 
     &::before {
       height: 265px;
-      background: url($image-path + 'eos-background-mobile.svg') 0 310px;
+      background: url($image-path + 'backgrounds/home-mobile.svg') 0 310px;
       background-size: cover;
     }
 
@@ -62,7 +62,7 @@
 
   @media (max-width: 450px) {
     &::before {
-      background: url($image-path + 'eos-background-mobile.svg') 0;
+      background: url($image-path + 'backgrounds/home-mobile.svg') 0;
     }
   }
 

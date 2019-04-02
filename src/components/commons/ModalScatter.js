@@ -31,7 +31,7 @@ class ModalScatter extends Component {
             <span> or</span>
             <a href="https://get-scatter.com/" target="_blank" rel="noopener noreferrer"> Scatter Desktop</a>
           </div>
-          <div className="error-modal__button common__button" onClick={() => this.signInToScatter()}>Try Again</div>
+          <div className="error-modal__button common__button common__button--blue" onClick={() => this.signInToScatter()}>Try Again</div>
         </div>
       </div>
     )

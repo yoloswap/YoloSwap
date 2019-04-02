@@ -31,9 +31,9 @@
   &__header {
     font-size: 18px;
     font-weight: 500;
-    color: #adb9c9;
+    color: white;
     box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.34);
-    background: #2f3640 linear-gradient(to bottom, #48505a, #2f3640);
+    background: $blue;
     padding: 23px 30px;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
@@ -41,13 +41,11 @@
   }
 
   &__close-btn {
-    width: 16px;
-    height: 15px;
+    font-size: 35px;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
     right: 30px;
-    background-image: url($image-path + 'icons/close.svg');
     cursor: pointer;
   }
 

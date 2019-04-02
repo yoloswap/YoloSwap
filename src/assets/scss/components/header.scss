@@ -1,8 +1,8 @@
 .header {
   width: 100%;
   padding: 15px 0;
-  box-shadow: 0 2px 134px 0 rgba(0, 0, 0, 0.51);
-  background-image: linear-gradient(to bottom, #48505a, #2f3640);
+  box-shadow: 0 2px 121px 0 rgba(0, 0, 0, 0.3);
+  background-image: linear-gradient(to bottom, #206bd3, #0052c3);
   position: relative;
   z-index: 1;
 
@@ -14,8 +14,8 @@
   }
 
   &__logo {
-    width: 90px;
-    height: 61px;
+    width: 100px;
+    height: 48px;
     background-image: url($image-path + 'logos/yolo.svg');
   }
 
@@ -23,11 +23,14 @@
     display: flex;
     align-items: center;
 
-    &-item,
-    &-button {
+    &-item {
       font-size: 14px;
-      font-weight: 400;
+      font-weight: 500;
       color: white;
+    }
+
+    &-button {
+      margin-right: 0;
     }
 
     &-item {
@@ -37,15 +40,15 @@
 
       &::after {
         content: '';
+        border-radius: 5px;
         position: absolute;
-        bottom: -5px;
+        bottom: -8px;
         left:0;
         right: 0;
         margin: 0 auto;
         width: 100%;
         height: 2px;
-        background-color: $blue;
-        box-shadow: 0 4px 14px 0 rgba(56, 155, 252, 0.82);
+        background-color: white;
         transform: translateY(5px);
         opacity: 0;
         transition: all .3s;
@@ -62,10 +65,6 @@
       }
     }
 
-    &-button {
-      margin-right: 0;
-    }
-
     &-account {
       display: flex;
       align-items: center;
@@ -75,13 +74,8 @@
     &-name {
       font-size: 14px;
       font-weight: 600;
-      color: #8c98aa;
-      margin-right: 10px;
-    }
-
-    &-arrow {
-      position: relative;
-      top: 1px;
+      color: white;
+      margin-right: 5px;
     }
 
     &-dropdown {
@@ -131,7 +125,7 @@
     z-index: 10;
 
     &-bar {
-      background-color: #a3abb8;
+      background-color: white;
       border-radius: 5px;
       height: 3px;
       transition: all .3s;
@@ -163,7 +157,7 @@
       padding: 100px 0 0;
       height: 100%;
       box-shadow: -10px 0 24px 0 rgba(0, 0, 0, 0.25);
-      background-image: linear-gradient(to bottom, #2f3640, #1f242b);
+      background-image: linear-gradient(to bottom, #206bd3, #0052c3);
       z-index: 9;
       transform: translateX(270px);
       transition: all .3s ease-out;
@@ -173,12 +167,13 @@
         display: block;
         margin-bottom: 25px;
 
-        &.active {
-          color: $blue-light;
+        &::after {
+          display: none;
+        }
 
-          &::after {
-            display: none;
-          }
+        &.active,
+        &:hover {
+          color: $blue-light
         }
       }
 
@@ -190,9 +185,6 @@
 
       &-name {
         padding: 0 30px;
-        font-size: 14px;
-        font-weight: 600;
-        color: #8c98aa;
       }
 
       &-arrow {

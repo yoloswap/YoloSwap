@@ -22,10 +22,10 @@
   &__button {
     display: inline-block;
     font-size: 14px;
-    font-weight: 400;
-    color: white;
+    font-weight: 600;
+    color: $blue;
     border-radius: 30px;
-    background-color: $blue;
+    background-color: white;
     padding: 8px 25px;
     cursor: pointer;
     transition: all .3s;
@@ -35,7 +35,13 @@
     }
 
     &:hover {
+      color: white;
       background-color: $blue-light;
+    }
+
+    &--blue {
+      color: white;
+      background-color: $blue;
     }
   }
 
@@ -76,12 +82,8 @@
     transition: all .3s;
 
     &.grey {
-      background-image: url($image-path + 'icons/arrow-drop-down-grey.svg');
-    }
-
-    &.grey-light {
       padding: 10px;
-      background: url($image-path + 'icons/arrow-drop-down-grey-light.svg') no-repeat center center;
+      background: url($image-path + 'icons/arrow-drop-down-grey.svg') no-repeat center center;
     }
 
     &.up {
