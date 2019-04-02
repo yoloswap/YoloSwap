@@ -179,8 +179,8 @@
 
       &-account {
         padding-top: 25px;
-        border-top: 1px solid #434c58;
-        cursor: none;
+        border-top: 1px solid white;
+        cursor: initial;
       }
 
       &-name {
@@ -213,7 +213,7 @@
         padding: 0 30px;
         font-size: 14px;
         font-weight: 500;
-        color: #8c98aa;
+        color: white;
         margin-top: 15px;
       }
 
@@ -221,12 +221,12 @@
         width: 100%;
         font-size: 14px;
         font-weight: 600;
-        color: #9ea1aa;
+        color: white;
         padding: 20px 0 0 63px;
         background: none;
         position: absolute;
         bottom: 20px;
-        border-top: 1px solid #434c58;
+        border-top: 1px solid white;
 
         &::after {
           right: unset;
