@@ -13,7 +13,10 @@ $red-light: #fff3f3;
 $grey: #ccc;
 
 /* ============ Breakpoints ============ */
+$ex-large-breakpoint: 1000px;
 $large-breakpoint: 950px;
 $medium-breakpoint: 750px;
-$small-breakpoint: 500px;
+$min-medium-breakpoint: 650px;
+$ex-small-breakpoint: 500px;
+$small-breakpoint: 450px;
 $smallest-breakpoint: 320px;

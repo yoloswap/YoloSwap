@@ -17,6 +17,10 @@
     &.none {
       justify-content: initial;
     }
+
+    &.center {
+      justify-content: center;
+    }
   }
 
   &__button {
@@ -115,7 +119,15 @@
 
   &__fade-in {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(20px);
     animation: fade-in 0.3s forwards;
+  }
+
+  &__icon {
+    &-chart {
+      width: 20px;
+      height: 12px;
+      background-image: url($image-path + 'icons/chart.svg');
+    }
   }
 }

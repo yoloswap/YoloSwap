@@ -12,7 +12,7 @@ import * as serviceWorker from './serviceWorker';
 const sagaMiddleware = createSagaMiddleware();
 
 let middleware = [sagaMiddleware];
-if (process.env.REACT_APP_ENV === 'development') {
+if (process.env.REACT_APP_ENV === 'local') {
   middleware = [...middleware, logger]
 }
 

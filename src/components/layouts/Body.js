@@ -24,6 +24,11 @@ function mapDispatchToProps(dispatch) {
 }
 
 class Body extends Component {
+  constructor(props) {
+    super(props);
+    this.srcAmountRef = React.createRef();
+  };
+
   componentWillMount = () => {
     const scatter = scatterService.initiateScatter();
     const eos = scatterService.getEosInstance(scatter);
@@ -40,11 +45,11 @@ class Body extends Component {
       <div className={"body"}>
         <div className={"body__container container"}>
           <div className={"body__content"}>
-            <div className={"body__title"}>No Deposit, No Orderbook, Competitive Spreads</div>
-            <div className={"body__sub-title"}>A simple way to exchange tokens</div>
+            <div className={"body__title"}>Simple Just Became Instant</div>
+            <div className={"body__sub-title"}>Swap tokens without involving any intermediate token</div>
           </div>
-          <Swap/>
-          <Market/>
+          <Swap srcAmountRef={this.srcAmountRef}/>
+          <Market srcAmountRef={this.srcAmountRef}/>
           <Modal isActive={this.props.global.isErrorActive} handleClose={() => this.props.unsetGlobalError()} title="Error">
             <div className={"error-modal"}>
               {this.props.global.errorType !== appConfig.SCATTER_ERROR_TYPE && (

@@ -13,7 +13,7 @@ export default class SwapView extends Component {
     const isButtonHidden = this.props.tx.isConfirming || this.props.tx.isBroadcasting || this.props.tx.id || this.props.tx.error;
 
     return (
-      <div className={"swap container"}>
+      <div className={"swap"}>
         <div className={"swap__container"}>
           <div className={"swap__content"}>
             <div className={"swap__content-title"}>From:</div>
@@ -24,7 +24,7 @@ export default class SwapView extends Component {
                 tokens={this.props.tokens}
                 showBalance={true}
               />
-              <input className={"swap__content-input"} type="text" placeholder="0" value={this.props.sourceAmount} onChange={(e) => this.props.handleSourceAmountChange(e)}/>
+              <input className={"swap__content-input"} type="text" placeholder="0" value={this.props.sourceAmount} onChange={(e) => this.props.handleSourceAmountChange(e)} ref={this.props.srcAmountRef}/>
               <Dropdown
                 className={"swap__content-dropdown-container"}
                 active={this.props.isSwapBalanceBoxActive}

@@ -138,6 +138,7 @@ class Swap extends Component {
         isBalanceLoading={this.props.isBalanceLoading}
         isConfirmLoading={this.props.isConfirmLoading}
         isScatterLoading={this.props.isScatterLoading}
+        srcAmountRef={this.props.srcAmountRef}
       />
     )
   }

@@ -1,15 +1,54 @@
 .market {
   margin-top: 50px;
-  padding: 0 45px;
 
   &__header {
     margin-bottom: 50px;
 
+    &-content {
+      display: flex;
+      align-self: center;
+    }
+
     &-title {
+      width: 170px;
       font-size: 24px;
       font-weight: 600;
       color: #1f2c50;
       text-transform: uppercase;
+      margin-right: 30px;
+    }
+
+    &-switcher {
+      width: 120px;
+      padding-bottom: 5px;
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #e1e4eb;
+      position: relative;
+
+      &::before {
+        content: '';
+        width: 50%;
+        height: 2px;
+        background-color: $blue;
+        border-radius: 5px;
+        position: absolute;
+        bottom: -1px;
+        transition: all .2s;
+      }
+
+      &.usd::before {
+        transform: translateX(100%);
+      }
+    }
+
+    &-market {
+      width: 50%;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: #5a5e67;
+      cursor: pointer;
     }
 
     &-input {
@@ -47,109 +86,70 @@
     }
   }
 
-  &__table {
-    width: 100%;
-    border-collapse: collapse;
-
-    &-select {
-      text-align: left;
-      min-width: 250px;
-      padding: 0 30px 0 51px;
-      position: relative;
+  &__body {
+    &-loading {
+      font-weight: 500;
+      color: #8690ad;
+      margin-top: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
-    &-option {
-      display: inline-block;
-      height: 32px;
-      font-size: 12px;
-      font-weight: 600;
-      color: $grey;
-      position: relative;
-      padding: 0 25px;
-      cursor: pointer;
-      transition: color .3s;
+    &-list {
+      display: flex;
+      flex-wrap: wrap;
+    }
+  }
 
-      &::after {
-        content: '';
-        display: block;
-        width: 100%;
-        height: 2px;
-        position: absolute;
-        bottom: -1px;
-        left: 0;
-        transition: all .3s;
-      }
+  &__item {
+    width: 30%;
+    margin: 0 5% 40px 0;
+    padding: 15px 20px 20px;
+    border-radius: 5px;
+    background: white;
 
-      &.active,
-      &:hover {
-        color: $blue;
-
-        &::after {
-          background-color: $blue;
-        }
-      }
+    &:nth-child(3n) {
+      margin-right: 0;
     }
 
     &-header {
-      min-width: 150px;
-      font-size: 12px;
-      font-weight: 600;
-      color: $blue;
-      text-align: left;
-      padding-bottom: 18px;
-      text-transform: uppercase;
-      cursor: pointer;
-
-      &:last-child {
-        padding-right: 30px;
-      }
-
-      &::before {
-        display: inline-block;
-        width: 11px;
-        height: 11px;
-        margin-right: 8px;
-        background-image: url($image-path + 'icons/arrow-blue-up.svg');
-        transform: scale(0.4);
-        animation: scale-up .3s forwards;
-        transition: transform .3s;
-      }
-
-      &.asc::before,
-      &.desc::before {
-       content: '';
-      }
-
-      &.desc::before {
-        animation: scale-up-with-rotating .3s forwards;
-      }
-
-      &.disabled {
-        cursor: initial;
-      }
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eceef6;
     }
 
-    &-icon {
-      margin-right: 15px;
+    &-logo {
+      margin-right: 10px;
       width: 32px;
       height: 32px;
       object-fit: contain;
     }
 
-    &-text {
-      font-size: 14px;
+    &-pair {
       font-weight: 500;
-      color: #8690ad;
+      color: #4a5675;
+    }
+
+    &-chart {
+
+    }
+
+    &-body {
+      padding-top: 15px;
     }
 
     &-change {
       font-size: 14px;
       font-weight: 500;
       color: white;
-      padding: 4px 15px;
+      padding: 4px 12px;
       border-radius: 3px;
       background-color: #6bc84b;
       display: inline-block;
+      margin-left: 10px;
 
       &::after {
         content: '';
@@ -180,94 +180,103 @@
       }
     }
 
-    &-bg-loading {
-      width: 16px;
-      height: 16px;
-      position: absolute;
-      top: 2px;
-      left: 30px;
-      background-image: url($image-path + 'icons/loading-circle-2.gif');
-      background-size: contain;
+    &-content {
+      width: 120px;
     }
 
-    &-td {
-      padding: 13px 0;
+    &-rate {
+      font-size: 22px;
+      text-align: center;
+      font-weight: 500;
+      color: #4a5675;
+      margin: 20px 0 15px;
     }
 
-    &-first-col {
-      padding-left: 30px;
-    }
+    &-button {
+      width: 100%;
+      padding: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: $blue;
+      cursor: pointer;
+      border-radius: 5px;
+      border: solid 1px $blue;
+      text-transform: uppercase;
+      text-align: center;
+      transition: all .3s;
 
-    &-last-col {
-      padding-right: 30px;
-    }
+      &:hover {
+        color: white;
+        background: $blue-light;
+        border-color: $blue-light;
+      }
 
-    tr:first-child th {
-      border-bottom: 1px solid #dce4ee;
-    }
+      &--blue {
+        color: white;
+        background: $blue;
+        border: solid 1px transparent;
 
-    tr:nth-child(even) {
-      background-color: #f2f2f2;
-    }
-
-    th:last-child,
-    td:last-child {
-      text-align: right;
+        &:hover {
+          background: $blue-light;
+        }
+      }
     }
   }
 
-  &__loading {
-    font-weight: 500;
-    color: #8690ad;
-    margin-top: 30px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  @media (max-width: $ex-large-breakpoint) {
+    &__item {
+      width: 47%;
+      margin: 0 6% 6% 0;
+
+      &:nth-child(3n) {
+        margin-right: 6%;
+      }
+
+      &:nth-child(2n) {
+        margin-right: 0;
+      }
+    }
   }
 
-  @media (max-width: 750px) {
+  @media (max-width: $medium-breakpoint) {
     padding: 0;
 
     &__header {
       padding: 0 20px;
-    }
+      margin-bottom: 30px;
+      flex-direction: column;
 
-    &__table {
-      &-container {
-        overflow-x: auto;
-        overflow-y: hidden;
+      &-content {
+        display: block;
       }
 
-      &-bg-loading {
-        left: 10px;
+      &-title {
+        width: auto;
+        margin-right: 0;
       }
 
-      &-option {
-        padding: 0 15px;
+      &-switcher {
+        margin: 10px auto 15px;
       }
 
-      td:first-child {
-        padding-left: 20px;
+      &-input {
+        margin-top: 15px;
+        max-width: 80%;
       }
     }
   }
 
-  @media (max-width: 450px) {
-    &__header {
-      display: block;
+  @media (max-width: $min-medium-breakpoint) {
+    &__item {
+      width: 100%;
+      margin: 0 0 20px 0;
 
-      &-title {
-        margin-bottom: 30px;
-        text-align: center;
+      &:nth-child(3n) {
+        margin-right: 0;
       }
 
-      &-input {
-        padding: 0 20px;
-        max-width: 100%;
-
-        &::after {
-          right: 40px;
-        }
+      &:nth-child(2n) {
+        margin-right: 0;
       }
     }
   }

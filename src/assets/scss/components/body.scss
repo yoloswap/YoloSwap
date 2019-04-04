@@ -30,6 +30,8 @@
     color: white;
     text-align: center;
     margin-bottom: 40px;
+    letter-spacing: 1px;
+    word-spacing: 1px;
   }
 
   @media (max-width: 750px) {
@@ -40,10 +42,6 @@
       height: 265px;
       background: url($image-path + 'backgrounds/home-mobile.svg') 0 310px;
       background-size: cover;
-    }
-
-    &__container {
-      padding: 0;
     }
 
     &__title,

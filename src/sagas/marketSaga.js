@@ -6,7 +6,8 @@ import * as tokenActions from "../actions/tokenAction";
 import appConfig from "../config/app";
 import envConfig from "../config/env";
 import { callFetchMarketRates } from "../services/api_service";
-import { getUSDRateById } from "../services/coingecko_service";
+import { fetchTokensByIds } from "../services/coingecko_service";
+import * as _ from 'underscore';
 
 const getTokens = state => state.token.tokens;
 const getAccountState = state => state.account;
@@ -64,31 +65,33 @@ function* getTokensWithRateFromAPI() {
     token.buyRate = tokenMarketRate.buyRate;
     token.sellRateUsd = tokenMarketRate.sellRateUsd;
     token.buyRateUsd = tokenMarketRate.buyRateUsd;
+    token.percentChange = tokenMarketRate.percentChange;
 
     return token;
   });
 }
 
 function* getTokensWithRateFromBlockChain() {
-  let srcSymbols = [], destSymbols = [], srcAmounts = [];
+  let srcSymbols = [], destSymbols = [], srcAmounts = [], tokenIds = [];
   const account = yield select(getAccountState);
   let tokens = yield select(getTokens);
 
   tokens.forEach((token) => {
-    if (token.symbol === envConfig.EOS.symbol) {
-      return;
-    }
+    tokenIds.push(token.id);
 
-    srcSymbols.push(token.symbol);
-    destSymbols.push(envConfig.EOS.symbol);
-    srcAmounts.push(1);
+    if (token.symbol !== envConfig.EOS.symbol) {
+      srcSymbols.push(token.symbol);
+      destSymbols.push(envConfig.EOS.symbol);
+      srcAmounts.push(1);
+    }
   });
 
   let sellRates = yield call(getRates, getMarketRateParams(account.eos, srcSymbols, destSymbols, srcAmounts));
   let buyRates = yield call(getRates, getMarketRateParams(account.eos, destSymbols, srcSymbols, srcAmounts));
-  const coinGeckoResponse = yield call(getUSDRateById, envConfig.EOS.id);
+  const coinGeckoTokens = yield call(fetchTokensByIds, tokenIds);
+  const eosData = _.find(coinGeckoTokens, (token) => { return token.id === envConfig.EOS.id });
+  const eosUSDPrice = eosData && eosData.current_price ? eosData.current_price : 0;
 
-  const eosUSDPrice = coinGeckoResponse[0] && coinGeckoResponse[0].current_price ? coinGeckoResponse[0].current_price : 0;
   tokens = yield select(getTokens);
 
   return tokens.map((token, index) => {
@@ -98,11 +101,14 @@ function* getTokensWithRateFromBlockChain() {
 
     const sellRate = sellRates[index - 1];
     const buyRate = buyRates[index - 1] ? 1 / buyRates[index - 1] : 0;
+    const tokenId = tokenIds[index];
+    const tokenData = _.find(coinGeckoTokens, (token) => { return token.id === tokenId });
 
     token.sellRate = sellRate;
     token.buyRate = buyRate;
     token.sellRateUsd = eosUSDPrice * sellRate;
     token.buyRateUsd = eosUSDPrice * buyRate;
+    token.percentChange = tokenData && tokenData.price_change_percentage_24h ? tokenData.price_change_percentage_24h: 0;
 
     return token;
   });

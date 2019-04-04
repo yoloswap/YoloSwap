@@ -26,6 +26,7 @@ const envConfig = {
 envConfig.TOKENS = [
   envConfig.EOS,
   {
+    "id": "everipedia",
     "name": "Everipedia",
     "symbol": "IQ",
     "account": "everipediaiq",

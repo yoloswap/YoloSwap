@@ -26,6 +26,7 @@ const envConfig = {
 envConfig.TOKENS = [
   envConfig.EOS,
   {
+    "id": "cryptopix",
     "name": "Crypto Pix",
     "symbol": "PXS",
     "account": "testtokeaaaa",
@@ -33,6 +34,7 @@ envConfig.TOKENS = [
     "logo": "pxs.svg",
   },
   {
+    "id": "everipedia",
     "name": "Everipedia",
     "symbol": "IQ",
     "account": "testtokeaaaa",
@@ -40,6 +42,7 @@ envConfig.TOKENS = [
     "logo": "iq.png",
   },
   {
+    "id": "hirevibes",
     "name": "HireVibes",
     "symbol": "HVT",
     "account": "testtokeaaaa",
@@ -47,6 +50,7 @@ envConfig.TOKENS = [
     "logo": "hvt.png",
   },
   {
+    "id": "karma-coin",
     "name": "Karma",
     "symbol": "KARMA",
     "account": "testtokeaaaa",
@@ -54,6 +58,7 @@ envConfig.TOKENS = [
     "logo": "karma.png",
   },
   {
+    "id": "trybe",
     "name": "Trybe",
     "symbol": "TRYBE",
     "account": "testtokeaaaa",
@@ -61,6 +66,7 @@ envConfig.TOKENS = [
     "logo": "trybe.svg",
   },
   {
+    "id": "eosdac",
     "name": "eosDAC",
     "symbol": "EOSDAC",
     "account": "testtokeaaaa",
@@ -68,6 +74,7 @@ envConfig.TOKENS = [
     "logo": "eosdac.png",
   },
   {
+    "id": "meetone",
     "name": "MeetOne",
     "symbol": "MEETONE",
     "account": "testtokeaaaa",

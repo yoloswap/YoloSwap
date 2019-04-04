@@ -193,6 +193,7 @@
   @media (max-width: $large-breakpoint) {
     max-width: 600px;
     padding: 30px 20px 40px;
+    margin: 0 auto;
 
     &__container {
       display: block;
@@ -217,7 +218,7 @@
     }
   }
 
-  @media (max-width: $small-breakpoint) {
+  @media (max-width: $ex-small-breakpoint) {
     &__content {
       &-input {
         width: calc(100% - 50px);
