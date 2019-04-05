@@ -39,8 +39,9 @@ async function fetchMarketRatesInterval() {
   try {
     const sellRates = await getRates(createRateParams(srcSymbols, destSymbols));
     const buyRates = await getRates(createRateParams(destSymbols, srcSymbols));
-    const coinGeckoTokens = await fetchTokensByIds(tokenIds);
-    const eosData = _.find(coinGeckoTokens, (token) => { return token.id === envConfig.EOS.id });
+    const usdBasedTokens = await fetchTokensByIds(tokenIds);
+    const eosBasedTokens = await fetchTokensByIds(tokenIds, envConfig.EOS.id);
+    const eosData = findTokenById(usdBasedTokens, envConfig.EOS.id);
     const eosUSDPrice = eosData && eosData.current_price ? eosData.current_price : 0;
     let tokenRates = [];
 
@@ -48,7 +49,8 @@ async function fetchMarketRatesInterval() {
       const sellRate = sellRates[index];
       const buyRate = buyRates[index] ? 1 / buyRates[index] : 0;
       const tokenId = tokenIds[index + 1];
-      const tokenData = _.find(coinGeckoTokens, (token) => { return token.id === tokenId });
+      const usdBasedToken = findTokenById(usdBasedTokens, tokenId);
+      const eosBasedToken = findTokenById(eosBasedTokens, tokenId);
 
       tokenRates.push({
         id: tokenId,
@@ -57,7 +59,8 @@ async function fetchMarketRatesInterval() {
         buyRate: buyRate,
         sellRateUsd: sellRate * eosUSDPrice,
         buyRateUsd: buyRate * eosUSDPrice,
-        percentChange: tokenData && tokenData.price_change_percentage_24h ? tokenData.price_change_percentage_24h: 0
+        usdChangePercentage: getChangePercentage(usdBasedToken),
+        eosChangePercentage: getChangePercentage(eosBasedToken),
       });
     });
 
@@ -76,6 +79,14 @@ function createRateParams(srcSymbols, destSymbols) {
     networkAccount: envConfig.NETWORK_ACCOUNT,
     eosTokenAccount: envConfig.EOS.account,
   }
+}
+
+function getChangePercentage(tokenData) {
+  return tokenData && tokenData.price_change_percentage_24h ? tokenData.price_change_percentage_24h: 0;
+}
+
+function findTokenById(tokens, tokenId) {
+  return _.find(tokens, (token) => { return token.id === tokenId });
 }
 
 app.listen(port, () => console.log(`Server's listening on port ${port}`));

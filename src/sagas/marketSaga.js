@@ -65,7 +65,8 @@ function* getTokensWithRateFromAPI() {
     token.buyRate = tokenMarketRate.buyRate;
     token.sellRateUsd = tokenMarketRate.sellRateUsd;
     token.buyRateUsd = tokenMarketRate.buyRateUsd;
-    token.percentChange = tokenMarketRate.percentChange;
+    token.usdChangePercentage = tokenMarketRate.usdChangePercentage;
+    token.eosChangePercentage = tokenMarketRate.eosChangePercentage;
 
     return token;
   });
@@ -88,8 +89,9 @@ function* getTokensWithRateFromBlockChain() {
 
   let sellRates = yield call(getRates, getMarketRateParams(account.eos, srcSymbols, destSymbols, srcAmounts));
   let buyRates = yield call(getRates, getMarketRateParams(account.eos, destSymbols, srcSymbols, srcAmounts));
-  const coinGeckoTokens = yield call(fetchTokensByIds, tokenIds);
-  const eosData = _.find(coinGeckoTokens, (token) => { return token.id === envConfig.EOS.id });
+  const usdBasedTokens = yield call(fetchTokensByIds, tokenIds);
+  const eosBasedTokens = yield call(fetchTokensByIds, tokenIds, envConfig.EOS.id);
+  const eosData = findTokenById(usdBasedTokens, envConfig.EOS.id);
   const eosUSDPrice = eosData && eosData.current_price ? eosData.current_price : 0;
 
   tokens = yield select(getTokens);
@@ -102,13 +104,15 @@ function* getTokensWithRateFromBlockChain() {
     const sellRate = sellRates[index - 1];
     const buyRate = buyRates[index - 1] ? 1 / buyRates[index - 1] : 0;
     const tokenId = tokenIds[index];
-    const tokenData = _.find(coinGeckoTokens, (token) => { return token.id === tokenId });
+    const usdBasedToken = findTokenById(usdBasedTokens, tokenId);
+    const eosBasedToken = findTokenById(eosBasedTokens, tokenId);
 
     token.sellRate = sellRate;
     token.buyRate = buyRate;
     token.sellRateUsd = eosUSDPrice * sellRate;
     token.buyRateUsd = eosUSDPrice * buyRate;
-    token.percentChange = tokenData && tokenData.price_change_percentage_24h ? tokenData.price_change_percentage_24h: 0;
+    token.usdChangePercentage = getChangePercentage(usdBasedToken);
+    token.eosChangePercentage = getChangePercentage(eosBasedToken);
 
     return token;
   });
@@ -131,6 +135,14 @@ function* setLoading(isLoading, isBackgroundLoading = false) {
   } else {
     yield put(marketActions.setLoading(isLoading));
   }
+}
+
+function findTokenById(tokens, tokenId) {
+  return _.find(tokens, (token) => { return token.id === tokenId });
+}
+
+function getChangePercentage(tokenData) {
+  return tokenData && tokenData.price_change_percentage_24h ? tokenData.price_change_percentage_24h: 0;
 }
 
 export default function* marketWatcher() {

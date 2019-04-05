@@ -18,24 +18,12 @@ export default class MarketView extends Component {
                 <img className={"market__item-logo"} src={require(`../../assets/images/tokens/${token.logo}`)} alt=""/>
                 <div className={"market__item-pair"}>{this.props.indexToken.symbol}/{token.symbol}</div>
               </div>
-
               <div>
                 <div className={"common__icon-chart"}/>
               </div>
             </div>
             <div className={"market__item-body"}>
-              <div className={"common__flexbox center"}>
-                <div>L24h</div>
-                {token.percentChange > 0 && (
-                  <div className={"market__item-change"}>{token.percentChange.toFixed(2)}%</div>
-                )}
-                {token.percentChange < 0 && (
-                  <div className={"market__item-change down"}>{token.percentChange.toFixed(2)}%</div>
-                )}
-                {!token.percentChange && (
-                  <div className={"market__item-change none"}>---</div>
-                )}
-              </div>
+              {renderLast24hChangePercentage(token)}
               <div className={"common__flexbox"}>
                 <div className={"market__item-content"}>
                   <div className={"market__item-rate"}>{renderRate(token.buyRate, token.buyRateUsd)}</div>
@@ -60,6 +48,25 @@ export default class MarketView extends Component {
       }
 
       return <div className={"market__table-text"}>{rate ? formatAmount(rate) : 0}</div>
+    };
+
+    const renderLast24hChangePercentage = (token) => {
+      const changePercentageField = this.props.indexToken.id === envConfig.EOS.id ? 'eosChangePercentage' : 'usdChangePercentage';
+
+      return (
+        <div className={"common__flexbox center"}>
+          <div>L24h</div>
+          {token[changePercentageField] > 0 && (
+            <div className={"market__item-change"}>{token[changePercentageField].toFixed(2)}%</div>
+          )}
+          {token[changePercentageField] < 0 && (
+            <div className={"market__item-change down"}>{token[changePercentageField].toFixed(2)}%</div>
+          )}
+          {!token[changePercentageField] && (
+            <div className={"market__item-change none"}>---</div>
+          )}
+        </div>
+      )
     };
 
     return (
