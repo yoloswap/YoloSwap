@@ -41,9 +41,9 @@ class Market extends Component {
   };
 
   setSwapToken = (srcToken, destToken) => {
+    this.props.setSourceAmount('');
     this.props.setSourceToken(srcToken);
     this.props.setDestToken(destToken);
-    this.props.setSourceAmount('');
     this.props.srcAmountRef.current.focus();
     window.scrollTo(0, 0);
   };
