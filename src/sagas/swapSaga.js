@@ -3,6 +3,7 @@ import { takeLatest, call, put, select } from 'redux-saga/effects';
 import { getRate, trade } from "../services/network_service";
 import * as swapActions from "../actions/swapAction";
 import * as accountActions from "../actions/accountAction";
+import { formatAmount } from "../utils/helpers";
 import envConfig from "../config/env";
 import appConfig from "../config/app";
 
@@ -144,13 +145,7 @@ function getRateParams(eos, srcSymbol, destSymbol, srcAmount) {
 }
 
 function getDestAmount(tokenPairRate, sourceAmount, destTokenPrecision) {
-  let destAmount = (tokenPairRate * sourceAmount).toFixed(destTokenPrecision);
-
-  if (!destAmount) {
-    destAmount = tokenPairRate * sourceAmount;
-  }
-
-  return parseFloat(destAmount);
+  return formatAmount(tokenPairRate * sourceAmount, destTokenPrecision);
 }
 
 export default function* swapWatcher() {
