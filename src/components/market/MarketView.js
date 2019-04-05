@@ -38,12 +38,12 @@ export default class MarketView extends Component {
               </div>
               <div className={"common__flexbox"}>
                 <div className={"market__item-content"}>
-                  <div className={"market__item-rate"}>{renderRate(token.sellRate, token.sellRateUsd)}</div>
-                  <div className={"market__item-button"} onClick={() => this.props.setSwapToken(token, envConfig.EOS)}>Sell</div>
-                </div>
-                <div className={"market__item-content"}>
                   <div className={"market__item-rate"}>{renderRate(token.buyRate, token.buyRateUsd)}</div>
                   <div className={"market__item-button market__item-button--blue"} onClick={() => this.props.setSwapToken(envConfig.EOS, token)}>Buy</div>
+                </div>
+                <div className={"market__item-content"}>
+                  <div className={"market__item-rate"}>{renderRate(token.sellRate, token.sellRateUsd)}</div>
+                  <div className={"market__item-button"} onClick={() => this.props.setSwapToken(token, envConfig.EOS)}>Sell</div>
                 </div>
               </div>
             </div>
