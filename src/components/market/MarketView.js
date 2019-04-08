@@ -16,7 +16,7 @@ export default class MarketView extends Component {
             <div className={"market__item-header"}>
               <div className={"common__flexbox none"}>
                 <img className={"market__item-logo"} src={require(`../../assets/images/tokens/${token.logo}`)} alt=""/>
-                <div className={"market__item-pair"}>{this.props.indexToken.symbol}/{token.symbol}</div>
+                <div className={"market__item-pair"}>{token.symbol}</div>
               </div>
               <div>
                 <div className={"common__icon-chart"}/>
