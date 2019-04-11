@@ -11,10 +11,10 @@ const getTokens = state => state.token.tokens;
 const getAccountData = state => state.account;
 
 function* connectToScatter(action) {
-  yield put(accountActions.setScatterLoading(true));
-
   try {
-    const isIdentityNeeded = action.payload;
+    const { isLoadingNeeded, isIdentityNeeded } = action.payload;
+
+    yield put(accountActions.setScatterLoading(isLoadingNeeded));
 
     const result = yield call(scatterService.connect, isIdentityNeeded);
 
