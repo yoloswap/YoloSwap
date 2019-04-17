@@ -43,6 +43,17 @@ deploy:
     on:
       branch: develop
 
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    bucket: jungle.yoloswap.com
+    region: ap-southeast-1
+    acl: public_read
+    local_dir: build
+    skip_cleanup: true
+    on:
+      branch: develop
+
   - provider: script
     script: bash .travis/docker_push.sh
     on:
