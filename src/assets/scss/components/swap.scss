@@ -2,7 +2,7 @@
   border-radius: 10px;
   box-shadow: 0 12px 64px 0 rgba(19, 23, 32, 0.09);
   background-color: white;
-  padding: 50px 55px 65px;
+  padding: 50px 55px 20px;
 
   &__container {
     display: flex;
@@ -149,6 +149,7 @@
 
   &__bot {
     text-align: center;
+    margin-bottom: 50px;
 
     &-button {
       margin-bottom: 20px;
@@ -190,9 +191,16 @@
     }
   }
 
+  &__faucet-link {
+    font-size: 12px;
+    font-weight: 500;
+    text-align: center;
+    color: #9ea1aa;
+  }
+
   @media (max-width: $large-breakpoint) {
     max-width: 600px;
-    padding: 30px 20px 40px;
+    padding: 30px 20px 20px;
     margin: 0 auto;
 
     &__container {

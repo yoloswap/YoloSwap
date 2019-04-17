@@ -101,6 +101,13 @@ export default class SwapView extends Component {
           </div>
         )}
 
+        {(process.env.REACT_APP_ENV === 'local' || process.env.REACT_APP_ENV === 'development') && (
+          <div className={"swap__faucet-link"}>
+            <span>Receive some EOS testnet </span>
+            <a href="https://monitor.jungletestnet.io/#faucet" target="_blank" rel="noopener noreferrer">here</a>
+          </div>
+        )}
+
         <Modal isActive={this.props.isScatterLoading} handleClose={() => this.props.handleCloseScatterModal()} title="Sign In">
           <div className={"scatter-modal"}>
             <div className={"scatter-modal__connecting"}>Connecting with your Scatter</div>
