@@ -25,7 +25,10 @@ function* connectToScatter(action) {
       yield call(fetchBalances);
     } else if (result === false) {
       yield put(accountActions.setScatterLoading(false));
-      yield put(globalActions.setGlobalError(true, '', appConfig.SCATTER_ERROR_TYPE));
+
+      if (isLoadingNeeded) {
+        yield put(globalActions.setGlobalError(true, '', appConfig.SCATTER_ERROR_TYPE));
+      }
     } else {
       yield put(accountActions.setScatterLoading(false));
     }
