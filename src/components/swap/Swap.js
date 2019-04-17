@@ -36,6 +36,7 @@ function mapDispatchToProps(dispatch) {
     fetchTokenPairRate: () => {dispatch(swapActions.fetchTokenPairRate())},
     swapToken: () => {dispatch(swapActions.swapToken())},
     setError: (message) => {dispatch(swapActions.setError(message))},
+    setSourceAndDestToken: (srcToken, destToken) => {dispatch(swapActions.setSourceAndDestToken(srcToken, destToken))},
     connectToScatter: () => {dispatch(accountAction.connectToScatter())},
     setScatterLoading: (isLoading) => {dispatch(accountAction.setScatterLoading(isLoading))},
   }
@@ -81,9 +82,7 @@ class Swap extends Component {
   };
 
   handleClickSwapIcon = () => {
-    this.resetSourceAmount(this.props.destToken);
-    this.props.setSourceToken(this.props.destToken);
-    this.props.setDestToken(this.props.sourceToken);
+    this.props.setSourceAndDestToken(this.props.destToken, this.props.sourceToken);
   };
 
   handleCloseScatterModal = () => {

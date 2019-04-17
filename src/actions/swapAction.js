@@ -3,6 +3,7 @@ export const swapActionTypes = {
   SET_TOKEN_PAIR_RATE_LOADING: 'SWAP.SET_TOKEN_PAIR_RATE_LOADING',
   SET_TOKEN_PAIR_RATE: 'SWAP.SET_TOKEN_PAIR_RATE',
   SWAP_TOKEN: 'SWAP.SWAP_TOKEN',
+  SET_SOURCE_AND_DEST_TOKEN: 'SWAP.SET_SOURCE_AND_DEST_TOKEN',
   SET_SOURCE_TOKEN: 'SWAP.SET_SOURCE_TOKEN',
   SET_DEST_TOKEN: 'SWAP.SET_DEST_TOKEN',
   SET_SOURCE_AMOUNT: 'SWAP.SET_SOURCE_AMOUNT',
@@ -107,5 +108,12 @@ export function setTxError(message) {
 export function resetTx() {
   return {
     type: swapActionTypes.RESET_TX
+  }
+}
+
+export function setSourceAndDestToken(srcToken, destToken) {
+  return {
+    type: swapActionTypes.SET_SOURCE_AND_DEST_TOKEN,
+    payload: { srcToken, destToken}
   }
 }
