@@ -53,6 +53,7 @@ deploy:
     skip_cleanup: true
     on:
       branch: develop
+      condition: $REACT_ENV = dev
 
   - provider: script
     script: bash .travis/docker_push.sh
