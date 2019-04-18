@@ -56,8 +56,8 @@ class Swap extends Component {
   };
 
   handleSetSourceToken = (token) => {
-    this.resetSourceAmount(token);
     this.props.setSourceToken(token);
+    this.resetSourceAmount(token);
   };
 
   handleClickSwapButton = () => {
