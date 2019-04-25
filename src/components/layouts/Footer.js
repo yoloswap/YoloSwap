@@ -8,7 +8,6 @@ const Footer = () => (
           <a href="/" className={"footer__content-item"}>Yolo</a>
           <a href="/" className={"footer__content-item"}>FAQ</a>
           <a className={"footer__content-item"} href="mailto:hello@yoloswap.com" target="_top">Contact Us</a>
-          <a href="/" className={"footer__content-item"}>KYC</a>
           <a className={"footer__content-item"} href="https://medium.com/@yoloswap" target="_blank" rel="noopener noreferrer">Blog</a>
         </div>
 
