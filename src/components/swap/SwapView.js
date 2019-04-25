@@ -10,7 +10,7 @@ export default class SwapView extends Component {
     const isError = !!this.props.error;
     const isSwapBalanceBoxShown = this.props.isAccountImported && !this.props.isBalanceLoading;
     const disabledClass = (isError || this.props.isTokenPairRateLoading) ? 'disabled' : '';
-    const isButtonHidden = this.props.tx.isConfirming || this.props.tx.isBroadcasting || this.props.tx.id || this.props.tx.error;
+    const isButtonHidden = this.props.tx.isConfirming || this.props.tx.isBroadcasting || this.props.tx.hash || this.props.tx.error;
 
     return (
       <div className={"swap"}>
@@ -87,8 +87,8 @@ export default class SwapView extends Component {
           <div className={"swap__text common__fade-in error"}>{this.props.tx.error}</div>
         )}
 
-        {this.props.tx.id && (
-          <div className={"swap__text common__fade-in"}>Successfully! The <a rel="noopener noreferrer" href={`${envConfig.TX_URL}${this.props.tx.id}`} target="_blank">transaction</a> is accepted</div>
+        {this.props.tx.hash && (
+          <div className={"swap__text common__fade-in"}>Successfully! The <a rel="noopener noreferrer" href={`${envConfig.TX_URL}${this.props.tx.hash}`} target="_blank">transaction</a> is accepted</div>
         )}
 
         {!isButtonHidden && (

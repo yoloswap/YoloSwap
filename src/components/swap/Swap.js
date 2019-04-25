@@ -9,6 +9,7 @@ function mapStateToProps(store) {
   const token = store.token;
   const account = store.account;
   const swap = store.swap;
+  const transaction = store.transaction;
   const tokens = token.tokens;
 
   return {
@@ -19,7 +20,7 @@ function mapStateToProps(store) {
     destAmount: swap.destAmount,
     tokenPairRate: swap.tokenPairRate,
     isTokenPairRateLoading: swap.isTokenPairRateLoading,
-    tx: swap.tx,
+    tx: transaction.tx,
     error: swap.error,
     isAccountImported: !!account.account,
     isBalanceLoading: account.isBalanceLoading,

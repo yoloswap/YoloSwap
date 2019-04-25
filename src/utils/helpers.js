@@ -9,3 +9,7 @@ export function formatAmount(amount, precision = 6) {
 
   return indexOfDecimal !== -1 ? parseFloat(amountString.slice(0, indexOfDecimal + (precision + 1))) : parseFloat(amountString);
 }
+
+export function formatHash(hash) {
+  return hash.substr(0, 16) + '...' + hash.substr(-6);
+}

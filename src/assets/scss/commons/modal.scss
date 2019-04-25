@@ -35,8 +35,8 @@
     box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.34);
     background: $blue;
     padding: 23px 30px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
     position: relative;
   }
 
@@ -56,7 +56,7 @@
     visibility: hidden;
     pointer-events: none;
     transform: scale(0.7);
-    border-radius: 10px;
+    border-radius: 8px;
     box-shadow: 0 12px 64px 0 rgba(19, 23, 32, 0.81);
     transition: all .3s;
   }
