@@ -7,16 +7,18 @@ const Footer = () => (
         <div className={"footer__content"}>
           <a href="/" className={"footer__content-item"}>Yolo</a>
           <a href="/" className={"footer__content-item"}>FAQ</a>
-          <a href="/" className={"footer__content-item"}>Contact Us</a>
+          <a className={"footer__content-item"} href="mailto:hello@yoloswap.com" target="_top">Contact Us</a>
           <a href="/" className={"footer__content-item"}>KYC</a>
-          <a href="/" className={"footer__content-item"}>Blog</a>
+          <a className={"footer__content-item"} href="https://medium.com/@yoloswap" target="_blank" rel="noopener noreferrer">Blog</a>
         </div>
 
         <div className={"footer__logo"}>
           <a href="/"><span className={"footer__logo-item telegram"}/></a>
           <a href="/"><span className={"footer__logo-item twitter"}/></a>
           <a href="/"><span className={"footer__logo-item reddit"}/></a>
-          <a href="/"><span className={"footer__logo-item medium"}/></a>
+          <a href="https://medium.com/@yoloswap" target="_blank" rel="noopener noreferrer">
+            <span className={"footer__logo-item medium"}/>
+          </a>
         </div>
       </div>
     </div>

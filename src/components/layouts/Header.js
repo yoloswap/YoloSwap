@@ -67,8 +67,8 @@ class Header extends Component {
           <div className={"header__content"}>
             <a href="/" className={"header__content-item active"}>YOLO</a>
             <a href="/" className={"header__content-item"}>FAQ</a>
-            <a href="/" className={"header__content-item"}>CONTACT US</a>
-            <a href="/" className={"header__content-item"}>BLOG</a>
+            <a className={"header__content-item"} href="mailto:hello@yoloswap.com" target="_top">CONTACT US</a>
+            <a className={"header__content-item"} href="https://medium.com/@yoloswap" target="_blank" rel="noopener noreferrer">BLOG</a>
 
             {!this.props.account && (
               <div className={"header__content-button common__button"} onClick={() => this.signInToScatter()}>Sign In</div>
