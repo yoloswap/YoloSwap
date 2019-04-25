@@ -17,6 +17,7 @@ function* swapToken() {
   const sourceToken = swap.sourceToken;
   const destToken = swap.destToken;
   const sourceAmount = (+swap.sourceAmount).toFixed(sourceToken.precision);
+  const minConversionRate = swap.tokenPairRate - (swap.tokenPairRate * appConfig.MIN_CONVERSION_RATE);
 
   try {
     yield put(swapActions.setTxConfirming(true));
@@ -34,7 +35,7 @@ function* swapToken() {
         destPrecision: destToken.precision,
         destSymbol: destToken.symbol,
         destAccount: account.account.name,
-        minConversionRate: appConfig.MIN_CONVERSION_RATE,
+        minConversionRate: minConversionRate,
       }
     );
 
