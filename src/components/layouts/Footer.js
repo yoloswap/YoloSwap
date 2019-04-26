@@ -9,6 +9,9 @@ const Footer = () => (
           <a href="#" className={"footer__content-item"}>FAQ</a>
           <a className={"footer__content-item"} href="mailto:hello@yoloswap.com" target="_top">Contact Us</a>
           <a className={"footer__content-item"} href="https://medium.com/hello-yolo" target="_blank" rel="noopener noreferrer">Blog</a>
+          <a className={"footer__content-item"} href="https://docs.google.com/document/d/19xGm8IZVn2wyImUnWD-TOXO6MJbICXTc_rwsV-aOv3A/edit" target="_blank" rel="noopener noreferrer">
+            Privacy Policy
+          </a>
         </div>
 
         <div className={"footer__logo"}>

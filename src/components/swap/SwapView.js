@@ -96,7 +96,9 @@ export default class SwapView extends Component {
             <div className={`swap__bot-button common__button-gradient ${disabledClass}`} onClick={() => this.props.handleClickSwapButton()}>Swap Now</div>
             <div className={"swap__bot-term"}>
               <span>By Swapping, you agree to the </span>
-              <a href="#">Terms and Conditions</a>
+              <a href="https://docs.google.com/document/d/1Bmy1uzQiPdLPmccbA4nXQPddKRpkVIC3JXDQmh3zYQo/edit" target="_blank" rel="noreferrer noopener">
+                Terms and Conditions
+              </a>
             </div>
           </div>
         )}
