@@ -1,5 +1,5 @@
 import ScatterJS from "scatterjs-core";
-import Eos from "eosjs";
+import Eos, { JsonRpc, Api } from "eosjs";
 import ScatterEOS from "scatterjs-plugin-eosjs";
 import ScatterLynx from "scatterjs-plugin-lynx";
 import envConfig from "../config/env";
@@ -39,7 +39,7 @@ export async function disconnect() {
 }
 
 export function initiateScatter() {
-  ScatterJS.plugins(new ScatterEOS(), new ScatterLynx(Eos));
+  ScatterJS.plugins(new ScatterEOS(), new ScatterLynx(Eos || {Api, JsonRpc}));
 
   return ScatterJS;
 }
