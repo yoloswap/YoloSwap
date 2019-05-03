@@ -18,7 +18,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     setScatterEos: (eos) => {dispatch(accountActions.setScatterEos(eos))},
-    connectToScatter: (isLoadingNeeded, isIdentityNeeded) => {dispatch(accountActions.connectToScatter(isLoadingNeeded, isIdentityNeeded))},
+    connectToScatter: (isLoadingNeeded, firstTimeConnect) => {dispatch(accountActions.connectToScatter(isLoadingNeeded, firstTimeConnect))},
     unsetGlobalError: () => {dispatch(globalActions.setGlobalError(false))},
   }
 }
@@ -30,15 +30,15 @@ class Body extends Component {
   };
 
   componentWillMount = () => {
-    const scatter = scatterService.initiateScatter();
-    const eos = scatterService.getEosInstance(scatter);
+    const scatterJs = scatterService.initiateScatter();
+    const eos = scatterService.getEosInstance(scatterJs.scatter);
 
     this.props.setScatterEos(eos);
 
-    this.props.connectToScatter(false, false);
+    this.props.connectToScatter(false, true);
 
     document.addEventListener('scatterLoaded', () => {
-      this.props.connectToScatter(false, false);
+      this.props.connectToScatter(false, true);
     });
   };
 

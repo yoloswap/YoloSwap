@@ -15,8 +15,9 @@
     "redux": "^4.0.1",
     "redux-logger": "^3.0.6",
     "redux-saga": "^0.16.2",
-    "scatterjs-core": "^2.6.0",
+    "scatterjs-core": "^2.7.18",
     "scatterjs-plugin-eosjs": "^1.4.0",
+    "scatterjs-plugin-lynx": "^1.6.6",
     "underscore": "^1.9.1"
   },
   "scripts": {

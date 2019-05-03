@@ -12,11 +12,11 @@ const getAccountData = state => state.account;
 
 function* connectToScatter(action) {
   try {
-    const { isLoadingNeeded, isIdentityNeeded } = action.payload;
+    const { isLoadingNeeded, firstTimeConnect } = action.payload;
 
     yield put(accountActions.setScatterLoading(isLoadingNeeded));
 
-    const result = yield call(scatterService.connect, isIdentityNeeded);
+    const result = yield call(scatterService.connect, firstTimeConnect);
 
     if (result) {
       yield put(accountActions.setScatterAccount(result.account));
