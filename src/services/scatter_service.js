@@ -13,7 +13,7 @@ export async function connect(firstTimeConnect = false) {
   if (firstTimeConnect) {
     isConnected = await scatterJs.scatter.connect('yolo');
   } else {
-    isConnected = await scatterJs.scatter.login(requiredFields);
+    isConnected = await loginToScatter(scatterJs.scatter, requiredFields);
   }
 
   if(!isConnected) return false;
@@ -27,7 +27,7 @@ export async function connect(firstTimeConnect = false) {
   await scatter.getIdentity(requiredFields);
 
   const account = scatter.identity.accounts.find(x => x.blockchain === 'eos');
-  const eos = getEosInstance(scatterJs, network);
+  const eos = getEosInstance(scatter, network);
 
   return { account, eos }
 }
@@ -44,10 +44,10 @@ export function initiateScatter() {
   return ScatterJS;
 }
 
-export function getEosInstance(scatterJs, network = null) {
+export function getEosInstance(scatter, network = null) {
   network = network ? network : getNetworkObject();
 
-  return scatterJs.eos(network, Eos, {});
+  return scatter.eos(network, Eos, {});
 }
 
 function getNetworkObject() {
@@ -58,4 +58,14 @@ function getNetworkObject() {
     port: envConfig.NETWORK_PORT,
     chainId: envConfig.NETWORK_CHAIN_ID
   }
+}
+
+async function loginToScatter(scatter, requiredFields) {
+  let isConnected = false;
+
+  if (typeof scatter.login === "function") {
+    isConnected = await scatter.login(requiredFields);
+  }
+
+  return isConnected;
 }

@@ -31,7 +31,7 @@ class Body extends Component {
 
   componentWillMount = () => {
     const scatterJs = scatterService.initiateScatter();
-    const eos = scatterService.getEosInstance(scatterJs);
+    const eos = scatterService.getEosInstance(scatterJs.scatter);
 
     this.props.setScatterEos(eos);
 
