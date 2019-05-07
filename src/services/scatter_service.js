@@ -42,8 +42,9 @@ export function initiateScatter() {
 
 export function getEosInstance(scatter, network = null) {
   network = network ? network : getNetworkObject();
+  const eosOptions = { chainId: envConfig.NETWORK_CHAIN_ID };
 
-  return scatter.eos(network, Eos, {});
+  return scatter.eos(network, Eos, eosOptions);
 }
 
 function getNetworkObject() {
