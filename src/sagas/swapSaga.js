@@ -3,6 +3,7 @@ import { takeLatest, call, put, select } from 'redux-saga/effects';
 import { getRate, trade } from "../services/network_service";
 import * as swapActions from "../actions/swapAction";
 import * as accountActions from "../actions/accountAction";
+import * as txActions from "../actions/transactionAction";
 import { formatAmount } from "../utils/helpers";
 import envConfig from "../config/env";
 import appConfig from "../config/app";
@@ -15,11 +16,16 @@ function* swapToken() {
   const account = yield select(getAccountState);
 
   const sourceToken = swap.sourceToken;
+  const sourceTokenSymbol = sourceToken.symbol;
+  const srcAmount = swap.sourceAmount;
   const destToken = swap.destToken;
-  const sourceAmount = (+swap.sourceAmount).toFixed(sourceToken.precision);
+  const destSymbol = destToken.symbol;
+  const destAmount = swap.destAmount;
+  const sourceAmountWithFullDecimals = (+srcAmount).toFixed(sourceToken.precision);
+  const minConversionRate = swap.tokenPairRate - (swap.tokenPairRate * appConfig.MIN_CONVERSION_RATE);
 
   try {
-    yield put(swapActions.setTxConfirming(true));
+    yield put(txActions.setTxConfirming(true));
 
     const result = yield call(
       trade,
@@ -27,43 +33,43 @@ function* swapToken() {
         eos: account.eos,
         networkAccount: envConfig.NETWORK_ACCOUNT,
         userAccount: account.account.name,
-        srcAmount: sourceAmount,
+        srcAmount: sourceAmountWithFullDecimals,
         srcTokenAccount: sourceToken.account,
         destTokenAccount: destToken.account,
-        srcSymbol: sourceToken.symbol,
+        srcSymbol: sourceTokenSymbol,
         destPrecision: destToken.precision,
-        destSymbol: destToken.symbol,
+        destSymbol: destSymbol,
         destAccount: account.account.name,
-        minConversionRate: appConfig.MIN_CONVERSION_RATE,
+        minConversionRate: minConversionRate,
       }
     );
 
-    yield put(swapActions.setTxConfirming(false));
-    yield put(swapActions.setTxBroadcasting(true));
-    yield call(delay, 1000);
-    yield put(swapActions.setTxBroadcasting(false));
-    yield put(swapActions.setTxId(result.transaction_id));
+    const txHash = result.transaction_id;
+
+    yield put(txActions.setTxConfirming(false));
+    yield call(setTxBroadcastingTime);
+    yield call(setTxData, txHash, srcAmount, sourceTokenSymbol, destAmount, destSymbol);
     yield put(swapActions.setSourceAmount(''));
     yield put(accountActions.fetchBalance());
     yield call(delay, 5000);
-    yield put(swapActions.resetTx());
+    yield put(txActions.resetTx());
   } catch (e) {
-    yield put(swapActions.resetTx());
+    yield put(txActions.resetTx());
 
     if (e.message) {
-      yield put(swapActions.setTxError(e.message));
+      yield put(txActions.setTxError(e.message));
     } else {
       const error = JSON.parse(e);
       if (error.error.details[0]) {
-        yield put(swapActions.setTxError(error.message + ": " + error.error.details[0].message));
+        yield put(txActions.setTxError(error.message + ": " + error.error.details[0].message));
       } else {
-        yield put(swapActions.setTxError(error.error.what));
+        yield put(txActions.setTxError(error.error.what));
       }
     }
 
     yield put(accountActions.fetchBalance());
     yield call(delay, 3000);
-    yield put(swapActions.setTxError(''));
+    yield put(txActions.setTxError(''));
   }
 }
 
@@ -148,10 +154,30 @@ function getDestAmount(tokenPairRate, sourceAmount, destTokenPrecision) {
   return formatAmount(tokenPairRate * sourceAmount, destTokenPrecision);
 }
 
+function* setTxBroadcastingTime() {
+  yield put(txActions.setTxBroadcasting(true));
+  yield call(delay, 1000);
+  yield put(txActions.setTxBroadcasting(false));
+}
+
+function* setTxData(txHash, sourceAmount, sourceSymbol, destAmount, destSymbol) {
+  yield put(txActions.setTxHash(txHash));
+  yield put(txActions.addTxDataToHistory({
+    type: 'swap',
+    hash: txHash,
+    srcAmount: sourceAmount,
+    srcSymbol: sourceSymbol,
+    destAmount: destAmount,
+    destSymbol: destSymbol,
+    status: 'executed'
+  }));
+}
+
 export default function* swapWatcher() {
   yield takeLatest(swapActions.swapActionTypes.SWAP_TOKEN, swapToken);
   yield takeLatest(swapActions.swapActionTypes.FETCH_TOKEN_PAIR_RATE, fetchTokenPairRate);
   yield takeLatest(swapActions.swapActionTypes.SET_SOURCE_TOKEN, fetchTokenPairRate);
   yield takeLatest(swapActions.swapActionTypes.SET_DEST_TOKEN, fetchTokenPairRate);
   yield takeLatest(swapActions.swapActionTypes.SET_SOURCE_AMOUNT, fetchTokenPairRate);
+  yield takeLatest(swapActions.swapActionTypes.SET_SOURCE_AND_DEST_TOKEN, fetchTokenPairRate);
 }

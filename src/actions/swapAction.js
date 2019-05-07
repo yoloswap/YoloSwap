@@ -3,15 +3,11 @@ export const swapActionTypes = {
   SET_TOKEN_PAIR_RATE_LOADING: 'SWAP.SET_TOKEN_PAIR_RATE_LOADING',
   SET_TOKEN_PAIR_RATE: 'SWAP.SET_TOKEN_PAIR_RATE',
   SWAP_TOKEN: 'SWAP.SWAP_TOKEN',
+  SET_SOURCE_AND_DEST_TOKEN: 'SWAP.SET_SOURCE_AND_DEST_TOKEN',
   SET_SOURCE_TOKEN: 'SWAP.SET_SOURCE_TOKEN',
   SET_DEST_TOKEN: 'SWAP.SET_DEST_TOKEN',
   SET_SOURCE_AMOUNT: 'SWAP.SET_SOURCE_AMOUNT',
   SET_DEST_AMOUNT: 'SWAP.SET_DEST_AMOUNT',
-  SET_TX_CONFIRMING: 'SWAP.SET_TX_CONFIRMING',
-  SET_TX_BROADCASTING: 'SWAP.SET_TX_BROADCASTING',
-  SET_TX_ID: 'SWAP.SET_TX_ID',
-  SET_TX_ERROR: 'SWAP.SET_TX_ERROR',
-  RESET_TX: 'SWAP.RESET_TX',
   SET_ERROR: 'SWAP.SET_ERROR',
 };
 
@@ -76,36 +72,9 @@ export function setError(message) {
   }
 }
 
-export function setTxConfirming(isConfirming) {
+export function setSourceAndDestToken(srcToken, destToken) {
   return {
-    type: swapActionTypes.SET_TX_CONFIRMING,
-    payload: isConfirming
-  }
-}
-
-export function setTxBroadcasting(isBroadcasting) {
-  return {
-    type: swapActionTypes.SET_TX_BROADCASTING,
-    payload: isBroadcasting
-  }
-}
-
-export function setTxId(txId) {
-  return {
-    type: swapActionTypes.SET_TX_ID,
-    payload: txId
-  }
-}
-
-export function setTxError(message) {
-  return {
-    type: swapActionTypes.SET_TX_ERROR,
-    payload: message
-  }
-}
-
-export function resetTx() {
-  return {
-    type: swapActionTypes.RESET_TX
+    type: swapActionTypes.SET_SOURCE_AND_DEST_TOKEN,
+    payload: { srcToken, destToken}
   }
 }

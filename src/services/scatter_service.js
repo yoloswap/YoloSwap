@@ -1,23 +1,29 @@
 import ScatterJS from "scatterjs-core";
-import Eos from "eosjs";
+import Eos, { JsonRpc, Api } from "eosjs";
 import ScatterEOS from "scatterjs-plugin-eosjs";
+import ScatterLynx from "scatterjs-plugin-lynx";
 import envConfig from "../config/env";
 
-export async function connect(isIdentityNeeded = true) {
-  const scatter = initiateScatter();
+export async function connect(firstTimeConnect = false) {
+  const scatterJs = initiateScatter();
   const network = getNetworkObject();
+  const requiredFields = { accounts:[network] };
+  let isConnected = false;
 
-  const connected = await scatter.connect('yolo');
+  if (firstTimeConnect) {
+    isConnected = await scatterJs.scatter.connect('yolo');
+  } else {
+    isConnected = await loginToScatter(scatterJs.scatter, requiredFields);
+  }
 
-  if(!connected) return false;
+  if(!isConnected) return false;
 
   window.ScatterJS = null;
 
-  if (!scatter.identity && !isIdentityNeeded) {
-    return;
-  }
+  const scatter = scatterJs.scatter;
 
-  const requiredFields = { accounts:[network] };
+  if (!scatter.identity) return;
+
   await scatter.getIdentity(requiredFields);
 
   const account = scatter.identity.accounts.find(x => x.blockchain === 'eos');
@@ -27,15 +33,15 @@ export async function connect(isIdentityNeeded = true) {
 }
 
 export async function disconnect() {
-  const scatter = initiateScatter();
+  const scatterJs = initiateScatter();
 
-  scatter.forgetIdentity();
+  scatterJs.scatter.forgetIdentity();
 }
 
 export function initiateScatter() {
-  ScatterJS.plugins(new ScatterEOS());
+  ScatterJS.plugins(new ScatterEOS(), new ScatterLynx(Eos || {Api, JsonRpc}));
 
-  return ScatterJS.scatter;
+  return ScatterJS;
 }
 
 export function getEosInstance(scatter, network = null) {
@@ -52,4 +58,14 @@ function getNetworkObject() {
     port: envConfig.NETWORK_PORT,
     chainId: envConfig.NETWORK_CHAIN_ID
   }
+}
+
+async function loginToScatter(scatter, requiredFields) {
+  let isConnected = false;
+
+  if (typeof scatter.login === "function") {
+    isConnected = await scatter.login(requiredFields);
+  }
+
+  return isConnected;
 }

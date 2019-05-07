@@ -16,8 +16,7 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchMarketRates: () => { dispatch(fetchMarketRates()) },
     setIndexToken: (token) => { dispatch(setIndexToken(token)) },
-    setSourceToken: (token) => { dispatch(swapActions.setSourceToken(token)) },
-    setDestToken: (token) => { dispatch(swapActions.setDestToken(token)) },
+    setSourceAndDestToken: (srcToken, destToken) => { dispatch(swapActions.setSourceAndDestToken(srcToken, destToken)) },
     setSourceAmount: (amount) => { dispatch(swapActions.setSourceAmount(amount)) },
   }
 }
@@ -41,9 +40,7 @@ class Market extends Component {
   };
 
   setSwapToken = (srcToken, destToken) => {
-    this.props.setSourceAmount('');
-    this.props.setSourceToken(srcToken);
-    this.props.setDestToken(destToken);
+    this.props.setSourceAndDestToken(srcToken, destToken);
     this.props.srcAmountRef.current.focus();
     window.scrollTo(0, 0);
   };

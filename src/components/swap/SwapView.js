@@ -10,7 +10,7 @@ export default class SwapView extends Component {
     const isError = !!this.props.error;
     const isSwapBalanceBoxShown = this.props.isAccountImported && !this.props.isBalanceLoading;
     const disabledClass = (isError || this.props.isTokenPairRateLoading) ? 'disabled' : '';
-    const isButtonHidden = this.props.tx.isConfirming || this.props.tx.isBroadcasting || this.props.tx.id || this.props.tx.error;
+    const isButtonHidden = this.props.tx.isConfirming || this.props.tx.isBroadcasting || this.props.tx.hash || this.props.tx.error;
 
     return (
       <div className={"swap"}>
@@ -87,8 +87,8 @@ export default class SwapView extends Component {
           <div className={"swap__text common__fade-in error"}>{this.props.tx.error}</div>
         )}
 
-        {this.props.tx.id && (
-          <div className={"swap__text common__fade-in"}>Successfully! The <a rel="noopener noreferrer" href={`${envConfig.TX_URL}${this.props.tx.id}`} target="_blank">transaction</a> is accepted</div>
+        {this.props.tx.hash && (
+          <div className={"swap__text common__fade-in"}>Successfully! The <a rel="noopener noreferrer" href={`${envConfig.TX_URL}${this.props.tx.hash}`} target="_blank">transaction</a> is accepted</div>
         )}
 
         {!isButtonHidden && (
@@ -96,8 +96,17 @@ export default class SwapView extends Component {
             <div className={`swap__bot-button common__button-gradient ${disabledClass}`} onClick={() => this.props.handleClickSwapButton()}>Swap Now</div>
             <div className={"swap__bot-term"}>
               <span>By Swapping, you agree to the </span>
-              <a href="/" target="_blank">Terms and Conditions</a>
+              <a href="https://docs.google.com/document/d/1Bmy1uzQiPdLPmccbA4nXQPddKRpkVIC3JXDQmh3zYQo/edit" target="_blank" rel="noreferrer noopener">
+                Terms and Conditions
+              </a>
             </div>
+          </div>
+        )}
+
+        {(process.env.REACT_APP_ENV === 'local' || process.env.REACT_APP_ENV === 'development') && (
+          <div className={"swap__faucet-link"}>
+            <span>Receive some EOS testnet </span>
+            <a href="https://monitor.jungletestnet.io/#faucet" target="_blank" rel="noopener noreferrer">here</a>
           </div>
         )}
 

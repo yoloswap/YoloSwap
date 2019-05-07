@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "bignumber.js": "^8.1.1",
     "cors": "^2.8.5",
     "eosjs": "^16.0.9",
     "express": "^4.16.4",
@@ -14,15 +15,18 @@
     "redux": "^4.0.1",
     "redux-logger": "^3.0.6",
     "redux-saga": "^0.16.2",
-    "scatterjs-core": "^2.6.0",
-    "scatterjs-plugin-eosjs": "^1.4.0",
+    "scatterjs-core": "^2.7.18",
+    "scatterjs-plugin-eosjs": "^1.5.1",
+    "scatterjs-plugin-lynx": "^1.6.6",
     "underscore": "^1.9.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "local": "REACT_APP_ENV=local react-scripts start",
+    "development": "REACT_APP_ENV=development react-scripts start",
     "staging": "REACT_APP_ENV=staging react-scripts start",
+    "production": "REACT_APP_ENV=production react-scripts start",
     "build-dev": "REACT_APP_ENV=development react-scripts build",
     "build-staging": "REACT_APP_ENV=staging react-scripts build",
     "build-production": "REACT_APP_ENV=production react-scripts build",

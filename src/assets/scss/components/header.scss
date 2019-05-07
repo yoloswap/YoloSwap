@@ -54,9 +54,14 @@
         transition: all .3s;
       }
 
-      &.active::after {
-        opacity: 1;
-        transform: translateY(0);
+      &.active {
+        cursor: initial;
+        pointer-events: none;
+
+        &::after {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
 
       &:hover::after {
@@ -88,6 +93,7 @@
       font-size: 14px;
       font-weight: 500;
       color: #5a5e67;
+      cursor: pointer;
     }
 
     &-dropdown-bot {

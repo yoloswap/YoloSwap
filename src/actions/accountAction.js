@@ -14,10 +14,10 @@ export function fetchBalance() {
   }
 }
 
-export function connectToScatter(isLoadingNeeded = true, isIdentityNeeded = true) {
+export function connectToScatter(isLoadingNeeded = true, firstTimeConnect = false) {
   return {
     type: accountActionTypes.CONNECT_TO_SCATTER,
-    payload: { isLoadingNeeded, isIdentityNeeded }
+    payload: { isLoadingNeeded, firstTimeConnect }
   }
 }
 

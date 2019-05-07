@@ -9,6 +9,7 @@ function mapStateToProps(store) {
   const token = store.token;
   const account = store.account;
   const swap = store.swap;
+  const transaction = store.transaction;
   const tokens = token.tokens;
 
   return {
@@ -19,7 +20,7 @@ function mapStateToProps(store) {
     destAmount: swap.destAmount,
     tokenPairRate: swap.tokenPairRate,
     isTokenPairRateLoading: swap.isTokenPairRateLoading,
-    tx: swap.tx,
+    tx: transaction.tx,
     error: swap.error,
     isAccountImported: !!account.account,
     isBalanceLoading: account.isBalanceLoading,
@@ -36,6 +37,7 @@ function mapDispatchToProps(dispatch) {
     fetchTokenPairRate: () => {dispatch(swapActions.fetchTokenPairRate())},
     swapToken: () => {dispatch(swapActions.swapToken())},
     setError: (message) => {dispatch(swapActions.setError(message))},
+    setSourceAndDestToken: (srcToken, destToken) => {dispatch(swapActions.setSourceAndDestToken(srcToken, destToken))},
     connectToScatter: () => {dispatch(accountAction.connectToScatter())},
     setScatterLoading: (isLoading) => {dispatch(accountAction.setScatterLoading(isLoading))},
   }
@@ -52,11 +54,6 @@ class Swap extends Component {
 
   componentDidMount = () => {
     this.props.fetchTokenPairRate();
-  };
-
-  handleSetSourceToken = (token) => {
-    this.resetSourceAmount(token);
-    this.props.setSourceToken(token);
   };
 
   handleClickSwapButton = () => {
@@ -81,9 +78,7 @@ class Swap extends Component {
   };
 
   handleClickSwapIcon = () => {
-    this.resetSourceAmount(this.props.destToken);
-    this.props.setSourceToken(this.props.destToken);
-    this.props.setDestToken(this.props.sourceToken);
+    this.props.setSourceAndDestToken(this.props.destToken, this.props.sourceToken);
   };
 
   handleCloseScatterModal = () => {
@@ -106,18 +101,12 @@ class Swap extends Component {
     this.handleCloseSwapBalanceBox();
   };
 
-  resetSourceAmount = (token) => {
-    if (token.symbol !== this.props.sourceToken.symbol) {
-      this.props.setSourceAmount('');
-    }
-  };
-
   render() {
     return (
       <SwapView
         handleClickSwapButton={this.handleClickSwapButton}
         handleClickSwapIcon={this.handleClickSwapIcon}
-        handleSelectSourceToken={this.handleSetSourceToken}
+        handleSelectSourceToken={this.props.setSourceToken}
         handleSelectDestToken={this.props.setDestToken}
         handleSourceAmountChange={this.handleSourceAmountChange}
         handleCloseScatterModal={this.handleCloseScatterModal}

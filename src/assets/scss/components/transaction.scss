@@ -1,0 +1,95 @@
+.transaction {
+  &--empty {
+    padding: 50px 30px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+  }
+
+  &__item {
+    padding: 10px 30px;
+
+    &:nth-child(odd) {
+      background: #f5f5f5;
+    }
+
+    &:last-child {
+      padding-bottom: 15px;
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+    }
+
+    &-head,
+    &-body {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    &-head {
+      font-weight: 600;
+      color: #4a5675;
+      margin-bottom: 5px;
+    }
+
+    &-action {
+      font-size: 14px;
+      text-transform: capitalize;
+    }
+
+    &-value {
+      font-size: 12px;
+    }
+
+    &-hash {
+      font-size: 12px;
+      font-weight: 500;
+      color: #9a9dac;
+      transition: color .3s;
+
+      &:hover {
+        color: $blue-light;
+      }
+    }
+
+    &-status {
+      font-size: 10px;
+      font-weight: 600;
+      border-radius: 9px;
+      padding: 3px 10px;
+      text-transform: capitalize;
+
+      &--executed {
+        color: #00c86d;
+        background-color: #d0fac5;
+      }
+    }
+  }
+
+  @media (max-width: $smaller-breakpoint) {
+    &__item {
+      &-body,
+      &-head {
+        display: block;
+      }
+
+      &-action {
+        margin-bottom: 5px;
+      }
+
+      &-body {
+        margin-bottom: 5px;
+      }
+
+      &-hash {
+        margin-bottom: 5px;
+        display: block;
+      }
+
+      &-status {
+        display: inline-block;
+      }
+    }
+  }
+}

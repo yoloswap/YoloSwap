@@ -8,12 +8,6 @@ const initialState = {
   destAmount: 0,
   tokenPairRate: 0,
   isTokenPairRateLoading: true,
-  tx: {
-    id: null,
-    isConfirming: false,
-    isBroadcasting: false,
-    error: null
-  },
   error: null
 };
 
@@ -22,7 +16,8 @@ export default function swapReducer(state = initialState, action) {
     case swapActionTypes.SET_SOURCE_TOKEN: {
       return {
         ...state,
-        sourceToken: action.payload
+        sourceToken: action.payload,
+        sourceAmount: '',
       }
     }
     case swapActionTypes.SET_DEST_TOKEN: {
@@ -62,46 +57,14 @@ export default function swapReducer(state = initialState, action) {
         error: action.payload
       }
     }
-    case swapActionTypes.SET_TX_CONFIRMING: {
+    case swapActionTypes.SET_SOURCE_AND_DEST_TOKEN: {
+      const { srcToken, destToken } = action.payload;
+
       return {
         ...state,
-        tx: {
-          ...state.tx,
-          isConfirming: action.payload
-        }
-      }
-    }
-    case swapActionTypes.SET_TX_BROADCASTING: {
-      return {
-        ...state,
-        tx: {
-          ...state.tx,
-          isBroadcasting: action.payload
-        }
-      }
-    }
-    case swapActionTypes.SET_TX_ID: {
-      return {
-        ...state,
-        tx: {
-          ...state.tx,
-          id: action.payload
-        }
-      }
-    }
-    case swapActionTypes.SET_TX_ERROR: {
-      return {
-        ...state,
-        tx: {
-          ...state.tx,
-          error: action.payload
-        }
-      }
-    }
-    case swapActionTypes.RESET_TX: {
-      return {
-        ...state,
-        tx: initialState.tx
+        sourceAmount: '',
+        sourceToken: srcToken,
+        destToken: destToken,
       }
     }
     default:
