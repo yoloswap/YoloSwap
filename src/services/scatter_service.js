@@ -21,12 +21,8 @@ export async function connect(firstTimeConnect = false) {
   window.ScatterJS = null;
 
   const scatter = scatterJs.scatter;
-
-  if (!scatter.identity) return;
-
-  await scatter.getIdentity(requiredFields);
-
-  const account = scatter.identity.accounts.find(x => x.blockchain === 'eos');
+  const identity = await scatter.getIdentity(requiredFields);
+  const account = identity.accounts.find(x => x.blockchain === 'eos');
   const eos = getEosInstance(scatter, network);
 
   return { account, eos }
