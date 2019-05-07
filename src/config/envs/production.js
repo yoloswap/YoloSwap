@@ -58,7 +58,7 @@ envConfig.TOKENS = [
     "logo": "emt.png",
   },
   {
-    "id": "bancor-network",
+    "id": "bancor",
     "name": "Bancor Network",
     "symbol": "BNT",
     "account": "bntbntbntbnt",
