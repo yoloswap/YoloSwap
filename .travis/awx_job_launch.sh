@@ -5,7 +5,7 @@ set -euo pipefail
 readonly awx_username=${AWX_USERNAME:-}
 readonly awx_password=${AWX_PASSWORD:-}
 readonly awx_develop_job_launch_uri=${AWX_DEVELOP_JOB_LAUNCH_URI:-}
-readonly awx_master_job_launch_uri=${AWX_STAGING_JOB_LAUNCH_URI:-}
+readonly awx_staging_job_launch_uri=${AWX_STAGING_JOB_LAUNCH_URI:-}
 
 if [[ "$TRAVIS_BRANCH" == "develop" ]]; then
     awx_job_launch_uri=$awx_develop_job_launch_uri
