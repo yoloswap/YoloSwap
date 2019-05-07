@@ -39,7 +39,6 @@ function* swapToken() {
         srcSymbol: sourceTokenSymbol,
         destPrecision: destToken.precision,
         destSymbol: destSymbol,
-        destAccount: account.account.name,
         minConversionRate: minConversionRate,
       }
     );

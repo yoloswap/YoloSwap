@@ -68,7 +68,7 @@ function* fetchBalances() {
       getBalances,
       {
         eos: account.eos,
-        account: account.account.name,
+        reserveAccount: account.account.name,
         tokenSymbols: tokenSymbols,
         tokenContracts: tokenContracts,
       }
