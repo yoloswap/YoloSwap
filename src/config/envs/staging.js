@@ -33,6 +33,46 @@ envConfig.TOKENS = [
     "precision": 3,
     "logo": "iq.png",
   },
+  {
+    "id": "infiniverse",
+    "name": "Infiniverse",
+    "symbol": "INF",
+    "account": "infinicoinio",
+    "precision": 4,
+    "logo": "inf.png",
+  },
+  {
+    "id": "aeron",
+    "name": "Aeron",
+    "symbol": "ARN",
+    "account": "aeronaerozzz",
+    "precision": 8,
+    "logo": "arn.webp",
+  },
+  {
+    "id": "emanate",
+    "name": "Emanate",
+    "symbol": "EMT",
+    "account": "emanateoneos",
+    "precision": 4,
+    "logo": "emt.png",
+  },
+  {
+    "id": "bancor-network",
+    "name": "Bancor Network",
+    "symbol": "BNT",
+    "account": "bntbntbntbnt",
+    "precision": 10,
+    "logo": "bnt.svg",
+  },
+  {
+    "id": "carbon",
+    "name": "Carbon",
+    "symbol": "CUSD",
+    "account": "stablecarbon",
+    "precision": 2,
+    "logo": "cusd.png",
+  },
 ];
 
 export default envConfig;
