@@ -88,6 +88,7 @@ async function trade(options) {
   let eos = options.eos
   let networkAccount = options.networkAccount
   let userAccount = options.userAccount
+  let userAuthority = options.userAuthority
   let srcAmount = options.srcAmount
   let srcTokenAccount = options.srcTokenAccount
   let destTokenAccount = options.destTokenAccount
@@ -103,7 +104,7 @@ async function trade(options) {
 
   return await token.transfer(
     { from: userAccount, to: networkAccount, quantity: asset, memo: memo },
-    { authorization: [`${userAccount}@active`]}
+    { authorization: [`${userAccount}@${userAuthority}`]}
   );
 }
 

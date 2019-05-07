@@ -33,6 +33,7 @@ function* swapToken() {
         eos: account.eos,
         networkAccount: envConfig.NETWORK_ACCOUNT,
         userAccount: account.account.name,
+        userAuthority: account.account.authority,
         srcAmount: sourceAmountWithFullDecimals,
         srcTokenAccount: sourceToken.account,
         destTokenAccount: destToken.account,
