@@ -14,7 +14,7 @@ async function getBalances(options){
       account: reserveAccount,
       symbol: tokenSymbols[i]}
     )
-    balances.push(parseFloat(balanceRes[0]))
+    balances.push(parseFloat(balanceRes[0]) || 0)
   }
   return balances
 }
