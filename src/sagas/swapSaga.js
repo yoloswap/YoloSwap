@@ -117,6 +117,9 @@ export function* validateValidInput() {
   if (sourceToken.symbol === destToken.symbol) {
     yield call(setError, 'Cannot exchange the same token');
     return false;
+  } else if (sourceToken.symbol !== eosSymbol && destToken.symbol !== eosSymbol) {
+    yield call(setError, 'Token to Token Swapping is not yet supported at current version of Yolo. Please choose EOS as your source or destination input.');
+    return false;
   } else if (sourceAmountDecimals && sourceAmountDecimals.length > sourceTokenDecimals) {
     yield call(setError, `Your source amount's decimals should be no longer than ${sourceTokenDecimals} characters`);
     return false;
@@ -125,9 +128,6 @@ export function* validateValidInput() {
     return false;
   } else if (sourceAmount !== '' && !+sourceAmount) {
     yield call(setError, 'Your source amount is invalid');
-    return false;
-  } else if (sourceToken.symbol !== eosSymbol && destToken.symbol !== eosSymbol) {
-    yield call(setError, 'Token to Token Swapping is not yet supported at current version of Yolo. Please choose EOS as your source or destination input.');
     return false;
   } else {
     yield put(swapActions.setError(''));
