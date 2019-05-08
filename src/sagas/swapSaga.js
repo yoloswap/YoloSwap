@@ -107,12 +107,14 @@ export function* fetchTokenPairRate() {
 
 export function* validateValidInput() {
   const swap = yield select(getSwapState);
+  const eosSymbol = envConfig.EOS.symbol;
   const sourceToken = swap.sourceToken;
+  const destToken = swap.destToken;
   const sourceAmount = swap.sourceAmount.toString();
   const sourceTokenDecimals = sourceToken.precision;
   const sourceAmountDecimals = sourceAmount.split(".")[1];
 
-  if (swap.sourceToken.symbol === swap.destToken.symbol) {
+  if (sourceToken.symbol === destToken.symbol) {
     yield call(setError, 'Cannot exchange the same token');
     return false;
   } else if (sourceAmountDecimals && sourceAmountDecimals.length > sourceTokenDecimals) {
@@ -123,6 +125,9 @@ export function* validateValidInput() {
     return false;
   } else if (sourceAmount !== '' && !+sourceAmount) {
     yield call(setError, 'Your source amount is invalid');
+    return false;
+  } else if (sourceToken.symbol !== eosSymbol && destToken.symbol !== eosSymbol) {
+    yield call(setError, 'Token to Token Swapping is not yet supported at current version of Yolo. Please choose EOS as your source or destination input.');
     return false;
   } else {
     yield put(swapActions.setError(''));
