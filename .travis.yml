@@ -2,12 +2,12 @@ sudo: required
 
 language: node_js
 
+node_js:
+  - "8"
+
 cache:
     directories:
       - node_modules
-
-node_js:
-  - "8"
 
 env:
   global:
@@ -27,16 +27,19 @@ deploy:
     script: npm run build-dev
     on:
       branch: develop
+    skip_cleanup: true
 
   - provider: script
     script: npm run build-staging
     on:
       branch: staging
+    skip_cleanup: true
 
   - provider: script
     script: npm run build-production
     on:
       branch: production
+    skip_cleanup: true
 
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY_ID
