@@ -96,6 +96,7 @@
   }
 
   &__error {
+    word-break: break-word;
     font-size: 14px;
     font-weight: 500;
     color: $red;

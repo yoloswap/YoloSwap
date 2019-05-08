@@ -47,7 +47,7 @@ envConfig.TOKENS = [
     "symbol": "ARN",
     "account": "aeronaerozzz",
     "precision": 8,
-    "logo": "arn.webp",
+    "logo": "arn.png",
   },
   {
     "id": "emanate",

@@ -95,7 +95,9 @@ class Swap extends Component {
 
   addSrcAmountByBalancePercentage = (balancePercentage) => {
     const srcTokenBalance = this.props.sourceToken.balance;
-    const sourceAmountByPercentage = (srcTokenBalance * (balancePercentage / 100)).toFixed(this.props.sourceToken.precision);
+    let sourceAmountByPercentage = (srcTokenBalance * (balancePercentage / 100)).toFixed(this.props.sourceToken.precision);
+
+    if (!+sourceAmountByPercentage) sourceAmountByPercentage = 0;
 
     this.props.setSourceAmount(sourceAmountByPercentage);
     this.handleCloseSwapBalanceBox();

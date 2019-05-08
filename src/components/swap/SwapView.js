@@ -35,9 +35,9 @@ export default class SwapView extends Component {
                   <div className={`common__arrow-drop-down grey ${this.props.isSwapBalanceBoxActive ? 'up' : 'down'}`}/>
                 </DropdownTrigger>
                 <DropdownContent className={"swap__content-dropdown-box common__fade-in"}>
-                  <div onClick={() => this.props.addSrcAmountByBalancePercentage(25)}>Swap 25% balance</div>
-                  <div onClick={() => this.props.addSrcAmountByBalancePercentage(50)}>Swap 50% balance</div>
-                  <div onClick={() => this.props.addSrcAmountByBalancePercentage(100)}>Swap 100% balance</div>
+                  <div onClick={() => this.props.addSrcAmountByBalancePercentage(25)}>Swap 25% of balance</div>
+                  <div onClick={() => this.props.addSrcAmountByBalancePercentage(50)}>Swap 50% of balance</div>
+                  <div onClick={() => this.props.addSrcAmountByBalancePercentage(100)}>Swap 100% of balance</div>
                 </DropdownContent>
               </Dropdown>
             </div>
