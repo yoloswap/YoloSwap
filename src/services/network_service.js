@@ -103,7 +103,7 @@ async function trade(options) {
 
   return await token.transfer(
     { from: userAccount, to: networkAccount, quantity: asset, memo: memo },
-    { authorization: [`${userAccount}@owner`]}
+    { authorization: [`${userAccount}@active`]}
   );
 }
 
