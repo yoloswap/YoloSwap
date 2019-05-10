@@ -100,6 +100,8 @@ export function* fetchTokenPairRate() {
     yield put(swapActions.setTokenPairRate(tokenPairRate));
   } catch (e) {
     yield put(swapActions.setError(`This pair is under maintenance. Please try again later.`));
+    yield put(swapActions.setDestAmount(0));
+    yield put(swapActions.setTokenPairRate(0));
     console.log(e);
   }
 
