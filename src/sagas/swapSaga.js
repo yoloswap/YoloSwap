@@ -99,7 +99,7 @@ export function* fetchTokenPairRate() {
     yield put(swapActions.setDestAmount(destAmount));
     yield put(swapActions.setTokenPairRate(tokenPairRate));
   } catch (e) {
-    yield put(swapActions.setError(`Our reserves cannot handle your amount at the moment. Please try again later.`));
+    yield put(swapActions.setError(`This pair is under maintenance. Please try again later.`));
     console.log(e);
   }
 
