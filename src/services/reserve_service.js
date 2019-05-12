@@ -1,55 +1,51 @@
 /////////// exported functions /////////// 
 
 async function getRate(options) {
-  try {
-    const eos = options.eos
-    const reserveAccount = options.reserveAccount
-    const eosTokenAccount = options.eosTokenAccount
-    const srcSymbol = options.srcSymbol
-    const srcAmount = options.srcAmount
+  const eos = options.eos
+  const reserveAccount = options.reserveAccount
+  const eosTokenAccount = options.eosTokenAccount
+  const srcSymbol = options.srcSymbol
+  const srcAmount = options.srcAmount
 
-    let params = await getParams(eos, reserveAccount);
-    let currentParams = {
-      r:              parseFloat(params["rows"][0]["r"]),
-      pMin:           parseFloat(params["rows"][0]["p_min"]),
-      maxEosCapBuy:   parseFloat(params["rows"][0]["max_eos_cap_buy"].split(" ")[0]),
-      maxEosCapSell:  parseFloat(params["rows"][0]["max_eos_cap_buy"].split(" ")[0]),
-      profitPercent:  parseFloat(params["rows"][0]["profit_percent"]),
-      maxBuyRate:     parseFloat(params["rows"][0]["max_buy_rate"]),
-      minBuyRate:     parseFloat(params["rows"][0]["min_buy_rate"]),
-      maxSellRate:    parseFloat(params["rows"][0]["max_sell_rate"]),
-      minSellRate:    parseFloat(params["rows"][0]["min_sell_rate"])
-    }
-
-    let e = await getReserveEos(eos, reserveAccount, eosTokenAccount);
-
-    let rate
-    let deltaE
-    let deltaT;
-
-    const isBuy = (srcSymbol === "EOS")
-    if (isBuy) {
-      deltaE = srcAmount;
-      if (srcAmount > currentParams.maxEosCapBuy) return 0;
-      rate = (deltaE === 0) ? buyRateZeroQuantity(currentParams, e) :
-        buyRate(currentParams, e, deltaE)
-    } else {
-      deltaT = valueAfterReducingProfit(currentParams, srcAmount);
-      if (deltaT === 0) {
-        rate = sellRateZeroQuantity(currentParams, e)
-        deltaE = 0
-      } else {
-        const rateAnddeltaE = sellRate(currentParams, e, srcAmount, deltaT);
-        rate = rateAnddeltaE[0]
-        deltaE = rateAnddeltaE[1]
-      }
-      if (deltaE > currentParams.maxEosCapSell) return 0;
-    }
-
-    return rateAfterValidation(currentParams, rate, isBuy);
-  } catch (e) {
-    return 0;
+  let params = await getParams(eos, reserveAccount);
+  let currentParams = {
+    r:              parseFloat(params["rows"][0]["r"]),
+    pMin:           parseFloat(params["rows"][0]["p_min"]),
+    maxEosCapBuy:   parseFloat(params["rows"][0]["max_eos_cap_buy"].split(" ")[0]),
+    maxEosCapSell:  parseFloat(params["rows"][0]["max_eos_cap_buy"].split(" ")[0]),
+    profitPercent:  parseFloat(params["rows"][0]["profit_percent"]),
+    maxBuyRate:     parseFloat(params["rows"][0]["max_buy_rate"]),
+    minBuyRate:     parseFloat(params["rows"][0]["min_buy_rate"]),
+    maxSellRate:    parseFloat(params["rows"][0]["max_sell_rate"]),
+    minSellRate:    parseFloat(params["rows"][0]["min_sell_rate"])
   }
+
+  let e = await getReserveEos(eos, reserveAccount, eosTokenAccount);
+
+  let rate
+  let deltaE
+  let deltaT;
+
+  const isBuy = (srcSymbol === "EOS")
+  if (isBuy) {
+    deltaE = srcAmount;
+    if (srcAmount > currentParams.maxEosCapBuy) return 0;
+    rate = (deltaE === 0) ? buyRateZeroQuantity(currentParams, e) :
+      buyRate(currentParams, e, deltaE)
+  } else {
+    deltaT = valueAfterReducingProfit(currentParams, srcAmount);
+    if (deltaT === 0) {
+      rate = sellRateZeroQuantity(currentParams, e)
+      deltaE = 0
+    } else {
+      const rateAnddeltaE = sellRate(currentParams, e, srcAmount, deltaT);
+      rate = rateAnddeltaE[0]
+      deltaE = rateAnddeltaE[1]
+    }
+    if (deltaE > currentParams.maxEosCapSell) return 0;
+  }
+
+  return rateAfterValidation(currentParams, rate, isBuy);
 }
 
 /////////// internal function /////////// 
