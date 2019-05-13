@@ -1,0 +1,28 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: $font-montserrat;
+  margin: 0;
+  background-color: #f7f7f7;
+}
+
+input {
+  font-family: $font-montserrat;
+}
+
+a {
+  text-decoration: none;
+  color: $blue;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+}
+
+.container {
+  max-width: $container-width;
+  padding: 0 15px;
+  margin: 0 auto;
+}

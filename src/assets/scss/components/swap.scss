@@ -1,0 +1,240 @@
+.swap {
+  border-radius: 10px;
+  box-shadow: 0 12px 64px 0 rgba(19, 23, 32, 0.09);
+  background-color: white;
+  padding: 50px 55px 20px;
+
+  &__container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 45px;
+  }
+
+  &__content {
+    width: calc(50% - 40px);
+
+    &-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #5584f9;
+      padding-left: 10px;
+      margin-bottom: 13px;
+    }
+
+    &-box {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 30px;
+      background-color: white;
+      border: 1px solid #dfe3ea;
+      padding: 14px 25px;
+      transition: all .3s;
+
+      &--error {
+        border-color: $red;
+        background-color: $red-light;
+
+        .swap__content-input {
+           background-color: $red-light;
+        }
+      }
+
+      &--imported {
+        position: relative;
+
+        .swap__content-input {
+          padding-right: 20px;
+        }
+
+        .swap__content-dropdown-container {
+          display: block;
+        }
+      }
+    }
+
+    &-input {
+      width: calc(100% - 170px);
+      height: 31px;
+      outline: none;
+      border: none;
+      text-align: right;
+      font-size: 24px;
+      font-weight: 500;
+      color: #727b8f;
+      transition: all .3s;
+
+      &::placeholder {
+        opacity: .6;
+      }
+    }
+
+    &-dropdown-container {
+      display: none;
+      position: absolute;
+      right: 15px;
+    }
+
+    &-dropdown-box {
+      width: 200px;
+      border-radius: 10px;
+      padding: 10px 0;
+      font-size: 14px;
+      font-weight: 500;
+      color: #5a5e67;
+      line-height: 2.14;
+      top: 24px;
+      right: 0;
+
+      div {
+        padding: 0 20px;
+        cursor: pointer;
+        transition: background-color .3s;
+
+        &:hover {
+          background-color: #eee;
+        }
+      }
+    }
+
+    &-info {
+      height: 22px;
+      margin-top: 15px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #8690ad;
+      padding: 0 25px;
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+
+      .common__flexbox {
+        height: 100%;
+        align-items: flex-start;
+      }
+
+      &.right {
+        justify-content: flex-end;
+      }
+    }
+
+    &-loading {
+      width: 18px;
+      height: 18px;
+      display: inline-block;
+      position: relative;
+      top: -1px;
+      margin: 0 4px;
+    }
+  }
+
+  &__icon {
+    width: 44px;
+    height: 44px;
+    background-image: url($image-path + 'icons/arrow-swap.svg');
+    cursor: pointer;
+    position: relative;
+    top: 40px;
+    border-radius: 50%;
+    transition: all .3s;
+
+    &:hover {
+      box-shadow: 0 2px 3px 0 #eee;
+    }
+
+    &:active {
+      top: 42px;
+    }
+  }
+
+  &__bot {
+    text-align: center;
+    margin-bottom: 50px;
+
+    &-button {
+      margin-bottom: 20px;
+    }
+
+    &-term {
+      font-size: 12px;
+      font-weight: 500;
+      font-style: italic;
+      color: #9ea1aa;
+    }
+  }
+
+  &__text {
+    font-size: 14px;
+    font-weight: 500;
+    color: #727b8f;
+    text-align: center;
+    margin-bottom: 50px;
+
+    &.loading::before {
+      content: '';
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      background-image: url($image-path + 'icons/loading-circle.gif');
+      margin-right: 7px;
+      top: 3px;
+      position: relative;
+    }
+
+    &.error {
+      color: $red;
+    }
+
+    a {
+      font-weight: 600;
+      color: $blue;
+    }
+  }
+
+  &__faucet-link {
+    font-size: 12px;
+    font-weight: 500;
+    text-align: center;
+    color: #9ea1aa;
+  }
+
+  @media (max-width: $large-breakpoint) {
+    max-width: 600px;
+    padding: 30px 20px 20px;
+    margin: 0 auto;
+
+    &__container {
+      display: block;
+    }
+
+    &__content {
+      width: 100%;
+
+      &-info {
+        height: auto;
+      }
+
+      &-info.right {
+        justify-content: flex-start;
+      }
+    }
+
+    &__icon {
+      position: initial;
+      margin: 15px auto;
+      transform: rotate(90deg);
+    }
+  }
+
+  @media (max-width: $ex-small-breakpoint) {
+    &__content {
+      &-input {
+        width: calc(100% - 50px);
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+      }
+    }
+  }
+}

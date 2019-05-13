@@ -1,0 +1,101 @@
+sudo: required
+
+language: node_js
+
+node_js:
+  - "8"
+
+cache:
+    directories:
+      - node_modules
+
+env:
+  global:
+    - CI=false
+
+script:
+  - echo "npm test temporarily disabled"
+
+install:
+  - npm install
+
+after_success:
+  - docker --version
+
+deploy:
+  - provider: script
+    script: npm run build-dev
+    on:
+      branch: develop
+    skip_cleanup: true
+
+  - provider: script
+    script: npm run build-staging
+    on:
+      branch: staging
+    skip_cleanup: true
+
+  - provider: script
+    script: npm run build-production
+    on:
+      branch: production
+    skip_cleanup: true
+
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    bucket: dev-yolo.knstats.com
+    region: ap-southeast-1
+    acl: public_read
+    local_dir: build
+    skip_cleanup: true
+    on:
+      branch: develop
+  
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    bucket: staging-yolo.knstats.com
+    region: ap-southeast-1
+    acl: public_read
+    local_dir: build
+    skip_cleanup: true
+    on:
+      branch: staging
+
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    bucket: production.yoloswap.com
+    region: ap-southeast-1
+    acl: public_read
+    local_dir: build
+    skip_cleanup: true
+    on:
+      branch: production
+
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    bucket: jungle.yoloswap.com
+    region: ap-southeast-1
+    acl: public_read
+    local_dir: build
+    skip_cleanup: true
+    on:
+      branch: develop
+
+  - provider: script
+    script: docker build -f Dockerfile -t kybernetwork/yolo:$TRAVIS_COMMIT .
+    on:
+      all_branches: true
+
+  - provider: script
+    script: bash .travis/docker_push.sh
+    on:
+      all_branches: true
+
+  - provider: script
+    script: bash .travis/awx_job_launch.sh $TRAVIS_BRANCH
+    on:
+      all_branches: true

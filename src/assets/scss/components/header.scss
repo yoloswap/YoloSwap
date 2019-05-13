@@ -1,0 +1,274 @@
+.header {
+  width: 100%;
+  padding: 15px 0;
+  box-shadow: 0 2px 121px 0 rgba(0, 0, 0, 0.3);
+  background-image: linear-gradient(to bottom, #206bd3, #0052c3);
+  position: relative;
+  z-index: 1;
+
+  &__container {
+    padding: 0 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__logo {
+    width: 100px;
+    height: 48px;
+    background-image: url($image-path + 'logos/yolo.svg');
+  }
+
+  &__content {
+    display: flex;
+    align-items: center;
+
+    &-item {
+      font-size: 14px;
+      font-weight: 500;
+      color: white;
+    }
+
+    &-button {
+      margin-right: 0;
+    }
+
+    &-item {
+      margin-right: 30px;
+      position: relative;
+      transition: color .3s;
+
+      &::after {
+        content: '';
+        border-radius: 5px;
+        position: absolute;
+        bottom: -8px;
+        left:0;
+        right: 0;
+        margin: 0 auto;
+        width: 100%;
+        height: 2px;
+        background-color: white;
+        transform: translateY(5px);
+        opacity: 0;
+        transition: all .3s;
+      }
+
+      &.active {
+        cursor: initial;
+        pointer-events: none;
+
+        &::after {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      &:hover::after {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    &-account {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    &-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: white;
+      margin-right: 5px;
+    }
+
+    &-dropdown {
+      border-radius: 7px;
+      margin-top: 10px;
+    }
+
+    &-dropdown-text {
+      padding: 15px 20px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #5a5e67;
+      cursor: pointer;
+    }
+
+    &-dropdown-bot {
+      padding: 15px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #4a5675;
+      background-color: #dfe3ea;
+      border-bottom-left-radius: 7px;
+      border-bottom-right-radius: 7px;
+      text-transform: uppercase;
+      position: relative;
+      transition: all .3s;
+
+      &::after {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 12px;
+        right: 20px;
+        width: 18px;
+        height: 18px;
+        background-image: url($image-path + 'icons/logout.svg');
+      }
+
+      &:hover {
+        background-color: #c9ccd3;
+      }
+    }
+  }
+
+  &__mobile-opener {
+    display: none;
+    cursor: pointer;
+    z-index: 10;
+
+    &-bar {
+      background-color: white;
+      border-radius: 5px;
+      height: 3px;
+      transition: all .3s;
+    }
+
+    &-bar:first-child {
+      width: 24px;
+      margin-bottom: 6px;
+    }
+
+    &-bar:last-child {
+      width: 16px;
+      margin-left: auto;
+    }
+  }
+
+  @media (max-width: 750px) {
+    &__container {
+      padding: 0 20px;
+      flex-wrap: wrap;
+    }
+
+    &__content {
+      width: 250px;
+      display: block;
+      position: fixed;
+      top: 0;
+      right: 0;
+      padding: 100px 0 0;
+      height: 100%;
+      box-shadow: -10px 0 24px 0 rgba(0, 0, 0, 0.25);
+      background-image: linear-gradient(to bottom, #206bd3, #0052c3);
+      z-index: 9;
+      transform: translateX(270px);
+      transition: all .3s ease-out;
+
+      &-item {
+        padding: 0 30px;
+        display: block;
+        margin-bottom: 25px;
+
+        &::after {
+          display: none;
+        }
+
+        &.active,
+        &:hover {
+          color: $blue-light
+        }
+      }
+
+      &-account {
+        padding-top: 25px;
+        border-top: 1px solid rgba(255, 255, 255, 0.25);
+        cursor: initial;
+      }
+
+      &-name {
+        padding: 0 30px;
+      }
+
+      &-arrow {
+        display: none;
+      }
+
+      &-button {
+        margin: 0 30px;
+        text-align: center;
+      }
+
+      &-dropdown {
+        display: block;
+        background: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+        box-shadow: none;
+        animation: none;
+        position: unset;
+        opacity: 1;
+        transform: unset;
+      }
+
+      &-dropdown-text {
+        padding: 0 30px;
+        font-size: 14px;
+        font-weight: 500;
+        color: white;
+        margin-top: 15px;
+      }
+
+      &-dropdown-bot {
+        width: 100%;
+        font-size: 14px;
+        font-weight: 600;
+        color: white;
+        padding: 20px 0 0 63px;
+        background: none;
+        position: absolute;
+        bottom: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.25);
+
+        &::after {
+          right: unset;
+          left: 30px;
+          top: 20px;
+          background-image: url($image-path + 'icons/logout-light.svg');
+        }
+      }
+    }
+
+    &__mobile-opener {
+      display: block;
+    }
+
+    &__container.active {
+      .header__mobile-opener {
+        position: fixed;
+        top: 40px;
+        right: 20px;
+
+        &-bar {
+          width: 24px;
+
+          &:first-child {
+            transform: rotate(45deg);
+          }
+
+          &:last-child {
+            transform: rotate(-45deg) translate(6px, -7px);
+          }
+        }
+      }
+
+      .header__content {
+        transform: translateX(0);
+      }
+    }
+  }
+}
