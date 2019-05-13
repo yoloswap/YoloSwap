@@ -6,11 +6,14 @@ readonly awx_username=${AWX_USERNAME:-}
 readonly awx_password=${AWX_PASSWORD:-}
 readonly awx_develop_job_launch_uri=${AWX_DEVELOP_JOB_LAUNCH_URI:-}
 readonly awx_staging_job_launch_uri=${AWX_STAGING_JOB_LAUNCH_URI:-}
+readonly awx_production_job_launch_uri=${AWX_PRODUCTION_JOB_LAUNCH_URI:-}
 
 if [[ "$TRAVIS_BRANCH" == "develop" ]]; then
     awx_job_launch_uri=$awx_develop_job_launch_uri
 elif [[ "$TRAVIS_BRANCH" == "staging" ]]; then
     awx_job_launch_uri=$awx_staging_job_launch_uri
+elif [[ "$TRAVIS_BRANCH" == "production" ]]; then
+    awx_job_launch_uri=$awx_production_job_launch_uri
 else
     echo "branch is not set to call awx deploy"
     exit 0
