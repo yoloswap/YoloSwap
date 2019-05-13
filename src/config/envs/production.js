@@ -65,14 +65,6 @@ envConfig.TOKENS = [
     "precision": 10,
     "logo": "bnt.svg",
   },
-  {
-    "id": "carbon",
-    "name": "Carbon",
-    "symbol": "CUSD",
-    "account": "stablecarbon",
-    "precision": 2,
-    "logo": "cusd.png",
-  },
 ];
 
 export default envConfig;

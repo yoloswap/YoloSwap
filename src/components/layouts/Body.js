@@ -48,7 +48,7 @@ class Body extends Component {
         <div className={"body__container container"}>
           <div className={"body__content"}>
             <div className={"body__title"}>Simple Just Became Instant</div>
-            <div className={"body__sub-title"}>Swap tokens without involving any intermediate token</div>
+            {/*<div className={"body__sub-title"}>Swap tokens without involving any intermediate token</div>*/}
           </div>
           <Swap srcAmountRef={this.srcAmountRef}/>
           <Market srcAmountRef={this.srcAmountRef}/>
