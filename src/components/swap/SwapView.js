@@ -4,13 +4,18 @@ import TokenSelector from '../commons/TokenSelector';
 import { formatAmount } from "../../utils/helpers";
 import envConfig from '../../config/env';
 import Dropdown, { DropdownTrigger, DropdownContent } from "react-simple-dropdown";
+import ReactTooltip from 'react-tooltip';
+
+function getContentForTooltipRate(fluctuatingRate) {
+  return `Price is dependent on your source amount. There is a ${fluctuatingRate}% difference in price for the requested quantity compared to the default source amount of 1 EOS`
+}
 
 const SwapView = (props)=> {
   const isError = !!props.error;
   const isSwapBalanceBoxShown = props.isAccountImported && !props.isBalanceLoading;
   const disabledClass = (isError || props.isTokenPairRateLoading) ? 'disabled' : '';
   const isButtonHidden = props.tx.isConfirming || props.tx.isBroadcasting || props.tx.hash || props.tx.error;
-  
+
   return (
     <div className={"swap"}>
       <div className={"swap__container"}>
@@ -70,6 +75,14 @@ const SwapView = (props)=> {
             {props.sourceToken.symbol}/{props.destToken.symbol} = {!props.isTokenPairRateLoading ?
             formatAmount(props.tokenPairRate, 6) :
             <div className={"swap__content-loading common__loading"}/>}
+
+            {props.fluctuatingRate > 0 && (
+              <div className={"common__inline-block common__fade-in"}>
+                <span className={"common__decreased-number common__ml5"}>{props.fluctuatingRate}%</span>
+                <span className={"common__tooltip common__ml5"} data-tip=""/>
+                <ReactTooltip className={"common__tooltip-content"} effect="solid" getContent={() => getContentForTooltipRate(props.fluctuatingRate)}/>
+              </div>
+            )}
           </div>
         </div>
       </div>

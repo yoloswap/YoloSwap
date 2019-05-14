@@ -2,6 +2,7 @@ export const swapActionTypes = {
   FETCH_TOKEN_PAIR_RATE: 'SWAP.FETCH_TOKEN_PAIR_RATE',
   SET_TOKEN_PAIR_RATE_LOADING: 'SWAP.SET_TOKEN_PAIR_RATE_LOADING',
   SET_TOKEN_PAIR_RATE: 'SWAP.SET_TOKEN_PAIR_RATE',
+  SET_FLUCTUATING_RATE: 'SWAP.SET_FLUCTUATING_RATE',
   SWAP_TOKEN: 'SWAP.SWAP_TOKEN',
   SET_SOURCE_AND_DEST_TOKEN: 'SWAP.SET_SOURCE_AND_DEST_TOKEN',
   SET_SOURCE_TOKEN: 'SWAP.SET_SOURCE_TOKEN',
@@ -55,6 +56,13 @@ export function setTokenPairRate(rate) {
   return {
     type: swapActionTypes.SET_TOKEN_PAIR_RATE,
     payload: rate
+  }
+}
+
+export function setFluctuatingRate(fluctuatingRate) {
+  return {
+    type: swapActionTypes.SET_FLUCTUATING_RATE,
+    payload: fluctuatingRate
   }
 }
 
