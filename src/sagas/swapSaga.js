@@ -115,20 +115,20 @@ export function* validateValidInput() {
   const destToken = swap.destToken;
   const sourceAmount = swap.sourceAmount.toString();
   const sourceTokenDecimals = sourceToken.precision;
+  const sourceTokenSymbol = sourceToken.symbol;
   const sourceAmountDecimals = sourceAmount.split(".")[1];
 
-  if (sourceToken.symbol === destToken.symbol) {
+  if (sourceTokenSymbol === destToken.symbol) {
     yield call(setError, 'Cannot exchange the same token');
     return false;
-  } else if (sourceToken.symbol !== eosSymbol && destToken.symbol !== eosSymbol) {
-    yield call(setError, 'Token to Token Swapping is not yet supported at current version of Yolo. Please choose EOS as your source or destination input.');
+  } else if (sourceTokenSymbol !== eosSymbol && destToken.symbol !== eosSymbol) {
+    yield call(setError, 'Token to Token Swapping is not yet supported at current version of Yolo. Please choose EOS as either your source or destination input.');
     return false;
   } else if (sourceAmountDecimals && sourceAmountDecimals.length > sourceTokenDecimals) {
-    yield call(setError, `Your source amount's decimals should be no longer than ${sourceTokenDecimals} characters`);
+    yield call(setError, `Your ${sourceTokenSymbol} source amount's decimals should be no longer than ${sourceTokenDecimals} characters`);
     return false;
   } else if (sourceAmount > sourceToken.balance) {
     yield call(setError, 'Your source amount is bigger than your real balance');
-    return false;
   } else if (sourceAmount !== '' && !+sourceAmount) {
     yield call(setError, 'Your source amount is invalid');
     return false;
