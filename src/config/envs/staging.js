@@ -42,6 +42,14 @@ envConfig.TOKENS = [
     "logo": "inf.png",
   },
   {
+    "id": "paytomat",
+    "name": "Paytomat",
+    "symbol": "PTI",
+    "account": "ptitokenhome",
+    "precision": 4,
+    "logo": "pti.png",
+  },
+  {
     "id": "aeron",
     "name": "Aeron",
     "symbol": "ARN",
@@ -64,6 +72,14 @@ envConfig.TOKENS = [
     "account": "bntbntbntbnt",
     "precision": 10,
     "logo": "bnt.svg",
+  },
+  {
+    "id": "carbon",
+    "name": "Carbon",
+    "symbol": "CUSD",
+    "account": "stablecarbon",
+    "precision": 2,
+    "logo": "cusd.png",
   },
 ];
 
