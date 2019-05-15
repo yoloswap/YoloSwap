@@ -5,6 +5,7 @@ import { getRate, getRates } from "../src/services/network_service";
 import envConfig from "../src/config/env";
 import { fetchTokensByIds } from "../src/services/coingecko_service";
 import * as _ from 'underscore';
+import { formatAmount } from "../src/utils/helpers";
 
 const app = express();
 const port = 3002;
@@ -53,7 +54,7 @@ async function getRateAPI(req, res) {
       }
     }
 
-    res.send(getAPIFReturnFormat(rate));
+    res.send(getAPIFReturnFormat(formatAmount(rate, 4)));
   } catch (e) {
     res.send(getAPIFReturnFormat(0, 500, 'There is something wrong with the API'));
   }
