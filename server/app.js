@@ -1,7 +1,7 @@
 import Eos from 'eosjs';
 import cors from 'cors';
 import express from 'express';
-import { getRates } from "../src/services/network_service";
+import { getRate, getRates } from "../src/services/network_service";
 import envConfig from "../src/config/env";
 import { fetchTokensByIds } from "../src/services/coingecko_service";
 import * as _ from 'underscore';
@@ -26,9 +26,29 @@ envConfig.TOKENS.forEach((token) => {
 });
 
 app.use(cors());
-app.get('/fetchMarketRates', fetchMarketRates);
+app.get('/fetchMarketRates', fetchMarketRatesAPI);
+app.get('/getRate', getRateAPI);
 
-async function fetchMarketRates(req, res) {
+async function getRateAPI(req, res) {
+  const srcSymbol = req.query.srcSymbol;
+  const destSymbol = req.query.destSymbol;
+  const srcAmount = req.query.srcAmount;
+  const { isValid, message } = validateGetRateParams(srcSymbol, destSymbol, srcAmount);
+
+  if (!isValid) {
+    res.send(getAPIFReturnFormat(0, 400, message));
+    return;
+  }
+
+  try {
+    const rate = await getRate(createRateParams(srcSymbol, destSymbol, srcAmount));
+    res.send(getAPIFReturnFormat(rate));
+  } catch (e) {
+    res.send(getAPIFReturnFormat(0, 500, 'There is something wrong with the API'));
+  }
+}
+
+async function fetchMarketRatesAPI(req, res) {
   res.send(rates);
 }
 
@@ -37,8 +57,8 @@ setInterval(fetchMarketRatesInterval, rateFetchingInterval);
 
 async function fetchMarketRatesInterval() {
   try {
-    const sellRates = await getRates(createRateParams(srcSymbols, destSymbols));
-    const buyRates = await getRates(createRateParams(destSymbols, srcSymbols));
+    const sellRates = await getRates(createBatchRateParams(srcSymbols, destSymbols));
+    const buyRates = await getRates(createBatchRateParams(destSymbols, srcSymbols));
     const usdBasedTokens = await fetchTokensByIds(tokenIds);
     const eosBasedTokens = await fetchTokensByIds(tokenIds, envConfig.EOS.id);
     const eosData = findTokenById(usdBasedTokens, envConfig.EOS.id);
@@ -70,7 +90,40 @@ async function fetchMarketRatesInterval() {
   }
 }
 
-function createRateParams(srcSymbols, destSymbols) {
+function validateGetRateParams(srcSymbol, destSymbol, srcAmount) {
+  let isValid = true;
+  let message = '';
+  const eosSymbol = envConfig.EOS.symbol;
+
+  if (!srcSymbol || !destSymbol || !srcAmount) {
+    isValid = false;
+    message = `One or more of the required parameters are missing. Please make sure you have 'srcSymbol', 'destSymbol' and 'srcAmount'.`;
+  } else if (srcSymbol !== eosSymbol && !srcSymbols.includes(srcSymbol)) {
+    isValid = false;
+    message = `${srcSymbol} is not supported by our API.`;
+  } else if (destSymbol !== eosSymbol && !srcSymbols.includes(destSymbol)) {
+    isValid = false;
+    message = `${destSymbol} is not supported by our API.`;
+  } else if (srcSymbol !== eosSymbol && destSymbol !== eosSymbol) {
+    isValid = false;
+    message = `Token to Token Swapping is not yet supported. Please choose EOS as either your 'srcSymbol' or 'destSymbol' `;
+  }
+
+  return { isValid, message };
+}
+
+function createRateParams(srcSymbol, destSymbol, srcAmount) {
+  return {
+    eos: eos,
+    srcSymbol: srcSymbol,
+    destSymbol: destSymbol,
+    srcAmount: srcAmount,
+    networkAccount: envConfig.NETWORK_ACCOUNT,
+    eosTokenAccount: envConfig.EOS.account,
+  }
+}
+
+function createBatchRateParams(srcSymbols, destSymbols) {
   return {
     eos: eos,
     srcSymbols: srcSymbols,
@@ -87,6 +140,13 @@ function getChangePercentage(tokenData) {
 
 function findTokenById(tokens, tokenId) {
   return _.find(tokens, (token) => { return token.id === tokenId });
+}
+
+function getAPIFReturnFormat(data, statusCode = 200, message = 'success') {
+  return {
+    status: { code: statusCode, message: message },
+    data: data
+  }
 }
 
 app.listen(port, () => console.log(`Server's listening on port ${port}`));

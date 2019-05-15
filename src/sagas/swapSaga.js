@@ -73,6 +73,8 @@ function* swapToken() {
 }
 
 export function* fetchTokenPairRate() {
+  yield put(swapActions.setFluctuatingRate(0));
+
   const swap = yield select(getSwapState);
   const account = yield select(getAccountState);
   const sourceAmount = swap.sourceAmount ? swap.sourceAmount : appConfig.DEFAULT_RATE_AMOUNT;
@@ -118,8 +120,6 @@ export function* validateValidInput() {
   const sourceTokenDecimals = sourceToken.precision;
   const sourceTokenSymbol = sourceToken.symbol;
   const sourceAmountDecimals = sourceAmount.split(".")[1];
-
-  yield put(swapActions.setFluctuatingRate(0));
 
   if (sourceTokenSymbol === destToken.symbol) {
     yield call(setError, 'Cannot exchange the same token');
