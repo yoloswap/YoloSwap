@@ -1,4 +1,12 @@
 .common {
+  &__ml5 {
+    margin-left: 5px;
+  }
+
+  &__inline-block {
+    display: inline-block;
+  }
+
   &__text {
     font-size: 14px;
     font-weight: 500;
@@ -129,6 +137,42 @@
       width: 20px;
       height: 12px;
       background-image: url($image-path + 'icons/chart.svg');
+    }
+  }
+
+  &__decreased-number {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #f96363;
+    border-radius: 10px;
+    background-color: #ffeeee;
+    padding: 2px 8px 2px 10px;
+
+    &::after {
+      content: '';
+      width: 10px;
+      height: 10px;
+      background-image: url($image-path + 'icons/arrow-down-red.svg');
+      background-size: contain;
+      display: inline-block;
+      margin-left: 3px;
+    }
+  }
+
+  &__tooltip {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    background-image: url($image-path + 'icons/tooltip.svg');
+    position: relative;
+    top: 2px;
+    left: 1px;
+    cursor: pointer;
+
+    &-content {
+      width: 250px;
+      padding: 8px 10px;
     }
   }
 }

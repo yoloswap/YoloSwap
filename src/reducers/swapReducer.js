@@ -7,6 +7,7 @@ const initialState = {
   sourceAmount: '',
   destAmount: 0,
   tokenPairRate: 0,
+  fluctuatingRate: 0,
   isTokenPairRateLoading: true,
   error: null
 };
@@ -43,6 +44,12 @@ export default function swapReducer(state = initialState, action) {
       return {
         ...state,
         tokenPairRate: action.payload
+      }
+    }
+    case swapActionTypes.SET_FLUCTUATING_RATE: {
+      return {
+        ...state,
+        fluctuatingRate: action.payload
       }
     }
     case swapActionTypes.SET_TOKEN_PAIR_RATE_LOADING: {
