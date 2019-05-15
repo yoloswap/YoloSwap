@@ -33,15 +33,26 @@ async function getRateAPI(req, res) {
   const srcSymbol = req.query.srcSymbol;
   const destSymbol = req.query.destSymbol;
   const srcAmount = req.query.srcAmount;
-  const { isValid, message } = validateGetRateParams(srcSymbol, destSymbol, srcAmount);
 
-  if (!isValid) {
-    res.send(getAPIFReturnFormat(0, 400, message));
+  const error = validateGetRateParams(srcSymbol, destSymbol, srcAmount);
+
+  if (error) {
+    res.send(getAPIFReturnFormat(0, 400, error));
     return;
   }
 
   try {
-    const rate = await getRate(createRateParams(srcSymbol, destSymbol, srcAmount));
+    let rate = srcAmount;
+
+    if (srcSymbol !== destSymbol) {
+      rate = await getRate(createRateParams(srcSymbol, destSymbol, srcAmount));
+
+      if (!rate) {
+        res.send(getAPIFReturnFormat(0, 400, 'Our reserves cannot handle your amount at the moment. Please try again later'));
+        return;
+      }
+    }
+
     res.send(getAPIFReturnFormat(rate));
   } catch (e) {
     res.send(getAPIFReturnFormat(0, 500, 'There is something wrong with the API'));
@@ -91,25 +102,27 @@ async function fetchMarketRatesInterval() {
 }
 
 function validateGetRateParams(srcSymbol, destSymbol, srcAmount) {
-  let isValid = true;
-  let message = '';
+  let error = false;
+  const srcToken = findTokenBySymbol(srcSymbol);
+  const destToken = findTokenBySymbol(destSymbol);
   const eosSymbol = envConfig.EOS.symbol;
+  const sourceAmountDecimals = (srcAmount.toString()).split(".")[1];
 
-  if (!srcSymbol || !destSymbol || !srcAmount) {
-    isValid = false;
-    message = `One or more of the required parameters are missing. Please make sure you have 'srcSymbol', 'destSymbol' and 'srcAmount'.`;
-  } else if (srcSymbol !== eosSymbol && !srcSymbols.includes(srcSymbol)) {
-    isValid = false;
-    message = `${srcSymbol} is not supported by our API.`;
-  } else if (destSymbol !== eosSymbol && !srcSymbols.includes(destSymbol)) {
-    isValid = false;
-    message = `${destSymbol} is not supported by our API.`;
+  if (srcAmount.includes('0x') || isNaN(srcAmount) || srcAmount <= 0) {
+    error = `Your source amount is invalid`;
+  } else if (!srcSymbol || !destSymbol || !srcAmount) {
+    error = `One or more of the required parameters are missing. Please make sure you have srcSymbol, destSymbol and srcAmount`;
+  } else if (!srcToken) {
+    error = `${srcSymbol} is not supported by our API`;
+  } else if (!destToken) {
+    error = `${destSymbol} is not supported by our API`;
   } else if (srcSymbol !== eosSymbol && destSymbol !== eosSymbol) {
-    isValid = false;
-    message = `Token to Token Swapping is not yet supported. Please choose EOS as either your 'srcSymbol' or 'destSymbol' `;
+    error = `Token to Token Swapping is not yet supported. Please choose EOS as either your srcSymbol or destSymbol`;
+  } else if (sourceAmountDecimals && sourceAmountDecimals.length > srcToken.precision) {
+    error = `Your ${srcSymbol} source amount's decimals should be no longer than ${srcToken.precision} characters`;
   }
 
-  return { isValid, message };
+  return error;
 }
 
 function createRateParams(srcSymbol, destSymbol, srcAmount) {
@@ -142,7 +155,15 @@ function findTokenById(tokens, tokenId) {
   return _.find(tokens, (token) => { return token.id === tokenId });
 }
 
+function findTokenBySymbol(tokenSymbol) {
+  return _.find(envConfig.TOKENS, (token) => { return token.symbol === tokenSymbol });
+}
+
 function getAPIFReturnFormat(data, statusCode = 200, message = 'success') {
+  if (statusCode !== 200) {
+    return { status: { code: statusCode, message: message } }
+  }
+
   return {
     status: { code: statusCode, message: message },
     data: data
