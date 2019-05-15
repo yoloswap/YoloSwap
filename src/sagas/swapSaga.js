@@ -81,7 +81,6 @@ export function* fetchTokenPairRate() {
   if (!isValidInput) return;
 
   yield put(swapActions.setTokenPairRateLoading(true));
-  yield put(swapActions.setFluctuatingRate(0));
 
   try {
     const tokenPairRate = yield call(
@@ -120,6 +119,8 @@ export function* validateValidInput() {
   const sourceTokenSymbol = sourceToken.symbol;
   const sourceAmountDecimals = sourceAmount.split(".")[1];
 
+  yield put(swapActions.setFluctuatingRate(0));
+
   if (sourceTokenSymbol === destToken.symbol) {
     yield call(setError, 'Cannot exchange the same token');
     return false;
@@ -147,7 +148,7 @@ function* setFluctuatingRate(eos, expectedRate, srcTokenSymbol, destTokenSymbol)
     let fluctuatingRate = 0;
 
     if (+expectedRate && +expectedDefaultRate) {
-      fluctuatingRate = (expectedDefaultRate - expectedRate) / expectedDefaultRate;
+      fluctuatingRate = (expectedDefaultRate - expectedRate) / expectedRate;
       fluctuatingRate = Math.round(fluctuatingRate * 1000) / 10;
       if (fluctuatingRate <= 0.1) fluctuatingRate = 0;
 
