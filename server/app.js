@@ -107,12 +107,12 @@ function validateGetRateParams(srcSymbol, destSymbol, srcAmount) {
   const srcToken = findTokenBySymbol(srcSymbol);
   const destToken = findTokenBySymbol(destSymbol);
   const eosSymbol = envConfig.EOS.symbol;
-  const sourceAmountDecimals = (srcAmount.toString()).split(".")[1];
+  const sourceAmountDecimals = srcAmount ? (srcAmount.toString()).split(".")[1] : false;
 
-  if (srcAmount.includes('0x') || isNaN(srcAmount) || srcAmount <= 0) {
-    error = `Your source amount is invalid`;
-  } else if (!srcSymbol || !destSymbol || !srcAmount) {
+  if (!srcSymbol || !destSymbol || !srcAmount) {
     error = `One or more of the required parameters are missing. Please make sure you have srcSymbol, destSymbol and srcAmount`;
+  } else if (srcAmount.includes('0x') || isNaN(srcAmount) || srcAmount <= 0) {
+    error = `Your source amount is invalid`;
   } else if (!srcToken) {
     error = `${srcSymbol} is not supported by our API`;
   } else if (!destToken) {
