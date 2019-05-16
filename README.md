@@ -15,9 +15,9 @@ Run the API in the development mode, the server is served in port 3002 [http://l
 ### 1. /fetchMarketRates
 (GET) Fetching data of all available tokens supported in YoloSwap with buyRate & sellRate by EOS and USD. Also, 24h change percentage is returned that is fetched by CoinGecko API.
 
-Parameters: N/A
+#####Parameters: N/A
 
-Success Response Example:
+#####Success Response Example:
 ```javascript
 [
     {
@@ -43,6 +43,7 @@ Success Response Example:
 ]
 ```
 
+#####Response Description:
 |Name | Type | Description |
 | ----------| ------|-----------------------------|
 |id|String|CoinGecko token ID|
@@ -57,7 +58,7 @@ Success Response Example:
 ## 1. /getRate
 (GET) Get rate for a token pair by source token symbol, destination token symbol & source amount.
 
-Parameters:
+#####Parameters:
 
 |Name | Type | Description | Example |
 | ----------| ------|----------------------|-------|
@@ -65,7 +66,7 @@ Parameters:
 |destSymbol|String|Destination token symbol| IQ |
 |srcAmount|Number|Source amount| 1|
 
-Success Response Example:
+#####Success Response Example:
 ```javascript
 {
     status: {
@@ -76,7 +77,7 @@ Success Response Example:
 }
 ```
 
-Error Response Example:
+#####Error Response Example:
 ```javascript
 {
     status: {
@@ -86,6 +87,7 @@ Error Response Example:
 }
 ```
 
+#####Response Description:
 |Name | Type | Description |
 | ----------| ------|-----------------------------|
 |status|Object|The object contains status of request response|
