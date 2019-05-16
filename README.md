@@ -15,9 +15,10 @@ Run the API in the development mode, the server is served in port 3002 [http://l
 ### 1. /fetchMarketRates
 (GET) Fetching data of all available tokens supported in YoloSwap with buyRate & sellRate by EOS and USD. Also, 24h change percentage is returned that is fetched by CoinGecko API.
 
-####Parameters: N/A
+##### Parameters: N/A
 
-####Success Response Example:
+##### Success Response Example:
+
 ```javascript
 [
     {
@@ -43,7 +44,8 @@ Run the API in the development mode, the server is served in port 3002 [http://l
 ]
 ```
 
-####Response Description:
+##### Response Description:
+
 |Name | Type | Description |
 | ----------| ------|-----------------------------|
 |id|String|CoinGecko token ID|
@@ -58,7 +60,7 @@ Run the API in the development mode, the server is served in port 3002 [http://l
 ### 2. /getRate
 (GET) Get rate for a token pair by source token symbol, destination token symbol & source amount.
 
-####Parameters:
+##### Parameters:
 
 |Name | Type | Description | Example |
 | ----------| ------|----------------------|-------|
@@ -66,7 +68,8 @@ Run the API in the development mode, the server is served in port 3002 [http://l
 |destSymbol|String|Destination token symbol| IQ |
 |srcAmount|Number|Source amount| 1|
 
-####Success Response Example:
+##### Success Response Example:
+
 ```javascript
 {
     status: {
@@ -77,7 +80,8 @@ Run the API in the development mode, the server is served in port 3002 [http://l
 }
 ```
 
-####Error Response Example:
+##### Error Response Example:
+
 ```javascript
 {
     status: {
@@ -87,7 +91,8 @@ Run the API in the development mode, the server is served in port 3002 [http://l
 }
 ```
 
-####Response Description:
+##### Response Description:
+
 |Name | Type | Description |
 | ----------| ------|-----------------------------|
 |status|Object|The object contains status of request response|
