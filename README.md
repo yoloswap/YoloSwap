@@ -62,11 +62,11 @@ Run the API in the development mode, the server is served in port 3002 [http://l
 
 ##### Parameters:
 
-|Name | Type | Description | Example |
-| ----------| ------|----------------------|-------|
-|srcSymbol|String|Source token symbol| EOS |
-|destSymbol|String|Destination token symbol| IQ |
-|srcAmount|Number|Source amount| 1|
+|Name | Type | Required | Description | Example|
+| ----------| ------|----------------------|---|----|
+|srcSymbol|String|True|Source token symbol|EOS|
+|destSymbol|String|True|Destination token symbol|IQ|
+|srcAmount|Number|True|Source amount|1|
 
 ##### Success Response Example:
 
