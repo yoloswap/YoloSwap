@@ -12,7 +12,50 @@ Run the API in the development mode, the server is served in port 3002 [http://l
 
 ## Available APIs
 
-### 1. /fetchMarketRates
+### 1. /getRate
+(GET) Get rate for a token pair by source token symbol, destination token symbol & source amount.
+
+##### Parameters:
+
+|Name | Type | Required | Description | Example|
+| ----------| ------|----------------------|---|----|
+|srcSymbol|String|True|Source token symbol|EOS|
+|destSymbol|String|True|Destination token symbol|IQ|
+|srcAmount|Number|True|Source amount|1|
+
+##### Success Response Example:
+
+```javascript
+{
+    status: {
+        code: 200,
+        message: "success"
+    },
+    data: 1213.6497
+}
+```
+
+##### Error Response Example:
+
+```javascript
+{
+    status: {
+        code: 400,
+        message: "ETH is not supported by our API"
+    }
+}
+```
+
+##### Response Description:
+
+|Name | Type | Description |
+| ----------| ------|-----------------------------|
+|status|Object|The object contains status of request response|
+|code|Number|Response status code|
+|message|String|Response message|
+|data|Number|Rate of the requested token pair|
+
+### 2. /fetchMarketRates
 (GET) Fetching data of all available tokens supported in YoloSwap with buyRate & sellRate by EOS and USD. Also, 24h change percentage is returned that is fetched by CoinGecko API.
 
 ##### Parameters: N/A
@@ -56,46 +99,3 @@ Run the API in the development mode, the server is served in port 3002 [http://l
 |buyRateUsd|Number|Buy rate by USD|
 |usdChangePercentage|Number|24h change percentage by USD|
 |eosChangePercentage|Number|24h change percentage by EOS|
-
-### 2. /getRate
-(GET) Get rate for a token pair by source token symbol, destination token symbol & source amount.
-
-##### Parameters:
-
-|Name | Type | Required | Description | Example|
-| ----------| ------|----------------------|---|----|
-|srcSymbol|String|True|Source token symbol|EOS|
-|destSymbol|String|True|Destination token symbol|IQ|
-|srcAmount|Number|True|Source amount|1|
-
-##### Success Response Example:
-
-```javascript
-{
-    status: {
-        code: 200,
-        message: "success"
-    },
-    data: 1213.6497
-}
-```
-
-##### Error Response Example:
-
-```javascript
-{
-    status: {
-        code: 400,
-        message: "ETH is not supported by our API"
-    }
-}
-```
-
-##### Response Description:
-
-|Name | Type | Description |
-| ----------| ------|-----------------------------|
-|status|Object|The object contains status of request response|
-|code|Number|Response status code|
-|message|String|Response message|
-|data|Number|Rate of the requested token pair|
