@@ -3,6 +3,7 @@ import MarketView from './MarketView';
 import { connect } from "react-redux";
 import { fetchMarketRates, setIndexToken } from "../../actions/marketAction";
 import * as swapActions from "../../actions/swapAction";
+import appConfig from "../../config/app";
 
 function mapStateToProps(store) {
   return {
@@ -45,6 +46,15 @@ class Market extends Component {
     window.scrollTo(0, 0);
   };
 
+  checkNewToken = (listingTime) => {
+    const listingDate = new Date(listingTime);
+    const currentDate = new Date();
+    const diffTime = Math.abs(currentDate.getTime() - listingDate.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    return diffDays <= appConfig.NEW_LISTING_TOKEN_DAYS;
+  };
+
   render() {
     return (
       <MarketView
@@ -55,6 +65,7 @@ class Market extends Component {
         onClickBasedToken={this.props.setIndexToken}
         onTypingSearch={this.handleOnTypingSearch}
         setSwapToken={this.setSwapToken}
+        checkNewToken={this.checkNewToken}
       />
     )
   }
