@@ -5,7 +5,7 @@ import * as globalActions from "../actions/globalAction";
 import { getBalances } from "../services/network_service";
 import * as scatterService from "../services/scatter_service";
 import appConfig from '../config/app';
-import { validateValidInput, fetchTokenPairRate } from "./swapSaga";
+import { validateInputParams, fetchTokenPairRate } from "./swapSaga";
 
 const getTokens = state => state.token.tokens;
 const getAccountData = state => state.account;
@@ -78,7 +78,7 @@ function* fetchBalances() {
     });
 
     yield put(tokenAction.setTokens(tokensWithBalance));
-    yield call(validateValidInput);
+    yield call(validateInputParams);
   } catch (e) {
     console.log(e);
   }
