@@ -13,3 +13,7 @@ export function formatAmount(amount, precision = 6) {
 export function formatHash(hash) {
   return hash.substr(0, 16) + '...' + hash.substr(-6);
 }
+
+export function formatNumberWithZeroDigit(number) {
+  return number.toFixed(20).match(/^-?\d*\.?0*\d{0,4}/)[0];
+}
