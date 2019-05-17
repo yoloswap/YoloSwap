@@ -48,6 +48,7 @@ envConfig.TOKENS = [
     "account": "ptitokenhome",
     "precision": 4,
     "logo": "pti.png",
+    "listingTime": "5-17-2019"
   },
   {
     "id": "aeron",

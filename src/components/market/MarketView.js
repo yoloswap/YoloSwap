@@ -2,16 +2,25 @@ import React from 'react';
 import { formatAmount } from "../../utils/helpers";
 import appConfig from "../../config/app";
 import envConfig from "../../config/env";
+import { default as _ } from "underscore";
 
 const MarketView = (props)=> {
   const getTokenList = () => {
-    return props.tokens.map((token, index) => {
+    const sortedTokens = _(props.tokens).sortBy(function (token) {
+      return !props.checkNewToken(token.listingTime);
+    });
+
+    return sortedTokens.map((token, index) => {
       if (!token.symbol.includes(props.searchText) || (token.id === envConfig.EOS.id)) {
         return null;
       }
 
+      if (token.listingTime) {
+        token.isNew = props.checkNewToken(token.listingTime);
+      }
+
       return (
-        <div key={index} className={"market__item common__fade-in"}>
+        <div key={index} className={`market__item common__fade-in ${token.isNew ? 'market__item--new' : ''}`}>
           <div className={"market__item-header"}>
             <div className={"common__flexbox none"}>
               <img className={"market__item-logo"} src={require(`../../assets/images/tokens/${token.logo}`)} alt=""/>
