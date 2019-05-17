@@ -73,10 +73,12 @@ function* swapToken() {
 }
 
 export function* fetchTokenPairRate() {
+  yield put(swapActions.setFluctuatingRate(0));
+
   const swap = yield select(getSwapState);
   const account = yield select(getAccountState);
-  const sourceAmount = swap.sourceAmount ? swap.sourceAmount : 1;
-  const isValidInput = yield call(validateValidInput);
+  const sourceAmount = swap.sourceAmount ? swap.sourceAmount : appConfig.DEFAULT_RATE_AMOUNT;
+  const isValidInput = yield call(validateInputParams);
 
   if (!isValidInput) return;
 
@@ -88,18 +90,20 @@ export function* fetchTokenPairRate() {
       getRateParams(account.eos, swap.sourceToken.symbol, swap.destToken.symbol, sourceAmount)
     );
 
-    const destAmount = getDestAmount(tokenPairRate, sourceAmount, swap.destToken.precision);
+    const destAmount = formatAmount(tokenPairRate * sourceAmount, swap.destToken.precision);
+    let error = validateRateResult(tokenPairRate, swap.sourceAmount, destAmount);
 
-    if (!tokenPairRate) {
-      yield put(swapActions.setError(`Our reserves cannot handle your amount at the moment. Please try again later.`));
-    } else if (swap.sourceAmount > 0 && !destAmount) {
-      yield put(swapActions.setError('Your source amount is too small to make the swap'));
+    if (!error) {
+      yield put(swapActions.setDestAmount(destAmount));
+      yield put(swapActions.setTokenPairRate(tokenPairRate));
+      yield call(setFluctuatingRate, account.eos, tokenPairRate, swap.sourceToken.symbol, swap.destToken.symbol);
+    } else {
+      yield put(swapActions.setError(error));
+      yield put(swapActions.setDestAmount(0));
+      yield put(swapActions.setTokenPairRate(0));
     }
-
-    yield put(swapActions.setDestAmount(destAmount));
-    yield put(swapActions.setTokenPairRate(tokenPairRate));
   } catch (e) {
-    yield put(swapActions.setError(`This pair is under maintenance. Please try again later.`));
+    yield put(swapActions.setError(`This pair is under maintenance. Please try again later`));
     yield put(swapActions.setDestAmount(0));
     yield put(swapActions.setTokenPairRate(0));
     console.log(e);
@@ -108,27 +112,27 @@ export function* fetchTokenPairRate() {
   yield put(swapActions.setTokenPairRateLoading(false));
 }
 
-export function* validateValidInput() {
+export function* validateInputParams() {
   const swap = yield select(getSwapState);
   const eosSymbol = envConfig.EOS.symbol;
   const sourceToken = swap.sourceToken;
   const destToken = swap.destToken;
   const sourceAmount = swap.sourceAmount.toString();
   const sourceTokenDecimals = sourceToken.precision;
+  const sourceTokenSymbol = sourceToken.symbol;
   const sourceAmountDecimals = sourceAmount.split(".")[1];
 
-  if (sourceToken.symbol === destToken.symbol) {
+  if (sourceTokenSymbol === destToken.symbol) {
     yield call(setError, 'Cannot exchange the same token');
     return false;
-  } else if (sourceToken.symbol !== eosSymbol && destToken.symbol !== eosSymbol) {
-    yield call(setError, 'Token to Token Swapping is not yet supported at current version of Yolo. Please choose EOS as your source or destination input.');
+  } else if (sourceTokenSymbol !== eosSymbol && destToken.symbol !== eosSymbol) {
+    yield call(setError, 'Token to Token Swapping is not yet supported at current version of Yolo. Please choose EOS as either your source or destination input');
     return false;
   } else if (sourceAmountDecimals && sourceAmountDecimals.length > sourceTokenDecimals) {
-    yield call(setError, `Your source amount's decimals should be no longer than ${sourceTokenDecimals} characters`);
+    yield call(setError, `Your ${sourceTokenSymbol} source amount's decimals should be no longer than ${sourceTokenDecimals} characters`);
     return false;
   } else if (sourceAmount > sourceToken.balance) {
     yield call(setError, 'Your source amount is bigger than your real balance');
-    return false;
   } else if (sourceAmount !== '' && !+sourceAmount) {
     yield call(setError, 'Your source amount is invalid');
     return false;
@@ -137,6 +141,39 @@ export function* validateValidInput() {
   }
 
   return true;
+}
+
+function validateRateResult(tokenPairRate, srcAmount, destAmount) {
+  let error = false;
+
+  if (!tokenPairRate) {
+    error = `Our reserves cannot handle your amount at the moment. Please try again later`;
+  } else if (srcAmount > 0 && !destAmount) {
+    error = 'Your source amount is too small to make the swap';
+  }
+
+  return error;
+}
+
+function* setFluctuatingRate(eos, expectedRate, srcTokenSymbol, destTokenSymbol) {
+  try {
+    const expectedDefaultRate = yield call(getRate, getRateParams(eos, srcTokenSymbol, destTokenSymbol, appConfig.DEFAULT_RATE_AMOUNT));
+    let fluctuatingRate = 0;
+
+    if (+expectedRate && +expectedDefaultRate) {
+      fluctuatingRate = (expectedDefaultRate - expectedRate) / expectedRate;
+      fluctuatingRate = Math.round(fluctuatingRate * 1000) / 10;
+      if (fluctuatingRate <= 0.1) fluctuatingRate = 0;
+
+      if (fluctuatingRate === 100) {
+        fluctuatingRate = 0;
+      }
+    }
+
+    yield put(swapActions.setFluctuatingRate(fluctuatingRate));
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 function* setError(errorMessage) {
@@ -155,10 +192,6 @@ function getRateParams(eos, srcSymbol, destSymbol, srcAmount) {
     networkAccount: envConfig.NETWORK_ACCOUNT,
     eosTokenAccount: envConfig.EOS.account
   };
-}
-
-function getDestAmount(tokenPairRate, sourceAmount, destTokenPrecision) {
-  return formatAmount(tokenPairRate * sourceAmount, destTokenPrecision);
 }
 
 function* setTxBroadcastingTime() {

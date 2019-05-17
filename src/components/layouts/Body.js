@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import Swap from '../swap/Swap';
 import Market from '../market/Market';
 import * as accountActions from "../../actions/accountAction";
@@ -10,8 +10,12 @@ import ModalScatter from '../commons/ModalScatter';
 import appConfig from '../../config/app';
 
 function mapStateToProps(state) {
+  const global = state.global;
+
   return {
-    global: state.global,
+    isErrorActive: global.isErrorActive,
+    errorType: global.errorType,
+    errorMessage: global.errorMessage
   };
 }
 
@@ -23,7 +27,7 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-class Body extends Component {
+class Body extends PureComponent {
   constructor(props) {
     super(props);
     this.srcAmountRef = React.createRef();
@@ -52,13 +56,13 @@ class Body extends Component {
           </div>
           <Swap srcAmountRef={this.srcAmountRef}/>
           <Market srcAmountRef={this.srcAmountRef}/>
-          <Modal isActive={this.props.global.isErrorActive} handleClose={() => this.props.unsetGlobalError()} title="Error">
+          <Modal isActive={this.props.isErrorActive} handleClose={() => this.props.unsetGlobalError()} title="Error">
             <div className={"error-modal"}>
-              {this.props.global.errorType !== appConfig.SCATTER_ERROR_TYPE && (
-                <div className={"error-modal__message"}>{this.props.global.errorMessage}</div>
+              {this.props.errorType !== appConfig.SCATTER_ERROR_TYPE && (
+                <div className={"error-modal__message"}>{this.props.errorMessage}</div>
               )}
 
-              {this.props.global.errorType === appConfig.SCATTER_ERROR_TYPE && (
+              {this.props.errorType === appConfig.SCATTER_ERROR_TYPE && (
                 <ModalScatter/>
               )}
             </div>

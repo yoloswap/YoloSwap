@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 
-export default class Modal extends Component {
+export default class Modal extends PureComponent {
   handleClose = (e) => {
     if(e.target === e.currentTarget) {
       this.props.handleClose();

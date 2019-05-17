@@ -5,6 +5,7 @@ const appConfig = {
   MARKET_RATE_FETCHING_INTERVAL: 10000,
   MIN_CONVERSION_RATE: "0.01",
   SCATTER_ERROR_TYPE: 'scatter',
+  DEFAULT_RATE_AMOUNT: 1,
 };
 
 export default appConfig;
