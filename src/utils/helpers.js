@@ -15,5 +15,5 @@ export function formatHash(hash) {
 }
 
 export function formatNumberWithZeroDigit(number) {
-  return +number.toFixed(20).match(/^-?\d*\.?0*\d{0,4}/)[0];
+  return +(+number).toFixed(20).match(/^-?\d*\.?0*\d{0,4}/)[0];
 }
