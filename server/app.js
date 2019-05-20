@@ -160,7 +160,7 @@ function findTokenBySymbol(tokenSymbol) {
   return _.find(envConfig.TOKENS, (token) => { return token.symbol === tokenSymbol });
 }
 
-function getAPIFReturnFormat(data, statusCode = 200, message = 'success') {
+function getAPIFReturnFormat(data, statusCode = 200, message = 'Success') {
   if (statusCode !== 200) {
     return { status: { code: statusCode, message: message } }
   }
