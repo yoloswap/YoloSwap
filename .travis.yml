@@ -41,6 +41,12 @@ deploy:
       branch: production
     skip_cleanup: true
 
+  - provider: script
+    script: npm run build-production
+    on:
+      branch: master
+    skip_cleanup: true
+
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY_ID
     secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -73,6 +79,28 @@ deploy:
     skip_cleanup: true
     on:
       branch: production
+
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    bucket: yoloswap.com
+    region: ap-southeast-1
+    acl: public_read
+    local_dir: build
+    skip_cleanup: true
+    on:
+      branch: master
+
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    bucket: www.yoloswap.com
+    region: ap-southeast-1
+    acl: public_read
+    local_dir: build
+    skip_cleanup: true
+    on:
+      branch: master
 
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY_ID
