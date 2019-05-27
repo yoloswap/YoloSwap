@@ -81,6 +81,7 @@ envConfig.TOKENS = [
     "account": "chexchexchex",
     "precision": 8,
     "logo": "chex.png",
+    "listingTime": "5-27-2019"
   },
 ];
 
