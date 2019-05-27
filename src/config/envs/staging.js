@@ -73,6 +73,14 @@ envConfig.TOKENS = [
     "precision": 2,
     "logo": "cusd.png",
   },
+  {
+    "id": "chintai",
+    "name": "Chintai",
+    "symbol": "CHEX",
+    "account": "chexchexchex",
+    "precision": 8,
+    "logo": "chex.png",
+  },
 ];
 
 export default envConfig;
