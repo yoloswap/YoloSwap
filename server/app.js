@@ -1,19 +1,15 @@
-import Eos from 'eosjs';
 import cors from 'cors';
 import express from 'express';
-import { getRate, getRates } from "../src/services/network_service";
 import envConfig from "../src/config/env";
 import { fetchTokensByIds } from "../src/services/coingecko_service";
 import * as _ from 'underscore';
 import { formatNumberWithZeroDigit } from "../src/utils/helpers";
+import { getTokenPairRate, getAllRates, getEOSInstance } from "./services/eosService";
 
 const app = express();
 const port = 3002;
 const rateFetchingInterval = 10000;
-const eos = Eos({
-  httpEndpoint: 'https://' + envConfig.NETWORK_HOST,
-  chainId: envConfig.NETWORK_CHAIN_ID,
-});
+const eos = getEOSInstance();
 let rates = [], srcAmounts = [], srcSymbols = [], destSymbols = [], tokenIds = [];
 
 envConfig.TOKENS.forEach((token) => {
@@ -46,7 +42,7 @@ async function getRateAPI(req, res) {
     let rate = srcAmount;
 
     if (srcSymbol !== destSymbol) {
-      rate = await getRate(createRateParams(srcSymbol, destSymbol, srcAmount));
+      rate = await getTokenPairRate(eos, srcSymbol, destSymbol, srcAmount);
 
       if (!rate) {
         res.send(getAPIFReturnFormat(0, 400, 'Our reserves cannot handle your amount at the moment. Please try again later'));
@@ -56,11 +52,12 @@ async function getRateAPI(req, res) {
 
     res.send(getAPIFReturnFormat(formatNumberWithZeroDigit(rate)));
   } catch (e) {
+    console.log(e);
     res.send(getAPIFReturnFormat(0, 500, 'There is something wrong with the API'));
   }
 }
 
-async function fetchMarketRatesAPI(req, res) {
+function fetchMarketRatesAPI(req, res) {
   res.send(rates);
 }
 
@@ -69,8 +66,9 @@ setInterval(fetchMarketRatesInterval, rateFetchingInterval);
 
 async function fetchMarketRatesInterval() {
   try {
-    const sellRates = await getRates(createBatchRateParams(srcSymbols, destSymbols));
-    const buyRates = await getRates(createBatchRateParams(destSymbols, srcSymbols));
+    const sellRates = await getAllRates(eos, srcSymbols, destSymbols, srcAmounts);
+    const buyRates = await getAllRates(eos, destSymbols, srcSymbols, srcAmounts);
+
     const usdBasedTokens = await fetchTokensByIds(tokenIds);
     const eosBasedTokens = await fetchTokensByIds(tokenIds, envConfig.EOS.id);
     const eosData = findTokenById(usdBasedTokens, envConfig.EOS.id);
@@ -124,28 +122,6 @@ function validateGetRateParams(srcSymbol, destSymbol, srcAmount) {
   }
 
   return error;
-}
-
-function createRateParams(srcSymbol, destSymbol, srcAmount) {
-  return {
-    eos: eos,
-    srcSymbol: srcSymbol,
-    destSymbol: destSymbol,
-    srcAmount: srcAmount,
-    networkAccount: envConfig.NETWORK_ACCOUNT,
-    eosTokenAccount: envConfig.EOS.account,
-  }
-}
-
-function createBatchRateParams(srcSymbols, destSymbols) {
-  return {
-    eos: eos,
-    srcSymbols: srcSymbols,
-    destSymbols: destSymbols,
-    srcAmounts: srcAmounts,
-    networkAccount: envConfig.NETWORK_ACCOUNT,
-    eosTokenAccount: envConfig.EOS.account,
-  }
 }
 
 function getChangePercentage(tokenData) {

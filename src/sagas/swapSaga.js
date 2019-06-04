@@ -1,12 +1,12 @@
 import { delay } from 'redux-saga';
 import { takeLatest, call, put, select } from 'redux-saga/effects';
-import { getRate, trade } from "../services/network_service";
 import * as swapActions from "../actions/swapAction";
 import * as accountActions from "../actions/accountAction";
 import * as txActions from "../actions/transactionAction";
 import { formatAmount } from "../utils/helpers";
 import envConfig from "../config/env";
 import appConfig from "../config/app";
+import { getTokenPairRate, tokenTrade } from "./serviceSaga/eosServiceSaga";
 
 const getSwapState = state => state.swap;
 const getAccountState = state => state.account;
@@ -27,21 +27,17 @@ function* swapToken() {
   try {
     yield put(txActions.setTxConfirming(true));
 
-    const result = yield call(
-      trade,
-      {
-        eos: account.eos,
-        networkAccount: envConfig.NETWORK_ACCOUNT,
-        userAccount: account.account.name,
-        srcAmount: sourceAmountWithFullDecimals,
-        srcTokenAccount: sourceToken.account,
-        destTokenAccount: destToken.account,
-        srcSymbol: sourceTokenSymbol,
-        destPrecision: destToken.precision,
-        destSymbol: destSymbol,
-        minConversionRate: minConversionRate,
-      }
-    );
+    const result = yield call(tokenTrade, {
+      eos: account.eos,
+      userAccount: account.account.name,
+      srcAmount: sourceAmountWithFullDecimals,
+      srcTokenAccount: sourceToken.account,
+      destTokenAccount: destToken.account,
+      srcSymbol: sourceTokenSymbol,
+      destPrecision: destToken.precision,
+      destSymbol: destSymbol,
+      minConversionRate: minConversionRate,
+    });
 
     const txHash = result.transaction_id;
 
@@ -85,18 +81,14 @@ export function* fetchTokenPairRate() {
   yield put(swapActions.setTokenPairRateLoading(true));
 
   try {
-    const tokenPairRate = yield call(
-      getRate,
-      getRateParams(account.eos, swap.sourceToken.symbol, swap.destToken.symbol, sourceAmount)
-    );
-
+    const tokenPairRate = yield call(getTokenPairRate, account.eos, swap.sourceToken.symbol, swap.destToken.symbol, sourceAmount);
     const destAmount = formatAmount(tokenPairRate * sourceAmount, swap.destToken.precision);
     let error = validateRateResult(tokenPairRate, swap.sourceAmount, destAmount);
 
     if (!error) {
       yield put(swapActions.setDestAmount(destAmount));
       yield put(swapActions.setTokenPairRate(tokenPairRate));
-      yield call(setFluctuatingRate, account.eos, tokenPairRate, swap.sourceToken.symbol, swap.destToken.symbol);
+      yield call(getFluctuatingRate, tokenPairRate, swap.sourceToken.symbol, swap.destToken.symbol);
     } else {
       yield put(swapActions.setError(error));
       yield put(swapActions.setDestAmount(0));
@@ -106,7 +98,6 @@ export function* fetchTokenPairRate() {
     yield put(swapActions.setError(`This pair is under maintenance. Please try again later`));
     yield put(swapActions.setDestAmount(0));
     yield put(swapActions.setTokenPairRate(0));
-    console.log(e);
   }
 
   yield put(swapActions.setTokenPairRateLoading(false));
@@ -155,10 +146,12 @@ function validateRateResult(tokenPairRate, srcAmount, destAmount) {
   return error;
 }
 
-function* setFluctuatingRate(eos, expectedRate, srcTokenSymbol, destTokenSymbol) {
+function* getFluctuatingRate(expectedRate, srcTokenSymbol, destTokenSymbol) {
+  let fluctuatingRate = 0;
+
   try {
-    const expectedDefaultRate = yield call(getRate, getRateParams(eos, srcTokenSymbol, destTokenSymbol, appConfig.DEFAULT_RATE_AMOUNT));
-    let fluctuatingRate = 0;
+    const account = yield select(getAccountState);
+    const expectedDefaultRate = yield call(getTokenPairRate, account.eos, srcTokenSymbol, destTokenSymbol, appConfig.DEFAULT_RATE_AMOUNT);
 
     if (+expectedRate && +expectedDefaultRate) {
       fluctuatingRate = (expectedDefaultRate - expectedRate) / expectedRate;
@@ -172,7 +165,7 @@ function* setFluctuatingRate(eos, expectedRate, srcTokenSymbol, destTokenSymbol)
 
     yield put(swapActions.setFluctuatingRate(fluctuatingRate));
   } catch (e) {
-    console.log(e);
+    yield put(fluctuatingRate);
   }
 }
 
@@ -181,17 +174,6 @@ function* setError(errorMessage) {
   yield put(swapActions.setTokenPairRateLoading(false));
   yield put(swapActions.setTokenPairRate(0));
   yield put(swapActions.setDestAmount(0));
-}
-
-function getRateParams(eos, srcSymbol, destSymbol, srcAmount) {
-  return {
-    eos: eos,
-    srcSymbol: srcSymbol,
-    destSymbol: destSymbol,
-    srcAmount: srcAmount,
-    networkAccount: envConfig.NETWORK_ACCOUNT,
-    eosTokenAccount: envConfig.EOS.account
-  };
 }
 
 function* setTxBroadcastingTime() {

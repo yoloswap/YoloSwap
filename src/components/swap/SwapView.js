@@ -53,7 +53,7 @@ const SwapView = (props)=> {
           <div className={"swap__content-info"}>
             {props.isAccountImported && (
               <div className={"common__flexbox"}>
-                Balance: {props.isBalanceLoading ? <div className={"swap__content-loading common__loading"}/> : props.sourceToken.balance} {props.sourceToken.symbol}
+                Balance: {props.isBalanceLoading ? <div className={"swap__content-loading common__loading"}/> : props.sourceToken.balance ? props.sourceToken.balance : 0} {props.sourceToken.symbol}
               </div>
             )}
           </div>

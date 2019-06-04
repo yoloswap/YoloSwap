@@ -3,7 +3,9 @@ const envConfig = {
   NETWORK_PROTOCOL: 'https',
   NETWORK_PORT: '443',
   NETWORK_ACCOUNT: 'yolonetw1121',
-  NETWORK_HOST: 'jungle2.cryptolions.io',
+  NETWORK_HOSTS: [
+    'jungle2.cryptolions.io'
+  ],
   NETWORK_CHAIN_ID: 'e70aaab8997e1dfce58fbfac80cbbb8fecec7b99cf982a9444273cbc64c41473',
   TX_URL: 'https://jungle.bloks.io/transaction/',
   COINGECKO_URL: 'https://api.coingecko.com/api/v3/',
