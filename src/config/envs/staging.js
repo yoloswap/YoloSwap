@@ -4,7 +4,7 @@ const envConfig = {
   NETWORK_PORT: '443',
   NETWORK_ACCOUNT: 'yolonetwork1',
   NETWORK_HOSTS: [
-    'user-api.eoseoul.io',
+    'user-api.eoseoul.iooo',
     'mainnet.eoscanada.com',
     'api.eossweden.se',
   ],
