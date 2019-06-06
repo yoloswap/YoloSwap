@@ -4,9 +4,9 @@ const envConfig = {
   NETWORK_PORT: '443',
   NETWORK_ACCOUNT: 'yolonetwork1',
   NETWORK_HOSTS: [
-    'user-api.eoseoul.iooo',
-    'mainnet.eoscanadaaaa.com',
-    'api.eossweden.seee',
+    'user-api.eoseoul.io',
+    'mainnet.eoscanada.com',
+    'api.eossweden.se',
   ],
   NETWORK_CHAIN_ID: 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906',
   TX_URL: 'https://bloks.io/transaction/',
