@@ -5,7 +5,7 @@ const envConfig = {
   NETWORK_ACCOUNT: 'yolonetwork1',
   NETWORK_HOSTS: [
     'user-api.eoseoul.iooo',
-    'mainnet.eoscanada.com',
+    'mainnet.eoscanadaaaa.com',
     'api.eossweden.se',
   ],
   NETWORK_CHAIN_ID: 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906',
