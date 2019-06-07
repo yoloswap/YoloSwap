@@ -20,51 +20,45 @@ async function getBalances(options){
 }
 
 async function getRate(options) {
-  try {
-    const eos = options.eos
-    const srcSymbol = options.srcSymbol
-    const destSymbol = options.destSymbol
-    const srcAmount = options.srcAmount
-    const networkAccount = options.networkAccount
-    const eosTokenAccount = options.eosTokenAccount
+  const eos = options.eos
+  const srcSymbol = options.srcSymbol
+  const destSymbol = options.destSymbol
+  const srcAmount = options.srcAmount
+  const networkAccount = options.networkAccount
+  const eosTokenAccount = options.eosTokenAccount
 
-    let reservesReply = await eos.getTableRows({
-      code: networkAccount,
-      scope:networkAccount,
-      table:"reservespert",
-      json: true
-    })
-    let bestRate = 0
-    let tokenSymbol = (srcSymbol === "EOS" ? destSymbol : srcSymbol)
-    for (var t = 0; t < reservesReply.rows.length; t++) {
-      if (tokenSymbol === reservesReply.rows[t].symbol.split(",")[1]) {
-        for (var i = 0; i < reservesReply.rows[t].reserve_contracts.length; i++) {
-          const reserveName = reservesReply.rows[t].reserve_contracts[i];
-          const currentRate = await getRateReserve({
-            eos:eos,
-            reserveAccount:reserveName,
-            eosTokenAccount:eosTokenAccount,
-            srcSymbol:srcSymbol,
-            destSymbol:destSymbol,
-            srcAmount:srcAmount
-          })
-          if(currentRate > bestRate) {
-            bestRate = currentRate
-          }
+  let reservesReply = await eos.getTableRows({
+    code: networkAccount,
+    scope:networkAccount,
+    table:"reservespert",
+    json: true
+  })
+  let bestRate = 0
+  let tokenSymbol = (srcSymbol === "EOS" ? destSymbol : srcSymbol)
+  for (var t = 0; t < reservesReply.rows.length; t++) {
+    if (tokenSymbol === reservesReply.rows[t].symbol.split(",")[1]) {
+      for (var i = 0; i < reservesReply.rows[t].reserve_contracts.length; i++) {
+        const reserveName = reservesReply.rows[t].reserve_contracts[i];
+        const currentRate = await getRateReserve({
+          eos:eos,
+          reserveAccount:reserveName,
+          eosTokenAccount:eosTokenAccount,
+          srcSymbol:srcSymbol,
+          destSymbol:destSymbol,
+          srcAmount:srcAmount
+        })
+        if(currentRate > bestRate) {
+          bestRate = currentRate
         }
-        break;
       }
+      break;
     }
-
-    return bestRate
-  } catch (e) {
-    return 0;
   }
+
+  return bestRate
 }
 
 async function getRates(options) {
-    // TODO: missing slippageRate handling
-
   const eos = options.eos
   const srcSymbols = options.srcSymbols
   const destSymbols = options.destSymbols

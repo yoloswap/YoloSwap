@@ -1,6 +1,5 @@
 import { delay } from 'redux-saga';
 import { takeLatest, call, put, select } from 'redux-saga/effects';
-import { getRates } from "../services/network_service";
 import * as marketActions from "../actions/marketAction";
 import * as tokenActions from "../actions/tokenAction";
 import appConfig from "../config/app";
@@ -8,6 +7,7 @@ import envConfig from "../config/env";
 import { callFetchMarketRates } from "../services/api_service";
 import { fetchTokensByIds } from "../services/coingecko_service";
 import * as _ from 'underscore';
+import { getAllRates } from "./serviceSaga/eosServiceSaga";
 
 const getTokens = state => state.token.tokens;
 const getAccountState = state => state.account;
@@ -87,8 +87,9 @@ function* getTokensWithRateFromBlockChain() {
     }
   });
 
-  let sellRates = yield call(getRates, getMarketRateParams(account.eos, srcSymbols, destSymbols, srcAmounts));
-  let buyRates = yield call(getRates, getMarketRateParams(account.eos, destSymbols, srcSymbols, srcAmounts));
+  let sellRates = yield call(getAllRates, account.eos, srcSymbols, destSymbols, srcAmounts);
+  let buyRates = yield call(getAllRates, account.eos, destSymbols, srcSymbols, srcAmounts);
+
   const usdBasedTokens = yield call(fetchTokensByIds, tokenIds);
   const eosBasedTokens = yield call(fetchTokensByIds, tokenIds, envConfig.EOS.id);
   const eosData = findTokenById(usdBasedTokens, envConfig.EOS.id);
@@ -116,17 +117,6 @@ function* getTokensWithRateFromBlockChain() {
 
     return token;
   });
-}
-
-function getMarketRateParams(eos, srcSymbols, destSymbols, srcAmounts) {
-  return {
-    eos: eos,
-    srcSymbols: srcSymbols,
-    destSymbols: destSymbols,
-    srcAmounts: srcAmounts,
-    networkAccount: envConfig.NETWORK_ACCOUNT,
-    eosTokenAccount: envConfig.EOS.account
-  };
 }
 
 function* setLoading(isLoading, isBackgroundLoading = false) {

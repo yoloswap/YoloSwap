@@ -2,10 +2,10 @@ import { takeLatest, call, put, select } from 'redux-saga/effects';
 import * as tokenAction from "../actions/tokenAction";
 import * as accountActions from "../actions/accountAction";
 import * as globalActions from "../actions/globalAction";
-import { getBalances } from "../services/network_service";
 import * as scatterService from "../services/scatter_service";
 import appConfig from '../config/app';
 import { validateInputParams, fetchTokenPairRate } from "./swapSaga";
+import { getTokenBalances } from "./serviceSaga/eosServiceSaga";
 
 const getTokens = state => state.token.tokens;
 const getAccountData = state => state.account;
@@ -62,15 +62,7 @@ function* fetchBalances() {
       tokenContracts.push(token.account);
     });
 
-    const balances = yield call(
-      getBalances,
-      {
-        eos: account.eos,
-        reserveAccount: account.account.name,
-        tokenSymbols: tokenSymbols,
-        tokenContracts: tokenContracts,
-      }
-    );
+    const balances = yield call(getTokenBalances, account.eos, account.account.name, tokenSymbols, tokenContracts);
 
     const tokensWithBalance = tokens.map((token, index) => {
       token.balance = balances[index];
