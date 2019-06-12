@@ -52,6 +52,10 @@ function* swapToken() {
       minConversionRate: minConversionRate,
     });
 
+    console.log('=============SUCCESS DATA=================');
+    console.log(result);
+
+
     const txHash = result.transaction_id;
 
     yield put(txActions.setTxConfirming(false));
