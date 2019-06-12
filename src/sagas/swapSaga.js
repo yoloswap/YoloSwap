@@ -27,6 +27,19 @@ function* swapToken() {
   try {
     yield put(txActions.setTxConfirming(true));
 
+    console.log('=============Sending Transaction Data=================');
+    console.log({
+      eos: account.eos,
+      userAccount: account.account.name,
+      srcAmount: sourceAmountWithFullDecimals,
+      srcTokenAccount: sourceToken.account,
+      destTokenAccount: destToken.account,
+      srcSymbol: sourceTokenSymbol,
+      destPrecision: destToken.precision,
+      destSymbol: destSymbol,
+      minConversionRate: minConversionRate,
+    });
+
     const result = yield call(tokenTrade, {
       eos: account.eos,
       userAccount: account.account.name,
@@ -49,6 +62,9 @@ function* swapToken() {
     yield call(delay, 5000);
     yield put(txActions.resetTx());
   } catch (e) {
+    console.log('================Transaction Error Received===============');
+    console.log(e);
+
     yield put(txActions.resetTx());
 
     if (e.message) {
