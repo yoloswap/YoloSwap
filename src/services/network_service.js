@@ -94,7 +94,7 @@ async function trade(options) {
   let destSymbol = options.destSymbol
   let minConversionRate = options.minConversionRate
 
-  let memo = `${destPrecision} ${destSymbol},${destTokenAccount},${minConversionRate}`
+  let memo = getMemo(destPrecision, destSymbol, destTokenAccount, minConversionRate);
   let asset = `${srcAmount} ${srcSymbol}`
 
   const token = await eos.contract(srcTokenAccount);
@@ -105,4 +105,8 @@ async function trade(options) {
   );
 }
 
-export {getBalances, getRate, getRates, trade};
+function getMemo(destPrecision, destSymbol, destTokenAccount, minConversionRate) {
+  return `${destPrecision} ${destSymbol},${destTokenAccount},${minConversionRate}`;
+}
+
+export { getBalances, getRate, getMemo, trade };

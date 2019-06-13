@@ -4,6 +4,7 @@ const initialState = {
   isErrorActive: false,
   errorMessage: '',
   errorType: '',
+  widgetMode: false
 };
 
 export default function globalReducer(state = initialState, action) {
@@ -11,6 +12,9 @@ export default function globalReducer(state = initialState, action) {
     case globalActionTypes.SET_GLOBAL_ERROR: {
       const { isErrorActive, errorMessage, errorType } = action.payload;
       return { ...state, isErrorActive, errorMessage, errorType }
+    }
+    case globalActionTypes.SET_WIDGET_MODE: {
+      return { ...state, widgetMode: action.payload }
     }
     default:
       return state;
