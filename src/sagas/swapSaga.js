@@ -14,7 +14,7 @@ const getAccountState = state => state.account;
 function* swapToken(action) {
   const swap = yield select(getSwapState);
   const account = yield select(getAccountState);
-  const sendTransactionToThirdParty = action.payload;
+  const sendTransaction = action.payload;
   const sourceToken = swap.sourceToken;
   const sourceTokenSymbol = sourceToken.symbol;
   const srcAmount = swap.sourceAmount;
@@ -26,8 +26,8 @@ function* swapToken(action) {
   try {
     yield put(txActions.setTxConfirming(true));
 
-    if (sendTransactionToThirdParty) {
-      sendTransactionToThirdParty({
+    if (sendTransaction) {
+      sendTransaction({
         destPrecision: destToken.precision,
         destSymbol: destSymbol,
         destTokenAccount: destToken.account,

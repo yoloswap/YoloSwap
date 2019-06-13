@@ -13,10 +13,10 @@ export const swapActionTypes = {
   SET_ERROR: 'SWAP.SET_ERROR',
 };
 
-export function swapToken(sendTransactionToThirdParty = false) {
+export function swapToken(sendTransaction = false) {
   return {
     type: swapActionTypes.SWAP_TOKEN,
-    payload: sendTransactionToThirdParty
+    payload: sendTransaction
   }
 }
 

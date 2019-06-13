@@ -10,7 +10,7 @@ import { connect } from "react-redux";
 function mapDispatchToProps(dispatch) {
   return {
     setWidgetMode: () => {dispatch(globalActions.setWidgetMode())},
-    setAccount: (account) => {dispatch(accountActions.setScatterAccount(account))},
+    setAccountWithBalances: (account) => {dispatch(accountActions.setAccountWithBalances(account))},
     completeSwap: (transactionId, srcAmount, sourceTokenSymbol, destAmount, destSymbol) => {dispatch(swapActions.completeSwap(transactionId, srcAmount, sourceTokenSymbol, destAmount, destSymbol))},
   }
 }
@@ -19,11 +19,11 @@ class Widget extends PureComponent {
   componentWillMount = () => {
     this.props.setWidgetMode();
 
-    window.parent.postMessage({ action: 'getAccount', data: {
-        account: 'newdexiotest',
-        authority: 'active',
-        publicKey: 'EOS5C7eh8CD9KqYETumPFjRjYaZrzPtQ8xt5uYY8XuTFZRRS8Sm1P'
-      } }, "*");
+    // window.parent.postMessage({ action: 'getAccount', data: {
+    //     account: 'kybermainnet',
+    //     authority: 'active',
+    //     publicKey: 'EOS5bf197zD5rkvnBwTsnK7yhkZLHsvKSPsaomvurehNtVRyfpq9o'
+    //   } }, "*");
 
     window.setInterval(this.sendHeight, 1000);
     window.addEventListener('message', this.watchPostMessages);
@@ -40,7 +40,7 @@ class Widget extends PureComponent {
     window.parent.postMessage({ action: 'setHeight', height: height }, "*");
   };
 
-  sendTransactionToThirdParty = (params) => {
+  sendTransaction = (params) => {
     const memo = getMemo(
       params.destPrecision,
       params.destSymbol,
@@ -64,8 +64,11 @@ class Widget extends PureComponent {
     const action = eventData.action;
 
     if (action === 'getAccount') {
-      this.props.setAccount(eventData.data);
-    } else if (action === 'transaction') {
+      let account = eventData.data;
+      account.name = account.account;
+
+      this.props.setAccountWithBalances(account);
+    } else if (action === 'transaction' && eventData.data.transaction_id) {
       const transactionId = eventData.data.transaction_id;
       this.props.completeSwap(transactionId);
     }
@@ -74,7 +77,7 @@ class Widget extends PureComponent {
   render() {
     return <Body
       widgetMode={true}
-      sendTransactionToThirdParty={this.sendTransactionToThirdParty}
+      sendTransaction={this.sendTransaction}
     />
   }
 }

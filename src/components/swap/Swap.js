@@ -39,7 +39,7 @@ function mapDispatchToProps(dispatch) {
     setDestToken: (token) => {dispatch(swapActions.setDestToken(token))},
     setSourceAmount: (amount) => {dispatch(swapActions.setSourceAmount(amount))},
     fetchTokenPairRate: () => {dispatch(swapActions.fetchTokenPairRate())},
-    swapToken: () => {dispatch(swapActions.swapToken())},
+    swapToken: (sendTransaction) => {dispatch(swapActions.swapToken(sendTransaction))},
     setError: (message) => {dispatch(swapActions.setError(message))},
     setSourceAndDestToken: (srcToken, destToken) => {dispatch(swapActions.setSourceAndDestToken(srcToken, destToken))},
     connectToScatter: () => {dispatch(accountAction.connectToScatter())},
@@ -74,7 +74,8 @@ class Swap extends Component {
         this.props.connectToScatter();
       }
     } else {
-      this.props.swapToken();
+      const sendTransaction = this.props.sendTransaction ? this.props.sendTransaction : false;
+      this.props.swapToken(sendTransaction);
     }
   };
 

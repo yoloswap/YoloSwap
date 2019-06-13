@@ -58,30 +58,6 @@ async function getRate(options) {
   return bestRate
 }
 
-async function getRates(options) {
-  const eos = options.eos
-  const srcSymbols = options.srcSymbols
-  const destSymbols = options.destSymbols
-  const srcAmounts = options.srcAmounts
-  const networkAccount = options.networkAccount
-  const eosTokenAccount = options.eosTokenAccount
-
-  let arrayLength = srcSymbols.length
-  let ratesArray = []
-  for (var i = 0; i < arrayLength; i++) {
-    const rate = await getRate({
-      eos:eos,
-      srcSymbol:srcSymbols[i],
-      destSymbol:destSymbols[i],
-      srcAmount:srcAmounts[i],
-      networkAccount:networkAccount,
-      eosTokenAccount:eosTokenAccount
-    })
-    ratesArray.push(rate)
-  }
-  return ratesArray
-}
-
 async function trade(options) {
   let eos = options.eos
   let networkAccount = options.networkAccount

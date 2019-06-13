@@ -53,7 +53,7 @@ class Body extends PureComponent {
             {/*<div className={"body__sub-title"}>Swap tokens without involving any intermediate token</div>*/}
           </div>
           <Swap
-            sendTransactionToThirdParty={this.props.sendTransactionToThirdParty}
+            sendTransaction={this.props.sendTransaction}
             srcAmountRef={this.srcAmountRef}
           />
           <Market srcAmountRef={this.srcAmountRef}/>
