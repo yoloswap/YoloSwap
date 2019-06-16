@@ -36,7 +36,7 @@ class Widget extends PureComponent {
 
     window.parent.postMessage(JSON.stringify({
       action: 'setHeight',
-      height: height
+      data: { height: height }
     }), "*");
   };
 
@@ -51,10 +51,12 @@ class Widget extends PureComponent {
     window.parent.postMessage(JSON.stringify({
       action: 'transaction',
       data: {
-        account: params.srcTokenAccount,
-        authorization: { actor: params.userAccount, permission: 'active' },
-        data: { from: params.userAccount, to: params.networkAccount, quantity: params.srcAmount, memo: memo },
-        name: 'transfer'
+        actions: [{
+          account: params.srcTokenAccount,
+          authorization: { actor: params.userAccount, permission: 'active' },
+          data: { from: params.userAccount, to: params.networkAccount, quantity: params.srcAmount, memo: memo },
+          name: 'transfer'
+        }]
       }
     }), "*");
   };
