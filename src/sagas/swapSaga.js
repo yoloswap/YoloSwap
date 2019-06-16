@@ -35,7 +35,8 @@ function* swapToken(action) {
         srcTokenAccount: sourceToken.account,
         userAccount: account.account.name,
         networkAccount: envConfig.NETWORK_ACCOUNT,
-        srcAmount: sourceAmountWithFullDecimals
+        srcAmount: sourceAmountWithFullDecimals,
+        srcSymbol: sourceTokenSymbol
       });
     } else {
       const result = yield call(tokenTrade, {

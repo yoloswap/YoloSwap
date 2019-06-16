@@ -54,7 +54,7 @@ class Widget extends PureComponent {
         actions: [{
           account: params.srcTokenAccount,
           authorization: { actor: params.userAccount, permission: 'active' },
-          data: { from: params.userAccount, to: params.networkAccount, quantity: params.srcAmount, memo: memo },
+          data: { from: params.userAccount, to: params.networkAccount, quantity: `${params.srcAmount} ${params.srcSymbol}`, memo: memo },
           name: 'transfer'
         }]
       }
