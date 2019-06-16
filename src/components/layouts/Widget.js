@@ -25,7 +25,7 @@ class Widget extends PureComponent {
     //     publicKey: 'EOS5bf197zD5rkvnBwTsnK7yhkZLHsvKSPsaomvurehNtVRyfpq9o'
     //   } }, "*");
 
-    window.setInterval(this.sendHeight, 1000);
+    this.sendHeight();
     window.addEventListener('message', this.watchPostMessages);
   };
 
@@ -60,15 +60,21 @@ class Widget extends PureComponent {
   };
 
   watchPostMessages = (event) => {
+    console.log('================ Event ================');
+    console.log(event);
     const eventData = event.data;
     const action = eventData.action;
 
     if (action === 'getAccount') {
+      console.log('===========getAccount============');
       let account = eventData.data;
       account.name = account.account;
 
+      console.log(account);
+
       this.props.setAccountWithBalances(account);
     } else if (action === 'transaction' && eventData.data.transaction_id) {
+      console.log('===========transaction============');
       const transactionId = eventData.data.transaction_id;
       this.props.completeSwap(transactionId);
     }
