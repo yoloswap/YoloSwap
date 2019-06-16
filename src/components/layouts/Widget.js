@@ -19,13 +19,10 @@ class Widget extends PureComponent {
   componentWillMount = () => {
     this.props.setWidgetMode();
 
-    // window.parent.postMessage({ action: 'getAccount', data: {
-    //     account: 'kybermainnet',
-    //     authority: 'active',
-    //     publicKey: 'EOS5bf197zD5rkvnBwTsnK7yhkZLHsvKSPsaomvurehNtVRyfpq9o'
-    //   } }, "*");
+    // window.parent.postMessage('{"action":"getAccount","data":{"account":"kybermainnet","authority":"active","publicKey":"EOS6qp6PrHYc9KTo2oWcqQXtNLDSkRZiTMWdfg7ygMnzGSRFDnnEU"}}', "*");
 
     this.sendHeight();
+
     window.addEventListener('message', this.watchPostMessages);
   };
 
@@ -35,9 +32,12 @@ class Widget extends PureComponent {
 
   sendHeight = () => {
     const body = document.getElementsByTagName('body')[0];
-    const height = body.clientHeight;
+    let height = body.clientHeight < 1567 ? 1567 : body.clientHeight;
 
-    window.parent.postMessage({ action: 'setHeight', height: height }, "*");
+    window.parent.postMessage(JSON.stringify({
+      action: 'setHeight',
+      height: height
+    }), "*");
   };
 
   sendTransaction = (params) => {
@@ -48,7 +48,7 @@ class Widget extends PureComponent {
       params.minConversionRate
     );
 
-    window.parent.postMessage({
+    window.parent.postMessage(JSON.stringify({
       action: 'transaction',
       data: {
         account: params.srcTokenAccount,
@@ -56,25 +56,22 @@ class Widget extends PureComponent {
         data: { from: params.userAccount, to: params.networkAccount, quantity: params.srcAmount, memo: memo },
         name: 'transfer'
       }
-    }, "*");
+    }), "*");
   };
 
   watchPostMessages = (event) => {
-    console.log('================ Event ================');
-    console.log(event);
-    const eventData = event.data;
+    const eventData = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
     const action = eventData.action;
 
+    console.log('=================EVENT=================');
+    console.log(eventData);
+
     if (action === 'getAccount') {
-      console.log('===========getAccount============');
       let account = eventData.data;
       account.name = account.account;
 
-      console.log(account);
-
       this.props.setAccountWithBalances(account);
     } else if (action === 'transaction' && eventData.data.transaction_id) {
-      console.log('===========transaction============');
       const transactionId = eventData.data.transaction_id;
       this.props.completeSwap(transactionId);
     }
