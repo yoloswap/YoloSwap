@@ -1,9 +1,10 @@
 export const swapActionTypes = {
+  SWAP_TOKEN: 'SWAP.SWAP_TOKEN',
+  COMPLETE_SWAP: 'SWAP.COMPLETE_SWAP',
   FETCH_TOKEN_PAIR_RATE: 'SWAP.FETCH_TOKEN_PAIR_RATE',
   SET_TOKEN_PAIR_RATE_LOADING: 'SWAP.SET_TOKEN_PAIR_RATE_LOADING',
   SET_TOKEN_PAIR_RATE: 'SWAP.SET_TOKEN_PAIR_RATE',
   SET_FLUCTUATING_RATE: 'SWAP.SET_FLUCTUATING_RATE',
-  SWAP_TOKEN: 'SWAP.SWAP_TOKEN',
   SET_SOURCE_AND_DEST_TOKEN: 'SWAP.SET_SOURCE_AND_DEST_TOKEN',
   SET_SOURCE_TOKEN: 'SWAP.SET_SOURCE_TOKEN',
   SET_DEST_TOKEN: 'SWAP.SET_DEST_TOKEN',
@@ -12,15 +13,23 @@ export const swapActionTypes = {
   SET_ERROR: 'SWAP.SET_ERROR',
 };
 
-export function fetchTokenPairRate() {
+export function swapToken(sendTransaction = false) {
   return {
-    type: swapActionTypes.FETCH_TOKEN_PAIR_RATE
+    type: swapActionTypes.SWAP_TOKEN,
+    payload: sendTransaction
   }
 }
 
-export function swapToken() {
+export function completeSwap(txResult) {
   return {
-    type: swapActionTypes.SWAP_TOKEN
+    type: swapActionTypes.COMPLETE_SWAP,
+    payload: txResult
+  }
+}
+
+export function fetchTokenPairRate() {
+  return {
+    type: swapActionTypes.FETCH_TOKEN_PAIR_RATE
   }
 }
 

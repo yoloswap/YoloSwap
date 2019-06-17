@@ -11,61 +11,101 @@ import { getTokenPairRate, tokenTrade } from "./serviceSaga/eosServiceSaga";
 const getSwapState = state => state.swap;
 const getAccountState = state => state.account;
 
-function* swapToken() {
+function* swapToken(action) {
   const swap = yield select(getSwapState);
   const account = yield select(getAccountState);
-
+  const sendTransaction = action.payload;
   const sourceToken = swap.sourceToken;
   const sourceTokenSymbol = sourceToken.symbol;
   const srcAmount = swap.sourceAmount;
   const destToken = swap.destToken;
   const destSymbol = destToken.symbol;
-  const destAmount = swap.destAmount;
   const sourceAmountWithFullDecimals = (+srcAmount).toFixed(sourceToken.precision);
   const minConversionRate = swap.tokenPairRate - (swap.tokenPairRate * appConfig.MIN_CONVERSION_RATE);
 
   try {
     yield put(txActions.setTxConfirming(true));
 
-    const result = yield call(tokenTrade, {
-      eos: account.eos,
-      userAccount: account.account.name,
-      srcAmount: sourceAmountWithFullDecimals,
-      srcTokenAccount: sourceToken.account,
-      destTokenAccount: destToken.account,
-      srcSymbol: sourceTokenSymbol,
-      destPrecision: destToken.precision,
-      destSymbol: destSymbol,
-      minConversionRate: minConversionRate,
-    });
-
-    const txHash = result.transaction_id;
-
-    yield put(txActions.setTxConfirming(false));
-    yield call(setTxBroadcastingTime);
-    yield call(setTxData, txHash, srcAmount, sourceTokenSymbol, destAmount, destSymbol);
-    yield put(swapActions.setSourceAmount(''));
-    yield put(accountActions.fetchBalance());
-    yield call(delay, 5000);
-    yield put(txActions.resetTx());
-  } catch (e) {
-    yield put(txActions.resetTx());
-
-    if (e.message) {
-      yield put(txActions.setTxError(e.message));
+    if (sendTransaction) {
+      sendTransaction({
+        destPrecision: destToken.precision,
+        destSymbol: destSymbol,
+        destTokenAccount: destToken.account,
+        minConversionRate: minConversionRate,
+        srcTokenAccount: sourceToken.account,
+        userAccount: account.account.name,
+        networkAccount: envConfig.NETWORK_ACCOUNT,
+        srcAmount: sourceAmountWithFullDecimals,
+        srcSymbol: sourceTokenSymbol
+      });
     } else {
-      const error = JSON.parse(e);
-      if (error.error.details[0]) {
-        yield put(txActions.setTxError(error.message + ": " + error.error.details[0].message));
-      } else {
-        yield put(txActions.setTxError(error.error.what));
-      }
+      const result = yield call(tokenTrade, {
+        eos: account.eos,
+        userAccount: account.account.name,
+        srcAmount: sourceAmountWithFullDecimals,
+        srcTokenAccount: sourceToken.account,
+        destTokenAccount: destToken.account,
+        srcSymbol: sourceTokenSymbol,
+        destPrecision: destToken.precision,
+        destSymbol: destSymbol,
+        minConversionRate: minConversionRate,
+      });
+
+      yield call(completeSwap, { payload: result });
+    }
+  } catch (e) {
+    yield call(handleSwapError, e);
+  }
+}
+
+function* completeSwap(action) {
+  const txResult = action.payload;
+  const transactionId = txResult.transaction_id;
+
+  if (!transactionId) {
+    yield call(handleSwapError, txResult);
+    return;
+  }
+
+  const swap = yield select(getSwapState);
+  const srcAmount = swap.sourceAmount;
+  const srcSymbol = swap.sourceToken.symbol;
+  const destAmount = swap.destAmount;
+  const destSymbol = swap.destToken.symbol;
+
+  yield put(txActions.setTxConfirming(false));
+  yield call(setTxBroadcastingTime);
+  yield call(setTxData, transactionId, srcAmount, srcSymbol, destAmount, destSymbol);
+  yield put(swapActions.setSourceAmount(''));
+  yield put(accountActions.fetchBalance());
+  yield call(delay, 5000);
+  yield put(txActions.resetTx());
+}
+
+function* handleSwapError(e) {
+  yield put(txActions.resetTx());
+
+  if (e.message) {
+    yield put(txActions.setTxError(e.message));
+  } else {
+    const error = JSON.parse(e);
+    const haveDetailError = error.message && error.error && error.error.details && error.error.details[0] && error.error.details[0].message;
+    let errorMessage = '';
+
+    if (haveDetailError) {
+      errorMessage = error.message + ": " + error.error.details[0].message;
+    } else if (error.error && error.error.what) {
+      errorMessage = error.error.what;
+    } else {
+      errorMessage = 'Unknown error occurred. Please try again later.';
     }
 
-    yield put(accountActions.fetchBalance());
-    yield call(delay, 3000);
-    yield put(txActions.setTxError(''));
+    yield put(txActions.setTxError(errorMessage));
   }
+
+  yield put(accountActions.fetchBalance());
+  yield call(delay, 3000);
+  yield put(txActions.setTxError(''));
 }
 
 export function* fetchTokenPairRate() {
@@ -182,13 +222,13 @@ function* setTxBroadcastingTime() {
   yield put(txActions.setTxBroadcasting(false));
 }
 
-function* setTxData(txHash, sourceAmount, sourceSymbol, destAmount, destSymbol) {
-  yield put(txActions.setTxHash(txHash));
+function* setTxData(transactionId, srcAmount, srcSymbol, destAmount, destSymbol) {
+  yield put(txActions.setTxHash(transactionId));
   yield put(txActions.addTxDataToHistory({
     type: 'swap',
-    hash: txHash,
-    srcAmount: sourceAmount,
-    srcSymbol: sourceSymbol,
+    hash: transactionId,
+    srcAmount: srcAmount,
+    srcSymbol: srcSymbol,
     destAmount: destAmount,
     destSymbol: destSymbol,
     status: 'executed'
@@ -197,6 +237,7 @@ function* setTxData(txHash, sourceAmount, sourceSymbol, destAmount, destSymbol) 
 
 export default function* swapWatcher() {
   yield takeLatest(swapActions.swapActionTypes.SWAP_TOKEN, swapToken);
+  yield takeLatest(swapActions.swapActionTypes.COMPLETE_SWAP, completeSwap);
   yield takeLatest(swapActions.swapActionTypes.FETCH_TOKEN_PAIR_RATE, fetchTokenPairRate);
   yield takeLatest(swapActions.swapActionTypes.SET_SOURCE_TOKEN, fetchTokenPairRate);
   yield takeLatest(swapActions.swapActionTypes.SET_DEST_TOKEN, fetchTokenPairRate);

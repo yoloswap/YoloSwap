@@ -6,6 +6,7 @@ export const accountActionTypes = {
   SET_SCATTER_EOS: 'ACCOUNT.SET_SCATTER_EOS',
   SET_SCATTER_ACCOUNT: 'ACCOUNT.SET_SCATTER_ACCOUNT',
   SET_SCATTER_LOADING: 'ACCOUNT.SET_SCATTER_LOADING',
+  SET_ACCOUNT_WITH_BALANCES: 'ACCOUNT.SET_ACCOUNT_WITH_BALANCES',
 };
 
 export function fetchBalance() {
@@ -52,5 +53,12 @@ export function setBalanceLoading(isLoading) {
   return {
     type: accountActionTypes.SET_BALANCE_LOADING,
     payload: isLoading
+  }
+}
+
+export function setAccountWithBalances(account) {
+  return {
+    type: accountActionTypes.SET_ACCOUNT_WITH_BALANCES,
+    payload: account
   }
 }

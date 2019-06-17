@@ -58,30 +58,6 @@ async function getRate(options) {
   return bestRate
 }
 
-async function getRates(options) {
-  const eos = options.eos
-  const srcSymbols = options.srcSymbols
-  const destSymbols = options.destSymbols
-  const srcAmounts = options.srcAmounts
-  const networkAccount = options.networkAccount
-  const eosTokenAccount = options.eosTokenAccount
-
-  let arrayLength = srcSymbols.length
-  let ratesArray = []
-  for (var i = 0; i < arrayLength; i++) {
-    const rate = await getRate({
-      eos:eos,
-      srcSymbol:srcSymbols[i],
-      destSymbol:destSymbols[i],
-      srcAmount:srcAmounts[i],
-      networkAccount:networkAccount,
-      eosTokenAccount:eosTokenAccount
-    })
-    ratesArray.push(rate)
-  }
-  return ratesArray
-}
-
 async function trade(options) {
   let eos = options.eos
   let networkAccount = options.networkAccount
@@ -94,7 +70,7 @@ async function trade(options) {
   let destSymbol = options.destSymbol
   let minConversionRate = options.minConversionRate
 
-  let memo = `${destPrecision} ${destSymbol},${destTokenAccount},${minConversionRate}`
+  let memo = getMemo(destPrecision, destSymbol, destTokenAccount, minConversionRate);
   let asset = `${srcAmount} ${srcSymbol}`
 
   const token = await eos.contract(srcTokenAccount);
@@ -105,4 +81,8 @@ async function trade(options) {
   );
 }
 
-export {getBalances, getRate, getRates, trade};
+function getMemo(destPrecision, destSymbol, destTokenAccount, minConversionRate) {
+  return `${destPrecision} ${destSymbol},${destTokenAccount},${minConversionRate}`;
+}
+
+export { getBalances, getRate, getMemo, trade };

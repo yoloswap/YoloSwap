@@ -9,13 +9,9 @@ import Modal from '../commons/Modal';
 import ModalScatter from '../commons/ModalScatter';
 import appConfig from '../../config/app';
 
-function mapStateToProps(state) {
-  const global = state.global;
-
+function mapStateToProps(store) {
   return {
-    isErrorActive: global.isErrorActive,
-    errorType: global.errorType,
-    errorMessage: global.errorMessage
+    global: store.global,
   };
 }
 
@@ -39,6 +35,8 @@ class Body extends PureComponent {
 
     this.props.setScatterEos(eos);
 
+    if (this.props.widgetMode) return;
+
     this.props.connectToScatter(false, true);
 
     document.addEventListener('scatterLoaded', () => {
@@ -54,15 +52,18 @@ class Body extends PureComponent {
             <div className={"body__title"}>Simple Just Became Instant</div>
             {/*<div className={"body__sub-title"}>Swap tokens without involving any intermediate token</div>*/}
           </div>
-          <Swap srcAmountRef={this.srcAmountRef}/>
+          <Swap
+            sendTransaction={this.props.sendTransaction}
+            srcAmountRef={this.srcAmountRef}
+          />
           <Market srcAmountRef={this.srcAmountRef}/>
-          <Modal isActive={this.props.isErrorActive} handleClose={() => this.props.unsetGlobalError()} title="Error">
+          <Modal isActive={this.props.global.isErrorActive} handleClose={() => this.props.unsetGlobalError()} title="Error">
             <div className={"error-modal"}>
-              {this.props.errorType !== appConfig.SCATTER_ERROR_TYPE && (
-                <div className={"error-modal__message"}>{this.props.errorMessage}</div>
+              {this.props.global.errorType !== appConfig.SCATTER_ERROR_TYPE && (
+                <div className={"error-modal__message"}>{this.props.global.errorMessage}</div>
               )}
 
-              {this.props.errorType === appConfig.SCATTER_ERROR_TYPE && (
+              {this.props.global.errorType === appConfig.SCATTER_ERROR_TYPE && (
                 <ModalScatter/>
               )}
             </div>
