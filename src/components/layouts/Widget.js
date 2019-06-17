@@ -64,9 +64,6 @@ class Widget extends PureComponent {
     const eventData = this.isJson(event.data) ? JSON.parse(event.data) : event.data;
     const action = eventData.action;
 
-    console.log('=================EVENT=================');
-    console.log(eventData);
-
     if (action === 'getAccount') {
       let account = eventData.data;
       account.name = account.account;

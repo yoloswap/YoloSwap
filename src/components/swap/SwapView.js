@@ -6,8 +6,8 @@ import envConfig from '../../config/env';
 import Dropdown, { DropdownTrigger, DropdownContent } from "react-simple-dropdown";
 import ReactTooltip from 'react-tooltip';
 
-function getContentForTooltipRate(fluctuatingRate) {
-  return `Price is dependent on your source amount. There is a ${fluctuatingRate}% difference in price for the requested quantity compared to the default source amount of 1 EOS`
+function getContentForTooltipRate(fluctuatingRate, srcSymbol) {
+  return `Price is dependent on your source amount. There is a ${fluctuatingRate}% difference in price for the requested quantity compared to the default source amount of 1 ${srcSymbol}`
 }
 
 const SwapView = (props)=> {
@@ -80,7 +80,7 @@ const SwapView = (props)=> {
               <div className={"common__inline-block common__fade-in"}>
                 <span className={"common__decreased-number common__ml5"}>{props.fluctuatingRate}%</span>
                 <span className={"common__tooltip common__ml5"} data-tip=""/>
-                <ReactTooltip className={"common__tooltip-content"} effect="solid" getContent={() => getContentForTooltipRate(props.fluctuatingRate)}/>
+                <ReactTooltip className={"common__tooltip-content"} effect="solid" getContent={() => getContentForTooltipRate(props.fluctuatingRate, props.sourceToken.symbol)}/>
               </div>
             )}
           </div>
