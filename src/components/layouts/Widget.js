@@ -70,6 +70,8 @@ class Widget extends PureComponent {
 
       this.props.setAccountWithBalances(account);
     } else if (action === 'transaction' && eventData.data.transaction_id) {
+      console.log(eventData.data);
+      console.log(eventData.transaction_id);
       const transactionId = eventData.data.transaction_id;
       this.props.completeSwap(transactionId);
     }
