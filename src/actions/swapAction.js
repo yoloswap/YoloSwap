@@ -20,10 +20,10 @@ export function swapToken(sendTransaction = false) {
   }
 }
 
-export function completeSwap(transactionId) {
+export function completeSwap(txResult) {
   return {
     type: swapActionTypes.COMPLETE_SWAP,
-    payload: transactionId
+    payload: txResult
   }
 }
 

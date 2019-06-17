@@ -51,14 +51,7 @@ function* swapToken(action) {
         minConversionRate: minConversionRate,
       });
 
-      const transactionId = result.transaction_id;
-
-      if (!transactionId) {
-        yield call(handleSwapError, { message: 'Transaction ID is no where to be found.' });
-        return;
-      }
-
-      yield call(completeSwap, { payload: transactionId });
+      yield call(completeSwap, { payload: result });
     }
   } catch (e) {
     yield call(handleSwapError, e);
@@ -66,8 +59,15 @@ function* swapToken(action) {
 }
 
 function* completeSwap(action) {
+  const txResult = action.payload;
+  const transactionId = txResult.transaction_id;
+
+  if (!transactionId) {
+    yield call(handleSwapError, txResult);
+    return;
+  }
+
   const swap = yield select(getSwapState);
-  const transactionId = action.payload;
   const srcAmount = swap.sourceAmount;
   const srcSymbol = swap.sourceToken.symbol;
   const destAmount = swap.destAmount;
