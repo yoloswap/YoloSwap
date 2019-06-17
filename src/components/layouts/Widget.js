@@ -11,7 +11,7 @@ function mapDispatchToProps(dispatch) {
   return {
     setWidgetMode: () => {dispatch(globalActions.setWidgetMode())},
     setAccountWithBalances: (account) => {dispatch(accountActions.setAccountWithBalances(account))},
-    completeSwap: (transactionId, srcAmount, sourceTokenSymbol, destAmount, destSymbol) => {dispatch(swapActions.completeSwap(transactionId, srcAmount, sourceTokenSymbol, destAmount, destSymbol))},
+    completeSwap: (transactionId) => {dispatch(swapActions.completeSwap(transactionId))},
   }
 }
 
@@ -70,8 +70,6 @@ class Widget extends PureComponent {
 
       this.props.setAccountWithBalances(account);
     } else if (action === 'transaction' && eventData.data.transaction_id) {
-      console.log(eventData.data);
-      console.log(eventData.transaction_id);
       const transactionId = eventData.data.transaction_id;
       this.props.completeSwap(transactionId);
     }

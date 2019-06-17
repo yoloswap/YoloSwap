@@ -20,10 +20,10 @@ export function swapToken(sendTransaction = false) {
   }
 }
 
-export function completeSwap(transactionId, srcAmount, sourceTokenSymbol, destAmount, destSymbol) {
+export function completeSwap(transactionId) {
   return {
     type: swapActionTypes.COMPLETE_SWAP,
-    payload: { transactionId, srcAmount, sourceTokenSymbol, destAmount, destSymbol }
+    payload: transactionId
   }
 }
 
