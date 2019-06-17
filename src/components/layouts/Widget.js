@@ -19,14 +19,13 @@ class Widget extends PureComponent {
   componentWillMount = () => {
     this.props.setWidgetMode();
 
-    // window.parent.postMessage('{"action":"getAccount","data":{"account":"kybermainnet","authority":"active","publicKey":"EOS6qp6PrHYc9KTo2oWcqQXtNLDSkRZiTMWdfg7ygMnzGSRFDnnEU"}}', "*");
-
-    this.sendHeight();
+    this.sendHeightInterval = setInterval(this.sendHeight, 2000);
 
     window.addEventListener('message', this.watchPostMessages);
   };
 
   componentWillUnmount = () => {
+    clearInterval(this.sendHeightInterval);
     window.removeEventListener('message', this.watchPostMessages);
   };
 
@@ -62,7 +61,7 @@ class Widget extends PureComponent {
   };
 
   watchPostMessages = (event) => {
-    const eventData = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+    const eventData = this.isJson(event.data) ? JSON.parse(event.data) : event.data;
     const action = eventData.action;
 
     console.log('=================EVENT=================');
@@ -77,6 +76,16 @@ class Widget extends PureComponent {
       const transactionId = eventData.data.transaction_id;
       this.props.completeSwap(transactionId);
     }
+  };
+
+  isJson = (string) => {
+    try {
+      JSON.parse(string);
+    } catch (e) {
+      return false;
+    }
+
+    return true;
   };
 
   render() {
