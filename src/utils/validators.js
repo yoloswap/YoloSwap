@@ -14,3 +14,13 @@ export function filterInputNumber(event, value, preVal) {
 
   return true
 }
+
+export function isStringJson(string) {
+  try {
+    JSON.parse(string);
+  } catch (e) {
+    return false;
+  }
+
+  return true;
+}
