@@ -6,6 +6,7 @@ import * as accountActions from "../../actions/accountAction";
 import * as swapActions from "../../actions/swapAction";
 import { getMemo } from "../../services/network_service";
 import { connect } from "react-redux";
+import { isStringJson } from "../../utils/validators";
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -61,7 +62,7 @@ class Widget extends PureComponent {
   };
 
   watchPostMessages = (event) => {
-    const eventData = this.isJson(event.data) ? JSON.parse(event.data) : event.data;
+    const eventData = isStringJson(event.data) ? JSON.parse(event.data) : event.data;
     const action = eventData.action;
 
     if (action === 'getAccount') {
@@ -73,16 +74,6 @@ class Widget extends PureComponent {
       const txResult = eventData.data;
       this.props.completeSwap(txResult);
     }
-  };
-
-  isJson = (string) => {
-    try {
-      JSON.parse(string);
-    } catch (e) {
-      return false;
-    }
-
-    return true;
   };
 
   render() {

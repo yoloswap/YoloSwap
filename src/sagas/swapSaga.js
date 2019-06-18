@@ -7,6 +7,7 @@ import { formatAmount } from "../utils/helpers";
 import envConfig from "../config/env";
 import appConfig from "../config/app";
 import { getTokenPairRate, tokenTrade } from "./serviceSaga/eosServiceSaga";
+import { isStringJson } from "../utils/validators";
 
 const getSwapState = state => state.swap;
 const getAccountState = state => state.account;
@@ -59,7 +60,7 @@ function* swapToken(action) {
 }
 
 function* completeSwap(action) {
-  const txResult = action.payload;
+  const txResult = isStringJson(action.payload) ? JSON.parse(action.payload) : action.payload;
   const transactionId = txResult.transaction_id;
 
   if (!transactionId) {
