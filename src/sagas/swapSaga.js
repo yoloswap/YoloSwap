@@ -54,6 +54,7 @@ function* swapToken(action) {
       yield call(completeSwap, { payload: result });
     }
   } catch (e) {
+    console.log('============ERROR on call to trade function===============');
     yield call(handleSwapError, e);
   }
 }
@@ -62,7 +63,13 @@ function* completeSwap(action) {
   const txResult = action.payload;
   const transactionId = txResult.transaction_id;
 
+  console.log('=========Result==========');
+  console.log(JSON.stringify(txResult));
+
+  console.log('=========TXID==========');
+  console.log(transactionId);
   if (!transactionId) {
+    console.log('============ERROR because no transaction_id found===============');
     yield call(handleSwapError, txResult);
     return;
   }
