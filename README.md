@@ -1,6 +1,6 @@
 # YoloSwap
 
-## Available Scripts
+## I. Available Scripts
 
 ### `npm run local`
 
@@ -10,9 +10,9 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 ### `REACT_APP_ENV=local node server/server.js`
 Run the API in the development mode, the server is served in port 3002 [http://localhost:3002](http://localhost:3002)
 
-## Available APIs
+## II. Available APIs
 
-### 1. /getRate
+### II.1. /getRate
 (GET) Get rate for a token pair by source token symbol, destination token symbol & source amount.
 
 ##### Parameters:
@@ -55,7 +55,7 @@ Run the API in the development mode, the server is served in port 3002 [http://l
 |message|String|Response message|
 |data|Number|Rate of the requested token pair|
 
-### 2. /fetchMarketRates
+### II.2. /fetchMarketRates
 (GET) Fetching data of all available tokens supported in YoloSwap with buyRate & sellRate by EOS and USD. Also, 24h change percentage is returned that is fetched by CoinGecko API.
 
 ##### Parameters: N/A
@@ -100,7 +100,7 @@ Run the API in the development mode, the server is served in port 3002 [http://l
 |usdChangePercentage|Number|24h change percentage by USD|
 |eosChangePercentage|Number|24h change percentage by EOS|
 
-## YOLO Integration by Iframe
+## III. YOLO Integration by Iframe
 
 ```
 <iframe src="https://yoloswap.com/widget" scrolling="no"></iframe>
@@ -132,7 +132,7 @@ watchPostMessages(event) {
 };
 ```
 
-### Events fired by Yolo
+### III.1 Events fired by Yolo
 #### setHeight
 To prevent iframe from scrolling inside itself, Yolo will send the exact height of the current content to your app. You should watch this event and set your iframe height accordingly.
 
@@ -169,7 +169,7 @@ This is the transaction data that your user should sign to implement a trade.
 }
 ```
 
-### Events fired by your App
+### III.2 Events fired by your App
 #### getAccount
 Since user will import their account through some methods offered by your app, you should send imported account data to Yolo whenever user signed in for balance fetching and other tasks.
 
