@@ -79,6 +79,14 @@ envConfig.TOKENS = [
     "logo": "bnt.svg",
   },
   {
+    "id": "carbon",
+    "name": "Carbon",
+    "symbol": "CUSD",
+    "account": "stablecarbon",
+    "precision": 2,
+    "logo": "cusd.png",
+  },
+  {
     "id": "chintai",
     "name": "Chintai",
     "symbol": "CHEX",
