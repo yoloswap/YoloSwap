@@ -3,6 +3,7 @@ import SwapView from './SwapView';
 import { connect } from 'react-redux';
 import * as swapActions from "../../actions/swapAction";
 import * as accountAction from "../../actions/accountAction";
+import * as globalActions from "../../actions/globalAction";
 import { filterInputNumber } from "../../utils/validators";
 
 function mapStateToProps(store) {
@@ -11,6 +12,7 @@ function mapStateToProps(store) {
   const swap = store.swap;
   const transaction = store.transaction;
   const tokens = token.tokens;
+  const widgetMode = store.global.widgetMode;
 
   return {
     tokens: tokens,
@@ -27,6 +29,7 @@ function mapStateToProps(store) {
     isBalanceLoading: account.isBalanceLoading,
     isScatterLoading: account.isScatterLoading,
     isConfirmLoading: account.isConfirmLoading,
+    widgetMode: widgetMode,
   };
 }
 
@@ -36,11 +39,12 @@ function mapDispatchToProps(dispatch) {
     setDestToken: (token) => {dispatch(swapActions.setDestToken(token))},
     setSourceAmount: (amount) => {dispatch(swapActions.setSourceAmount(amount))},
     fetchTokenPairRate: () => {dispatch(swapActions.fetchTokenPairRate())},
-    swapToken: () => {dispatch(swapActions.swapToken())},
+    swapToken: (sendTransaction) => {dispatch(swapActions.swapToken(sendTransaction))},
     setError: (message) => {dispatch(swapActions.setError(message))},
     setSourceAndDestToken: (srcToken, destToken) => {dispatch(swapActions.setSourceAndDestToken(srcToken, destToken))},
     connectToScatter: () => {dispatch(accountAction.connectToScatter())},
     setScatterLoading: (isLoading) => {dispatch(accountAction.setScatterLoading(isLoading))},
+    setGlobalError: (error) => {dispatch(globalActions.setGlobalError(true, error))},
   }
 }
 
@@ -64,9 +68,14 @@ class Swap extends Component {
     }
 
     if (!this.props.isAccountImported) {
-      this.props.connectToScatter();
+      if (this.props.widgetMode) {
+        this.props.setGlobalError("Please logging in to make a swap");
+      } else {
+        this.props.connectToScatter();
+      }
     } else {
-      this.props.swapToken();
+      const sendTransaction = this.props.sendTransaction ? this.props.sendTransaction : false;
+      this.props.swapToken(sendTransaction);
     }
   };
 

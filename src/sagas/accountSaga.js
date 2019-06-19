@@ -78,8 +78,16 @@ function* fetchBalances() {
   yield put(accountActions.setBalanceLoading(false));
 }
 
+function* setAccountWithBalances(action) {
+  const account = action.payload;
+
+  yield put(accountActions.setScatterAccount(account));
+  yield call(fetchBalances);
+}
+
 export default function* accountWatcher() {
   yield takeLatest(accountActions.accountActionTypes.CONNECT_TO_SCATTER, connectToScatter);
   yield takeLatest(accountActions.accountActionTypes.DISCONNECT_FROM_SCATTER, disconnectFromScatter);
   yield takeLatest(accountActions.accountActionTypes.FETCH_BALANCE, fetchBalances);
+  yield takeLatest(accountActions.accountActionTypes.SET_ACCOUNT_WITH_BALANCES, setAccountWithBalances);
 }

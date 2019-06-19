@@ -58,6 +58,12 @@
     }
   }
 
+  @media (max-width: 600px) {
+    &__content {
+      display: none;
+    }
+  }
+
   @media (max-width: 450px) {
     &::before {
       background: url($image-path + 'backgrounds/home-mobile.svg') 0;
