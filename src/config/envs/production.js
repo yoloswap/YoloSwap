@@ -85,6 +85,7 @@ envConfig.TOKENS = [
     "account": "stablecarbon",
     "precision": 2,
     "logo": "cusd.png",
+    "listingTime": "6-19-2019"
   },
   {
     "id": "chintai",
