@@ -25,7 +25,7 @@ Run the API in the development mode, the server is served in port 3002 [http://l
 
 ##### Success Response Example:
 
-```javascript
+```
 {
     status: {
         code: 200,
@@ -37,7 +37,7 @@ Run the API in the development mode, the server is served in port 3002 [http://l
 
 ##### Error Response Example:
 
-```javascript
+```
 {
     status: {
         code: 400,
@@ -62,7 +62,7 @@ Run the API in the development mode, the server is served in port 3002 [http://l
 
 ##### Success Response Example:
 
-```javascript
+```
 [
     {
         id: "everipedia",
@@ -99,3 +99,98 @@ Run the API in the development mode, the server is served in port 3002 [http://l
 |buyRateUsd|Number|Buy rate by USD|
 |usdChangePercentage|Number|24h change percentage by USD|
 |eosChangePercentage|Number|24h change percentage by EOS|
+
+## YOLO Integration by Iframe
+To communicate between iframe and embedded Yolo, we have to use [postMessage](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) with some defined events.
+
+```
+<iframe src="https://yoloswap.com/widget" scrolling="no"></iframe>
+```
+
+*Note: Every event data should be wrapped in a json string (by using `JSON.stringify`) before sending via `postMessage`.
+
+### Events fired by Yolo
+#### setHeight
+To prevent iframe from scrolling inside itself, Yolo will send the exact height of the current content to your app every 2 seconds. You should watch this event and set your iframe height accordingly.
+
+```
+{
+    action: "setHeight",
+    data: { height: 1600 }
+}
+```
+
+#### transaction
+This is the transaction data that your user should sign to implement a trade
+
+```
+{
+    action: "transaction",
+    origin: true,
+    data: {
+        actions: [{
+            account: "eosio.token",
+            authorization: {
+                actor: "useraccount",
+                permission: "active"
+            },
+            data: {
+                from: "useraccount",
+                to: "yolonetwork1",
+                quantity: "0.0010 EOS",
+                memo: "3 IQ,everipediaiq,1365.0828829752868"
+            }
+            name: "transfer"
+        }]
+    }
+}
+```
+
+### Events fired by your App
+#### getAccount
+Since user will import their account through some methods offered by your app, you should send imported account data to Yolo whenever user signed in for balance fetching and other tasks.
+
+```
+{
+    action: "getAccount",
+    data: {
+        account: "kybermainnet",
+        authority: "active",
+        publicKey: "EOS6qp6PrHo2oWc...TMWdfg7GSRFDnnEU"
+    }
+}
+```
+#### transaction
+After user signed the transaction data, `transaction` event have to be sent to Yolo for displaying transaction ID on success or error message on failure to the frontend.
+
+On success:
+
+```
+{
+    action: "transaction",
+    data: {
+        broadcast: true,
+        transaction_id: "e6d776c5b5a74...92d1e9195bd",
+        ...
+    }
+}
+```
+
+On failure:
+```
+{
+    action: "transaction",
+    data: {
+        code: 500,
+        error: {
+            code: 3090004,
+            details: [{
+                message: 'Error message'
+            }],
+            name: 'error_message',
+            what: 'Error message'
+        },
+        message: 'Error message'
+    }
+}
+```

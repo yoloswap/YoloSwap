@@ -7,6 +7,7 @@ import * as swapActions from "../../actions/swapAction";
 import { getMemo } from "../../services/network_service";
 import { connect } from "react-redux";
 import { isStringJson } from "../../utils/validators";
+import appConfig from "../../config/app";
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -17,8 +18,18 @@ function mapDispatchToProps(dispatch) {
 }
 
 class Widget extends PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      appHeight: 0,
+    }
+  }
+
   componentWillMount = () => {
     this.props.setWidgetMode();
+
+    window.parent.postMessage('{"action":"getAccount","data":{"account":"kybermainnet","authority":"active","publicKey":"EOS6qp6PrHYc9KTo2oWcqQXtNLDSkRZiTMWdfg7ygMnzGSRFDnnEU"}}', "*");
 
     this.sendHeightInterval = setInterval(this.sendHeight, 2000);
 
@@ -32,7 +43,13 @@ class Widget extends PureComponent {
 
   sendHeight = () => {
     const body = document.getElementsByTagName('body')[0];
-    let height = body.clientHeight < 1567 ? 1567 : body.clientHeight;
+    let height = body.clientHeight < appConfig.MIN_APP_HEIGHT ? appConfig.MIN_APP_HEIGHT : body.clientHeight;
+
+    if (height === this.state.appHeight) {
+      return;
+    }
+
+    this.setState({ appHeight: height });
 
     window.parent.postMessage(JSON.stringify({
       action: 'setHeight',
@@ -50,6 +67,7 @@ class Widget extends PureComponent {
 
     window.parent.postMessage(JSON.stringify({
       action: 'transaction',
+      origin: true,
       data: {
         actions: [{
           account: params.srcTokenAccount,
@@ -70,7 +88,7 @@ class Widget extends PureComponent {
       account.name = account.account;
 
       this.props.setAccountWithBalances(account);
-    } else if (action === 'transaction') {
+    } else if (action === 'transaction' && !eventData.origin) {
       const txResult = eventData.data;
       this.props.completeSwap(txResult);
     }
