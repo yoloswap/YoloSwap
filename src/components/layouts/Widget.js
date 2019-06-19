@@ -29,11 +29,9 @@ class Widget extends PureComponent {
   componentWillMount = () => {
     this.props.setWidgetMode();
 
-    window.parent.postMessage('{"action":"getAccount","data":{"account":"kybermainnet","authority":"active","publicKey":"EOS6qp6PrHYc9KTo2oWcqQXtNLDSkRZiTMWdfg7ygMnzGSRFDnnEU"}}', "*");
-
     this.sendHeightInterval = setInterval(this.sendHeight, 2000);
 
-    window.addEventListener('message', this.watchPostMessages);
+    window.addEventListener('message', this.watchPostMessages, false);
   };
 
   componentWillUnmount = () => {

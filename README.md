@@ -101,17 +101,40 @@ Run the API in the development mode, the server is served in port 3002 [http://l
 |eosChangePercentage|Number|24h change percentage by EOS|
 
 ## YOLO Integration by Iframe
-To communicate between iframe and embedded Yolo, we have to use [postMessage](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) with some defined events.
 
 ```
 <iframe src="https://yoloswap.com/widget" scrolling="no"></iframe>
 ```
 
-*Note: Every event data should be wrapped in a json string (by using `JSON.stringify`) before sending via `postMessage`.
+To communicate between iframe and embedded Yolo, we have to use [postMessage](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) with some defined events.
+
+Sample snippet to send data through `postMessage`:
+```
+HTMLIFrameElement.contentWindow.postMessage(JSON.stringify({
+    action: "action",
+    data: dataObject
+}), "https://yoloswap.com");
+```
+
+Sample snippet to receive data from Yolo:
+```
+window.addEventListener('message', watchPostMessages, false);
+
+watchPostMessages(event) {
+    const eventData = JSON.parse(event.data);
+    const action = eventData.action;
+
+    if (action === 'setHeight') {
+      ...
+    } else if (action === 'transaction') {
+     ...
+    }
+};
+```
 
 ### Events fired by Yolo
 #### setHeight
-To prevent iframe from scrolling inside itself, Yolo will send the exact height of the current content to your app every 2 seconds. You should watch this event and set your iframe height accordingly.
+To prevent iframe from scrolling inside itself, Yolo will send the exact height of the current content to your app. You should watch this event and set your iframe height accordingly.
 
 ```
 {
@@ -121,7 +144,7 @@ To prevent iframe from scrolling inside itself, Yolo will send the exact height 
 ```
 
 #### transaction
-This is the transaction data that your user should sign to implement a trade
+This is the transaction data that your user should sign to implement a trade.
 
 ```
 {
