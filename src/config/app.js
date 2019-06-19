@@ -7,6 +7,7 @@ const appConfig = {
   SCATTER_ERROR_TYPE: 'scatter',
   DEFAULT_RATE_AMOUNT: 1,
   NEW_LISTING_TOKEN_DAYS: 7,
+  MIN_APP_HEIGHT: 1600,
 };
 
 export default appConfig;
