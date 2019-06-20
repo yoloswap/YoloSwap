@@ -71,6 +71,11 @@
       pointer-events: visible;
     }
   }
+
+  &--widget {
+    top: 100px;
+    transform: translateX(-50%);
+  }
 }
 
 .scatter-modal {
