@@ -10,7 +10,7 @@ export default class Modal extends PureComponent {
   render() {
     return (
       <div className={"modal-overlay" + (this.props.isActive ? " modal-overlay--active" : "")} onClick={this.handleClose}>
-        <div className={"modal" + (this.props.isActive ? " modal--active" : "")} style={this.props.maxWidth ? {maxWidth: `${this.props.maxWidth}px`} : {}}>
+        <div className={`modal ${this.props.isActive ? "modal--active" : ""} ${this.props.widgetMode ? "modal--widget" : ""}`} style={this.props.maxWidth ? {maxWidth: `${this.props.maxWidth}px`} : {}}>
           <div className={"modal__content"}>
             <div className={"modal__header"}>
               <div className={"modal__close-btn"} onClick={this.handleClose}>×</div>

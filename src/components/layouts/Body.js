@@ -57,7 +57,7 @@ class Body extends PureComponent {
             srcAmountRef={this.srcAmountRef}
           />
           <Market srcAmountRef={this.srcAmountRef}/>
-          <Modal isActive={this.props.global.isErrorActive} handleClose={() => this.props.unsetGlobalError()} title="Error">
+          <Modal widgetMode={this.props.global.widgetMode} isActive={this.props.global.isErrorActive} handleClose={() => this.props.unsetGlobalError()} title="Error">
             <div className={"error-modal"}>
               {this.props.global.errorType !== appConfig.SCATTER_ERROR_TYPE && (
                 <div className={"error-modal__message"}>{this.props.global.errorMessage}</div>
