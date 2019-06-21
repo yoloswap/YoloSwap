@@ -1,6 +1,7 @@
 import cors from 'cors';
 import express from 'express';
 import envConfig from "../src/config/env";
+import appConfig from "../src/config/app";
 import { fetchTokensByIds } from "../src/services/coingecko_service";
 import * as _ from 'underscore';
 import { formatNumberWithZeroDigit } from "../src/utils/helpers";
@@ -8,17 +9,19 @@ import { getTokenPairRate, getAllRates, getEOSInstance } from "./services/eosSer
 
 const app = express();
 const port = 3002;
-const rateFetchingInterval = 10000;
+const rateFetchingInterval = 500;
+const marketRateFetchingInterval = 10000;
 const eos = getEOSInstance();
-let rates = [], srcAmounts = [], srcSymbols = [], destSymbols = [], tokenIds = [];
+
+let globalRates = [], globalMarketRates = [], globalSrcAmounts = [], globalSrcSymbols = [], globalDestSymbols = [], globalTokenIds = [];
 
 envConfig.TOKENS.forEach((token) => {
-  tokenIds.push(token.id);
+  globalTokenIds.push(token.id);
 
   if (token.id !== envConfig.EOS.id) {
-    srcSymbols.push(token.symbol);
-    destSymbols.push(envConfig.EOS.symbol);
-    srcAmounts.push(1);
+    globalSrcSymbols.push(token.symbol);
+    globalDestSymbols.push(envConfig.EOS.symbol);
+    globalSrcAmounts.push(1);
   }
 });
 
@@ -42,7 +45,14 @@ async function getRateAPI(req, res) {
     let rate = srcAmount;
 
     if (srcSymbol !== destSymbol) {
-      rate = await getTokenPairRate(eos, srcSymbol, destSymbol, srcAmount);
+      if (+srcAmount !== appConfig.DEFAULT_RATE_AMOUNT) {
+        rate = await getTokenPairRate(eos, srcSymbol, destSymbol, srcAmount);
+      } else {
+        const isBuy = srcSymbol === envConfig.EOS.symbol;
+        const tokenSymbol = isBuy ? destSymbol : srcSymbol;
+        const token = findTokenBySymbol(globalRates, tokenSymbol);
+        rate = isBuy ? token.buyRate : token.sellRate;
+      }
 
       if (!rate) {
         res.send(getAPIFReturnFormat(0, 400, 'Our reserves cannot handle your amount at the moment. Please try again later'));
@@ -52,33 +62,58 @@ async function getRateAPI(req, res) {
 
     res.send(getAPIFReturnFormat(formatNumberWithZeroDigit(rate)));
   } catch (e) {
-    console.log(e);
     res.send(getAPIFReturnFormat(0, 500, 'There is something wrong with the API'));
   }
 }
 
 function fetchMarketRatesAPI(req, res) {
-  res.send(rates);
+  res.send(globalMarketRates);
 }
 
-fetchMarketRatesInterval();
-setInterval(fetchMarketRatesInterval, rateFetchingInterval);
+setInterval(fetchMarketRatesInterval, marketRateFetchingInterval);
+setInterval(fetchRatesInterval, rateFetchingInterval);
+
+async function fetchRatesInterval() {
+  try {
+    const sellRates = await getAllRates(eos, globalSrcSymbols, globalDestSymbols, globalSrcAmounts);
+    const buyRates = await getAllRates(eos, globalDestSymbols, globalSrcSymbols, globalSrcAmounts);
+
+    let tokenRates = [];
+
+    globalSrcSymbols.forEach((tokenSymbol, index) => {
+      const sellRate = sellRates[index];
+      const buyRate = buyRates[index];
+
+      tokenRates.push({
+        symbol: tokenSymbol,
+        sellRate: sellRate,
+        buyRate: buyRate,
+      });
+    });
+
+    globalRates = tokenRates;
+  } catch(e) {
+    console.log(e);
+  }
+}
 
 async function fetchMarketRatesInterval() {
   try {
-    const sellRates = await getAllRates(eos, srcSymbols, destSymbols, srcAmounts);
-    const buyRates = await getAllRates(eos, destSymbols, srcSymbols, srcAmounts);
-
-    const usdBasedTokens = await fetchTokensByIds(tokenIds);
-    const eosBasedTokens = await fetchTokensByIds(tokenIds, envConfig.EOS.id);
+    const usdBasedTokens = await fetchTokensByIds(globalTokenIds);
+    const eosBasedTokens = await fetchTokensByIds(globalTokenIds, envConfig.EOS.id);
     const eosData = findTokenById(usdBasedTokens, envConfig.EOS.id);
     const eosUSDPrice = eosData && eosData.current_price ? eosData.current_price : 0;
+
     let tokenRates = [];
 
-    srcSymbols.forEach((tokenSymbol, index) => {
-      const sellRate = sellRates[index];
-      const buyRate = buyRates[index] ? 1 / buyRates[index] : 0;
-      const tokenId = tokenIds[index + 1];
+    globalSrcSymbols.forEach((tokenSymbol, index) => {
+      const token = findTokenBySymbol(globalRates, tokenSymbol);
+
+      if (!token) return;
+
+      const sellRate = token.sellRate ? token.sellRate : 0;
+      const buyRate = token.buyRate ? 1 / token.buyRate : 0;
+      const tokenId = globalTokenIds[index + 1];
       const usdBasedToken = findTokenById(usdBasedTokens, tokenId);
       const eosBasedToken = findTokenById(eosBasedTokens, tokenId);
 
@@ -94,7 +129,7 @@ async function fetchMarketRatesInterval() {
       });
     });
 
-    rates = tokenRates;
+    globalMarketRates = tokenRates;
   } catch(e) {
     console.log(e);
   }
@@ -102,8 +137,8 @@ async function fetchMarketRatesInterval() {
 
 function validateGetRateParams(srcSymbol, destSymbol, srcAmount) {
   let error = false;
-  const srcToken = findTokenBySymbol(srcSymbol);
-  const destToken = findTokenBySymbol(destSymbol);
+  const srcToken = findTokenBySymbol(envConfig.TOKENS, srcSymbol);
+  const destToken = findTokenBySymbol(envConfig.TOKENS, destSymbol);
   const eosSymbol = envConfig.EOS.symbol;
   const sourceAmountDecimals = srcAmount ? (srcAmount.toString()).split(".")[1] : false;
 
@@ -132,8 +167,8 @@ function findTokenById(tokens, tokenId) {
   return _.find(tokens, (token) => { return token.id === tokenId });
 }
 
-function findTokenBySymbol(tokenSymbol) {
-  return _.find(envConfig.TOKENS, (token) => { return token.symbol === tokenSymbol });
+function findTokenBySymbol(tokens, tokenSymbol) {
+  return _.find(tokens, (token) => { return token.symbol === tokenSymbol });
 }
 
 function getAPIFReturnFormat(data, statusCode = 200, message = 'Success') {
