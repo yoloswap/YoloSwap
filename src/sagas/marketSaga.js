@@ -1,7 +1,6 @@
 import { delay } from 'redux-saga';
 import { takeLatest, call, put, select } from 'redux-saga/effects';
 import * as marketActions from "../actions/marketAction";
-import * as tokenActions from "../actions/tokenAction";
 import appConfig from "../config/app";
 import envConfig from "../config/env";
 import { callFetchMarketRates } from "../services/api_service";
@@ -27,10 +26,8 @@ function* fetchMarketRates(isBackgroundLoading = false) {
     let tokensWithRate = yield call(getTokensWithRateFromAPI);
 
     if (!tokensWithRate) {
-      tokensWithRate = yield call(getTokensWithRateFromBlockChain);
+      yield call(getTokensWithRateFromBlockChain);
     }
-
-    yield put(tokenActions.setTokens(tokensWithRate));
   } catch (e) {
     console.log(e);
   }
@@ -42,31 +39,33 @@ function* fetchMarketRates(isBackgroundLoading = false) {
 
 function* getTokensWithRateFromAPI() {
   let tokens = yield select(getTokens);
-  let marketRateData;
+  let marketRateTokens;
 
   try {
-    marketRateData = yield call(callFetchMarketRates);
+    marketRateTokens = yield call(callFetchMarketRates);
   } catch (e) {
     return false;
   }
 
-  if (!marketRateData.length) {
+  if (!marketRateTokens.length) {
     return false;
   }
 
-  return tokens.map((token, index) => {
+  return tokens.map(token => {
     if (token.symbol === envConfig.EOS.symbol) {
       return token;
     }
 
-    const tokenMarketRate = marketRateData[index - 1];
+    const marketToken = marketRateTokens.find(marketRateToken => {
+      return token.symbol === marketRateToken.token;
+    });
 
-    token.sellRate = tokenMarketRate.sellRate;
-    token.buyRate = tokenMarketRate.buyRate;
-    token.sellRateUsd = tokenMarketRate.sellRateUsd;
-    token.buyRateUsd = tokenMarketRate.buyRateUsd;
-    token.usdChangePercentage = tokenMarketRate.usdChangePercentage;
-    token.eosChangePercentage = tokenMarketRate.eosChangePercentage;
+    token.sellRate = marketToken.sellRate;
+    token.buyRate = marketToken.buyRate;
+    token.sellRateUsd = marketToken.sellRateUsd;
+    token.buyRateUsd = marketToken.buyRateUsd;
+    token.usdChangePercentage = marketToken.usdChangePercentage;
+    token.eosChangePercentage = marketToken.eosChangePercentage;
 
     return token;
   });

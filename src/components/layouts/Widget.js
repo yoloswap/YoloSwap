@@ -3,17 +3,20 @@ import React, { PureComponent } from 'react';
 import './../../assets/scss/index.scss';
 import * as globalActions from "../../actions/globalAction";
 import * as accountActions from "../../actions/accountAction";
+import * as tokenActions from "../../actions/tokenAction";
 import * as swapActions from "../../actions/swapAction";
 import { getMemo } from "../../services/network_service";
 import { connect } from "react-redux";
 import { isStringJson } from "../../utils/validators";
 import appConfig from "../../config/app";
+import envConfig from "../../config/env";
 
 function mapDispatchToProps(dispatch) {
   return {
     setWidgetMode: () => {dispatch(globalActions.setWidgetMode())},
     setAccountWithBalances: (account) => {dispatch(accountActions.setAccountWithBalances(account))},
     completeSwap: (txResult) => {dispatch(swapActions.completeSwap(txResult))},
+    setTokens: (tokens) => {dispatch(tokenActions.setTokens(tokens))},
   }
 }
 
@@ -88,7 +91,15 @@ class Widget extends PureComponent {
       this.props.setAccountWithBalances(account);
     } else if (action === 'transaction' && !eventData.origin) {
       const txResult = eventData.data;
+
       this.props.completeSwap(txResult);
+    } else if (action === 'getConfig') {
+      const limitedTokens = eventData.data.tokens;
+      const tokens = envConfig.TOKENS.filter(token => {
+        return limitedTokens.includes(token.symbol) || token.symbol === envConfig.EOS.symbol;
+      });
+
+      this.props.setTokens(tokens)
     }
   };
 
