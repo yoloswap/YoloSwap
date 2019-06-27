@@ -33,7 +33,7 @@ const routing = (
         <Switch>
           <Route exact path="/swap/:srcSymbol-:destSymbol" component={App} />
           <Route exact path="/widget" component={Widget} />
-          <Redirect to={`/swap/EOS-${envConfig.TOKENS[1].symbol}`}/>
+          <Redirect to={`/swap/eos-${envConfig.TOKENS[1].symbol.toLowerCase()}`}/>
         </Switch>
       </div>
     </Router>
