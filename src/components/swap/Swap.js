@@ -5,6 +5,7 @@ import * as swapActions from "../../actions/swapAction";
 import * as accountAction from "../../actions/accountAction";
 import * as globalActions from "../../actions/globalAction";
 import { filterInputNumber } from "../../utils/validators";
+import { findTokenBySymbol } from "../../utils/helpers";
 
 function mapStateToProps(store) {
   const token = store.token;
@@ -59,9 +60,30 @@ class Swap extends Component {
 
   componentDidMount = () => {
     this.props.fetchTokenPairRate();
+    this.setSrcAndDestTokenFromParams();
   };
 
-  handleClickSwapButton = () => {
+  setSrcAndDestTokenFromParams = () => {
+    const tokens = this.props.tokens;
+    const srcSymbolParam = this.props.srcSymbolParam;
+    const destSymbolParam = this.props.destSymbolParam;
+
+    if (!srcSymbolParam || !destSymbolParam) return;
+
+    let srcToken = findTokenBySymbol(tokens, srcSymbolParam);
+    let destToken = findTokenBySymbol(tokens, destSymbolParam);
+
+    if (!srcToken || !destToken) {
+      srcToken = tokens[0];
+      destToken = tokens[1];
+      this.props.changeRouteParams(srcToken.symbol, destToken.symbol);
+    }
+
+    this.props.setSourceToken(srcToken);
+    this.props.setDestToken(destToken);
+  };
+
+  confirmSwap = () => {
     if (!this.props.sourceAmount) {
       this.props.setError("Source amount is required to make a swap");
       return;
@@ -79,7 +101,7 @@ class Swap extends Component {
     }
   };
 
-  handleSourceAmountChange = (e) => {
+  setSourceAmount = (e) => {
     const isValueValid = filterInputNumber(e, e.target.value, this.props.sourceAmount);
 
     if (!isValueValid) return;
@@ -87,19 +109,20 @@ class Swap extends Component {
     this.props.setSourceAmount(e.target.value);
   };
 
-  handleClickSwapIcon = () => {
+  switchTokens = () => {
     this.props.setSourceAndDestToken(this.props.destToken, this.props.sourceToken);
+    this.props.changeRouteParams(this.props.destToken.symbol, this.props.sourceToken.symbol);
   };
 
-  handleCloseScatterModal = () => {
+  closeScatterModal = () => {
     this.props.setScatterLoading(false);
   };
 
-  handleOpenSwapBalanceBox = () => {
+  openBalanceDropdown = () => {
     this.setState({ isSwapBalanceBoxActive: true });
   };
 
-  handleCloseSwapBalanceBox = () => {
+  closeBalanceDropdown = () => {
     this.setState({ isSwapBalanceBoxActive: false })
   };
 
@@ -110,21 +133,22 @@ class Swap extends Component {
     if (!+sourceAmountByPercentage) sourceAmountByPercentage = 0;
 
     this.props.setSourceAmount(sourceAmountByPercentage);
-    this.handleCloseSwapBalanceBox();
+    this.closeBalanceDropdown();
+  };
+
+  setSourceToken = (token) => {
+    this.props.setSourceToken(token);
+    this.props.changeRouteParams(token.symbol, this.props.destToken.symbol);
+  };
+
+  setDestToken = (token) => {
+    this.props.setDestToken(token);
+    this.props.changeRouteParams(this.props.sourceToken.symbol, token.symbol);
   };
 
   render() {
     return (
       <SwapView
-        handleClickSwapButton={this.handleClickSwapButton}
-        handleClickSwapIcon={this.handleClickSwapIcon}
-        handleSelectSourceToken={this.props.setSourceToken}
-        handleSelectDestToken={this.props.setDestToken}
-        handleSourceAmountChange={this.handleSourceAmountChange}
-        handleCloseScatterModal={this.handleCloseScatterModal}
-        handleOpenSwapBalanceBox={this.handleOpenSwapBalanceBox}
-        handleCloseSwapBalanceBox={this.handleCloseSwapBalanceBox}
-        addSrcAmountByBalancePercentage={this.addSrcAmountByBalancePercentage}
         tx={this.props.tx}
         sourceToken={this.props.sourceToken}
         destToken={this.props.destToken}
@@ -141,6 +165,15 @@ class Swap extends Component {
         isConfirmLoading={this.props.isConfirmLoading}
         isScatterLoading={this.props.isScatterLoading}
         srcAmountRef={this.props.srcAmountRef}
+        setSourceToken={this.setSourceToken}
+        setDestToken={this.setDestToken}
+        confirmSwap={this.confirmSwap}
+        switchTokens={this.switchTokens}
+        setSourceAmount={this.setSourceAmount}
+        closeScatterModal={this.closeScatterModal}
+        openBalanceDropdown={this.openBalanceDropdown}
+        closeBalanceDropdown={this.closeBalanceDropdown}
+        addSrcAmountByBalancePercentage={this.addSrcAmountByBalancePercentage}
       />
     )
   }

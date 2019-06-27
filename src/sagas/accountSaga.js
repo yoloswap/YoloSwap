@@ -1,5 +1,4 @@
 import { takeLatest, call, put, select } from 'redux-saga/effects';
-import * as tokenAction from "../actions/tokenAction";
 import * as accountActions from "../actions/accountAction";
 import * as globalActions from "../actions/globalAction";
 import * as scatterService from "../services/scatter_service";
@@ -40,12 +39,13 @@ function* disconnectFromScatter() {
 
   yield put(accountActions.setScatterAccount(null));
 
-  const tokens = yield select(getTokens);
-  const tokensWithoutBalance = tokens.map((token) => {
+  let tokens = yield select(getTokens);
+
+  tokens.map((token) => {
     delete token.balance;
     return token;
   });
-  yield put(tokenAction.setTokens(tokensWithoutBalance));
+
   yield call(fetchTokenPairRate);
 }
 
@@ -53,8 +53,8 @@ function* fetchBalances() {
   try {
     yield put(accountActions.setBalanceLoading(true));
 
-    const tokens = yield select(getTokens);
     const account = yield select(getAccountData);
+    let tokens = yield select(getTokens);
     let tokenSymbols = [], tokenContracts = [];
 
     tokens.forEach((token) => {
@@ -64,12 +64,11 @@ function* fetchBalances() {
 
     const balances = yield call(getTokenBalances, account.eos, account.account.name, tokenSymbols, tokenContracts);
 
-    const tokensWithBalance = tokens.map((token, index) => {
+    tokens.map((token, index) => {
       token.balance = balances[index];
       return token;
     });
 
-    yield put(tokenAction.setTokens(tokensWithBalance));
     yield call(validateInputParams);
   } catch (e) {
     console.log(e);

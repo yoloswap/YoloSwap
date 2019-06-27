@@ -24,16 +24,16 @@ const SwapView = (props)=> {
           <div className={`swap__content-box ${isError ? 'swap__content-box--error' : ''} ${isSwapBalanceBoxShown ? 'swap__content-box--imported' : ''}`}>
             <TokenSelector
               selectedToken={props.sourceToken}
-              onSelectedToken={props.handleSelectSourceToken}
+              onSelectedToken={props.setSourceToken}
               tokens={props.tokens}
               showBalance={true}
             />
-            <input className={"swap__content-input"} type="text" placeholder="0" value={props.sourceAmount} onChange={(e) => props.handleSourceAmountChange(e)} ref={props.srcAmountRef}/>
+            <input className={"swap__content-input"} type="text" placeholder="0" value={props.sourceAmount} onChange={(e) => props.setSourceAmount(e)} ref={props.srcAmountRef}/>
             <Dropdown
               className={"swap__content-dropdown-container"}
               active={props.isSwapBalanceBoxActive}
-              onShow={() => props.handleOpenSwapBalanceBox()}
-              onHide={() => props.handleCloseSwapBalanceBox()}
+              onShow={() => props.openBalanceDropdown()}
+              onHide={() => props.closeBalanceDropdown()}
             >
               <DropdownTrigger>
                 <div className={`common__arrow-drop-down grey ${props.isSwapBalanceBoxActive ? 'up' : 'down'}`}/>
@@ -58,13 +58,13 @@ const SwapView = (props)=> {
             )}
           </div>
         </div>
-        <div className={"swap__icon"} onClick={() => props.handleClickSwapIcon()}/>
+        <div className={"swap__icon"} onClick={() => props.switchTokens()}/>
         <div className={"swap__content"}>
           <div className={"swap__content-title"}>To:</div>
           <div className={"swap__content-box"}>
             <TokenSelector
               selectedToken={props.destToken}
-              onSelectedToken={props.handleSelectDestToken}
+              onSelectedToken={props.setDestToken}
               tokens={props.tokens}
             />
             <div className={"swap__content-input"}>
@@ -105,7 +105,7 @@ const SwapView = (props)=> {
 
       {!isButtonHidden && (
         <div className={"swap__bot common__fade-in"}>
-          <div className={`swap__bot-button common__button-gradient ${disabledClass}`} onClick={() => props.handleClickSwapButton()}>Swap Now</div>
+          <div className={`swap__bot-button common__button-gradient ${disabledClass}`} onClick={() => props.confirmSwap()}>Swap Now</div>
           <div className={"swap__bot-term"}>
             <span>By Swapping, you agree to the </span>
             <a href="https://docs.google.com/document/d/1Bmy1uzQiPdLPmccbA4nXQPddKRpkVIC3JXDQmh3zYQo/edit" target="_blank" rel="noreferrer noopener">
@@ -122,7 +122,7 @@ const SwapView = (props)=> {
         </div>
       )}
 
-      <Modal isActive={props.isScatterLoading} handleClose={() => props.handleCloseScatterModal()} title="Sign In">
+      <Modal isActive={props.isScatterLoading} handleClose={() => props.closeScatterModal()} title="Sign In">
         <div className={"scatter-modal"}>
           <div className={"scatter-modal__connecting"}>Connecting with your Scatter</div>
           <div className={"scatter-modal__loading common__loading"}/>
