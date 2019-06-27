@@ -30,6 +30,14 @@ const envConfig = {
 envConfig.TOKENS = [
   envConfig.EOS,
   {
+    "id": "carbon",
+    "name": "Carbon",
+    "symbol": "CUSD",
+    "account": "stablecarbon",
+    "precision": 2,
+    "logo": "cusd.png",
+  },
+  {
     "id": "everipedia",
     "name": "Everipedia",
     "symbol": "IQ",
@@ -68,14 +76,6 @@ envConfig.TOKENS = [
     "account": "bntbntbntbnt",
     "precision": 10,
     "logo": "bnt.svg",
-  },
-  {
-    "id": "carbon",
-    "name": "Carbon",
-    "symbol": "CUSD",
-    "account": "stablecarbon",
-    "precision": 2,
-    "logo": "cusd.png",
   },
   {
     "id": "chintai",

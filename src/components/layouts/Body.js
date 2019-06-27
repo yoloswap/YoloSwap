@@ -52,11 +52,20 @@ class Body extends PureComponent {
             <div className={"body__title"}>Simple Just Became Instant</div>
             {/*<div className={"body__sub-title"}>Swap tokens without involving any intermediate token</div>*/}
           </div>
+
           <Swap
             sendTransaction={this.props.sendTransaction}
             srcAmountRef={this.srcAmountRef}
+            srcSymbolParam={this.props.srcSymbolParam}
+            destSymbolParam={this.props.destSymbolParam}
+            changeRouteParams={this.props.changeRouteParams}
           />
-          <Market srcAmountRef={this.srcAmountRef}/>
+
+          <Market
+            srcAmountRef={this.srcAmountRef}
+            changeRouteParams={this.props.changeRouteParams}
+          />
+
           <Modal widgetMode={this.props.global.widgetMode} isActive={this.props.global.isErrorActive} handleClose={() => this.props.unsetGlobalError()} title="Error">
             <div className={"error-modal"}>
               {this.props.global.errorType !== appConfig.SCATTER_ERROR_TYPE && (

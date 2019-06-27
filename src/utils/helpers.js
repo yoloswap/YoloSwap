@@ -17,3 +17,9 @@ export function formatHash(hash) {
 export function formatNumberWithZeroDigit(number) {
   return +(+number).toFixed(20).match(/^-?\d*\.?0*\d{0,4}/)[0];
 }
+
+export function findTokenBySymbol(tokens, tokenSymbol) {
+  return tokens.find(token => {
+    return token.symbol.toLowerCase() === tokenSymbol.toLowerCase();
+  });
+}

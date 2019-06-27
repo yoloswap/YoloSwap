@@ -170,6 +170,17 @@ This is the transaction data that your user should sign to implement a trade.
 ```
 
 ### III.2 Events fired by your App
+#### getConfig
+Some of the options to customize your app.
+
+```
+{
+    action: "getConfig",
+    data: {
+        tokens: ['IQ', 'CUSD'] // default as [] to list all available tokens.
+    }
+}
+```
 #### getAccount
 Since user will import their account through some methods offered by your app, you should send imported account data to Yolo whenever user signed in for balance fetching and other tasks.
 

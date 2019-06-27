@@ -3,17 +3,21 @@ import React, { PureComponent } from 'react';
 import './../../assets/scss/index.scss';
 import * as globalActions from "../../actions/globalAction";
 import * as accountActions from "../../actions/accountAction";
+import * as tokenActions from "../../actions/tokenAction";
 import * as swapActions from "../../actions/swapAction";
 import { getMemo } from "../../services/network_service";
 import { connect } from "react-redux";
 import { isStringJson } from "../../utils/validators";
 import appConfig from "../../config/app";
+import envConfig from "../../config/env";
 
 function mapDispatchToProps(dispatch) {
   return {
     setWidgetMode: () => {dispatch(globalActions.setWidgetMode())},
     setAccountWithBalances: (account) => {dispatch(accountActions.setAccountWithBalances(account))},
     completeSwap: (txResult) => {dispatch(swapActions.completeSwap(txResult))},
+    setTokens: (tokens) => {dispatch(tokenActions.setTokens(tokens))},
+    setDestToken: (token) => {dispatch(swapActions.setDestToken(token))},
   }
 }
 
@@ -43,9 +47,7 @@ class Widget extends PureComponent {
     const body = document.getElementsByTagName('body')[0];
     let height = body.clientHeight < appConfig.MIN_APP_HEIGHT ? appConfig.MIN_APP_HEIGHT : body.clientHeight;
 
-    if (height === this.state.appHeight) {
-      return;
-    }
+    if (height === this.state.appHeight) return;
 
     this.setState({ appHeight: height });
 
@@ -88,15 +90,32 @@ class Widget extends PureComponent {
       this.props.setAccountWithBalances(account);
     } else if (action === 'transaction' && !eventData.origin) {
       const txResult = eventData.data;
+
       this.props.completeSwap(txResult);
+    } else if (action === 'getConfig') {
+      const limitedTokens = eventData.data.tokens;
+
+      if (!limitedTokens.length) return;
+
+      const tokens = envConfig.TOKENS.filter(token => {
+        return limitedTokens.includes(token.symbol) || token.symbol === envConfig.EOS.symbol;
+      });
+
+      if (tokens.length <= 1) return;
+
+      this.props.setTokens(tokens);
+      this.props.setDestToken(tokens[1]);
     }
   };
 
   render() {
-    return <Body
-      widgetMode={true}
-      sendTransaction={this.sendTransaction}
-    />
+    return (
+      <Body
+        widgetMode={true}
+        sendTransaction={this.sendTransaction}
+        changeRouteParams={() => false}
+      />
+    )
   }
 }
 
