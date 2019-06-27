@@ -17,6 +17,7 @@ function mapDispatchToProps(dispatch) {
     setAccountWithBalances: (account) => {dispatch(accountActions.setAccountWithBalances(account))},
     completeSwap: (txResult) => {dispatch(swapActions.completeSwap(txResult))},
     setTokens: (tokens) => {dispatch(tokenActions.setTokens(tokens))},
+    setDestToken: (token) => {dispatch(swapActions.setDestToken(token))},
   }
 }
 
@@ -46,9 +47,7 @@ class Widget extends PureComponent {
     const body = document.getElementsByTagName('body')[0];
     let height = body.clientHeight < appConfig.MIN_APP_HEIGHT ? appConfig.MIN_APP_HEIGHT : body.clientHeight;
 
-    if (height === this.state.appHeight) {
-      return;
-    }
+    if (height === this.state.appHeight) return;
 
     this.setState({ appHeight: height });
 
@@ -95,19 +94,28 @@ class Widget extends PureComponent {
       this.props.completeSwap(txResult);
     } else if (action === 'getConfig') {
       const limitedTokens = eventData.data.tokens;
+
+      if (!limitedTokens.length) return;
+
       const tokens = envConfig.TOKENS.filter(token => {
         return limitedTokens.includes(token.symbol) || token.symbol === envConfig.EOS.symbol;
       });
 
-      this.props.setTokens(tokens)
+      if (tokens.length <= 1) return;
+
+      this.props.setTokens(tokens);
+      this.props.setDestToken(tokens[1]);
     }
   };
 
   render() {
-    return <Body
-      widgetMode={true}
-      sendTransaction={this.sendTransaction}
-    />
+    return (
+      <Body
+        widgetMode={true}
+        sendTransaction={this.sendTransaction}
+        changeRouteParams={() => false}
+      />
+    )
   }
 }
 

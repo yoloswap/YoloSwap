@@ -40,10 +40,13 @@ class Market extends Component {
     this.setState({ searchText: value });
   };
 
-  setSwapToken = (srcToken, destToken) => {
+  setSourceAndDestToken = (srcToken, destToken) => {
     this.props.setSourceAndDestToken(srcToken, destToken);
     this.props.srcAmountRef.current.focus();
+
     window.scrollTo(0, 0);
+
+    this.props.changeRouteParams(srcToken.symbol, destToken.symbol);
   };
 
   checkNewToken = (listingTime) => {
@@ -64,7 +67,7 @@ class Market extends Component {
         isLoading={this.props.isLoading}
         onClickBasedToken={this.props.setIndexToken}
         onTypingSearch={this.handleOnTypingSearch}
-        setSwapToken={this.setSwapToken}
+        setSourceAndDestToken={this.setSourceAndDestToken}
         checkNewToken={this.checkNewToken}
       />
     )
