@@ -15,7 +15,7 @@ import envConfig from './config/env';
 const sagaMiddleware = createSagaMiddleware();
 
 let middleware = [sagaMiddleware];
-if (process.env.REACT_APP_ENV === 'production') {
+if (process.env.REACT_APP_ENV === 'local') {
   middleware = [...middleware, logger]
 }
 
