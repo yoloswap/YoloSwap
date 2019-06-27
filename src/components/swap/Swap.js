@@ -111,6 +111,7 @@ class Swap extends Component {
 
   switchTokens = () => {
     this.props.setSourceAndDestToken(this.props.destToken, this.props.sourceToken);
+    this.props.changeRouteParams(this.props.destToken.symbol, this.props.sourceToken.symbol);
   };
 
   closeScatterModal = () => {

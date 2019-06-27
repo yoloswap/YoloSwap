@@ -20,6 +20,6 @@ export function formatNumberWithZeroDigit(number) {
 
 export function findTokenBySymbol(tokens, tokenSymbol) {
   return tokens.find(token => {
-    return token.symbol === tokenSymbol;
+    return token.symbol.toLowerCase() === tokenSymbol.toLowerCase();
   });
 }

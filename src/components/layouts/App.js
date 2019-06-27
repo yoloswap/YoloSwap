@@ -6,7 +6,7 @@ import './../../assets/scss/index.scss';
 
 export default class App extends Component {
   changeRouteParams = (srcSymbol, destSymbol) => {
-    this.props.history.push(`/swap/${srcSymbol}-${destSymbol}`);
+    this.props.history.push(`/swap/${srcSymbol.toLowerCase()}-${destSymbol.toLowerCase()}`);
   };
 
   render() {
