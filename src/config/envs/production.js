@@ -96,6 +96,15 @@ envConfig.TOKENS = [
     "logo": "chex.png",
     "listingTime": "5-27-2019"
   },
+  {
+    "id": "equilibrium-eosdt",
+    "name": "Eosdt",
+    "symbol": "EOSDT",
+    "account": "eosdtsttoken",
+    "precision": 9,
+    "logo": "eosdt.svg",
+    "listingTime": "7-2-2019"
+  },
 ];
 
 export default envConfig;
