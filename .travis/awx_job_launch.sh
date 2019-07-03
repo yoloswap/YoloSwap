@@ -14,6 +14,8 @@ elif [[ "$TRAVIS_BRANCH" == "staging" ]]; then
     awx_job_launch_uri=$awx_staging_job_launch_uri
 elif [[ "$TRAVIS_BRANCH" == "production" ]]; then
     awx_job_launch_uri=$awx_production_job_launch_uri
+elif [[ "$TRAVIS_BRANCH" == "master" ]]; then
+    awx_job_launch_uri=$awx_production_job_launch_uri
 else
     echo "branch is not set to call awx deploy"
     exit 0
