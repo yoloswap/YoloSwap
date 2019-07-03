@@ -105,6 +105,15 @@ envConfig.TOKENS = [
     "logo": "eosdt.svg",
     "listingTime": "7-2-2019"
   },
+  {
+    "id": "karma-coin",
+    "name": "Karma",
+    "symbol": "KARMA",
+    "account": "therealkarma",
+    "precision": 4,
+    "logo": "karma.png",
+    "listingTime": "7-3-2019"
+  },
 ];
 
 export default envConfig;
