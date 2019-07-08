@@ -11,6 +11,13 @@
   }
 }
 
+@keyframes hover-in-the-air {
+  to {
+    transform: translateY(6px);
+    background-color: darken($blue-bold, 3%);
+  }
+}
+
 @keyframes scale-up-with-rotating {
   to {
     transform: scale(1) rotate(180deg);
