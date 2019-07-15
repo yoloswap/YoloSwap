@@ -36,8 +36,6 @@ class Widget extends PureComponent {
   componentWillMount = () => {
     this.props.setWidgetMode();
 
-    window.parent.postMessage('{"action":"getConfig","data":{"tokens": ["CHEX", "CUSD", "EMT"], "title": false, "market": false, "background": false}}', "*");
-
     this.sendHeightInterval = setInterval(this.sendHeight, 2000);
 
     window.addEventListener('message', this.watchPostMessages, false);
