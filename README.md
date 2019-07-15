@@ -177,7 +177,10 @@ Some of the options to customize your app.
 {
     action: "getConfig",
     data: {
-        tokens: ['IQ', 'CUSD'] // default as [] to list all available tokens.
+        tokens: ['IQ', 'CUSD'], // default as [] to list all available tokens.
+        title: true,            // default as `true` to show or hide Yolo header title
+        background: true,       // default as `true` to display Yolo background
+        market: true            // default as `true` to show token market.
     }
 }
 ```

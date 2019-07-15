@@ -27,6 +27,9 @@ class Widget extends PureComponent {
 
     this.state = {
       appHeight: 0,
+      market: true,
+      title: true,
+      background: true,
     }
   }
 
@@ -94,17 +97,32 @@ class Widget extends PureComponent {
       this.props.completeSwap(txResult);
     } else if (action === 'getConfig') {
       const limitedTokens = eventData.data.tokens;
+      const market = eventData.data.market;
+      const title = eventData.data.title;
+      const background = eventData.data.background;
 
-      if (!limitedTokens.length) return;
+      if (limitedTokens.length) {
+        const tokens = envConfig.TOKENS.filter(token => {
+          return limitedTokens.includes(token.symbol) || token.symbol === envConfig.EOS.symbol;
+        });
 
-      const tokens = envConfig.TOKENS.filter(token => {
-        return limitedTokens.includes(token.symbol) || token.symbol === envConfig.EOS.symbol;
-      });
+        if (tokens.length <= 1) return;
 
-      if (tokens.length <= 1) return;
+        this.props.setTokens(tokens);
+        this.props.setDestToken(tokens[1]);
+      }
 
-      this.props.setTokens(tokens);
-      this.props.setDestToken(tokens[1]);
+      if (market !== undefined) {
+        this.setState({ market: market });
+      }
+
+      if (title !== undefined) {
+        this.setState({ title: title });
+      }
+
+      if (background !== undefined) {
+        this.setState({ background: background });
+      }
     }
   };
 
@@ -112,6 +130,9 @@ class Widget extends PureComponent {
     return (
       <Body
         widgetMode={true}
+        market={this.state.market}
+        title={this.state.title}
+        background={this.state.background}
         sendTransaction={this.sendTransaction}
         changeRouteParams={() => false}
       />
