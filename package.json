@@ -7,7 +7,7 @@
     "cors": "^2.8.5",
     "eosjs": "^16.0.9",
     "express": "^4.16.4",
-    "react": "^16.7.0",
+    "react": "^16.8.6",
     "react-dom": "^16.7.0",
     "react-redux": "^6.0.0",
     "react-router-dom": "^5.0.1",

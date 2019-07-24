@@ -5,6 +5,8 @@ export default class TokenSelector extends Component {
   constructor(props) {
     super(props);
 
+    this.searchTokenInputRef = React.createRef();
+
     this.state = {
       isOpen: false,
       searchText: ''
@@ -12,11 +14,15 @@ export default class TokenSelector extends Component {
   }
 
   handleOpenDropDown = () => {
-    this.setState({ isOpen: true })
+    this.setState({ isOpen: true });
+    setTimeout(() => this.searchTokenInputRef.current.focus(), 0);
   };
 
   handleCloseDropDown = () => {
-    this.setState({ isOpen: false })
+    this.setState({
+      isOpen: false,
+      searchText: ''
+    });
   };
 
   handleOnTypingSearch = (e) => {
@@ -29,19 +35,16 @@ export default class TokenSelector extends Component {
     this.handleCloseDropDown();
   };
 
+  handleOnKeyUp = (e, firstToken) => {
+    if (e.key === 'Enter' && firstToken) {
+      this.handleOnClickToken(firstToken)
+    }
+  };
+
   render() {
-    const getTokenList = () => {
-      return this.props.tokens.filter((token) => {
-        return token.symbol.includes(this.state.searchText);
-      }).map((token, index) =>
-        <div className={"token-selector__item"} key={index} onClick={() => this.handleOnClickToken(token)}>
-          <div className={"token-selector__item-symbol"}>{token.symbol}</div>
-          {(this.props.showBalance && token.balance >= 0) && (
-            <div className={"token-selector__item-balance"}>{token.balance}</div>
-          )}
-        </div>
-      );
-    };
+    const filteredTokens = this.props.tokens.filter((token) => {
+      return token.symbol.includes(this.state.searchText);
+    });
 
     return (
       <div className={"token-selector"}>
@@ -56,10 +59,25 @@ export default class TokenSelector extends Component {
           <DropdownContent className={"common__fade-in"}>
             <div className={"token-selector__container"}>
               <div className={"token-selector__input-container"}>
-                <input className={"token-selector__input"} placeholder='Search' type="text" value={this.state.searchText} onChange={(e) => this.handleOnTypingSearch(e)}/>
+                <input
+                  className={"token-selector__input"}
+                  ref={this.searchTokenInputRef}
+                  placeholder='Search'
+                  type="text"
+                  value={this.state.searchText}
+                  onChange={this.handleOnTypingSearch}
+                  onKeyUp={(e) => this.handleOnKeyUp(e, filteredTokens[0])}
+                />
               </div>
               <div className={"token-selector__item-container"}>
-                {getTokenList()}
+                {filteredTokens.map((token, index) =>
+                  <div className={"token-selector__item"} key={index} onClick={() => this.handleOnClickToken(token)}>
+                    <div className={"token-selector__item-symbol"}>{token.symbol}</div>
+                    {(this.props.showBalance && token.balance >= 0) && (
+                      <div className={"token-selector__item-balance"}>{token.balance}</div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </DropdownContent>
@@ -67,5 +85,4 @@ export default class TokenSelector extends Component {
       </div>
     )
   }
-
 }
