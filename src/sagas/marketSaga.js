@@ -52,13 +52,13 @@ function* getTokensWithRateFromAPI() {
   }
 
   return tokens.map(token => {
-    if (token.symbol === envConfig.EOS.symbol) {
-      return token;
-    }
+    if (token.symbol === envConfig.EOS.symbol) return token;
 
     const marketToken = marketRateTokens.find(marketRateToken => {
       return token.symbol === marketRateToken.token;
     });
+
+    if (!marketToken) return token;
 
     token.sellRate = marketToken.sellRate;
     token.buyRate = marketToken.buyRate;

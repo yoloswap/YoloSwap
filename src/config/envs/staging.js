@@ -104,6 +104,15 @@ envConfig.TOKENS = [
     "logo": "eosdt.svg",
     "listingTime": "7-2-2019"
   },
+  {
+    "id": "lumeos",
+    "name": "Lumeos",
+    "symbol": "LUME",
+    "account": "lumetokenctr",
+    "precision": 3,
+    "logo": "lume.svg",
+    "listingTime": "7-24-2019"
+  },
 ];
 
 export default envConfig;
