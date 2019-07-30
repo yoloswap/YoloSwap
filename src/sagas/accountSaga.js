@@ -5,6 +5,7 @@ import * as scatterService from "../services/scatter_service";
 import appConfig from '../config/app';
 import { fetchTokenPairRate } from "./swapSaga";
 import { getTokenBalances } from "./serviceSaga/eosServiceSaga";
+import { validateInputParams } from "./swapSaga";
 
 const getTokens = state => state.token.tokens;
 const getAccountData = state => state.account;
@@ -68,6 +69,8 @@ function* fetchBalances() {
       token.balance = balances[index];
       return token;
     });
+
+    yield call(validateInputParams);
   } catch (e) {
     console.log(e);
   }
