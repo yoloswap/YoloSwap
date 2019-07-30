@@ -112,9 +112,6 @@ function* handleSwapError(e) {
 export function* fetchTokenPairRate() {
   yield put(swapActions.setFluctuatingRate(0));
 
-  const swap = yield select(getSwapState);
-  const account = yield select(getAccountState);
-  const sourceAmount = swap.sourceAmount ? swap.sourceAmount : appConfig.DEFAULT_RATE_AMOUNT;
   const isValidInput = yield call(validateInputParams);
 
   if (!isValidInput) return;
@@ -122,14 +119,20 @@ export function* fetchTokenPairRate() {
   yield put(swapActions.setTokenPairRateLoading(true));
 
   try {
-    const tokenPairRate = yield call(getTokenPairRate, account.eos, swap.sourceToken.symbol, swap.destToken.symbol, sourceAmount);
-    const destAmount = formatAmount(tokenPairRate * sourceAmount, swap.destToken.precision);
+    const swap = yield select(getSwapState);
+    const account = yield select(getAccountState);
+
+    const srcToken = swap.sourceToken;
+    const destToken = swap.destToken;
+    const sourceAmount = swap.sourceAmount ? swap.sourceAmount : appConfig.DEFAULT_RATE_AMOUNT;
+    const tokenPairRate = yield call(getTokenPairRate, account.eos, srcToken.symbol, destToken.symbol, sourceAmount, srcToken.precision, destToken.precision);
+    const destAmount = formatAmount(tokenPairRate * sourceAmount, destToken.precision);
     let error = validateRateResult(tokenPairRate, swap.sourceAmount, destAmount);
 
     if (!error) {
       yield put(swapActions.setDestAmount(destAmount));
       yield put(swapActions.setTokenPairRate(tokenPairRate));
-      yield call(getFluctuatingRate, tokenPairRate, swap.sourceToken.symbol, swap.destToken.symbol);
+      yield call(getFluctuatingRate, tokenPairRate, srcToken, destToken);
     } else {
       yield put(swapActions.setError(error));
       yield put(swapActions.setDestAmount(0));
@@ -187,12 +190,15 @@ function validateRateResult(tokenPairRate, srcAmount, destAmount) {
   return error;
 }
 
-function* getFluctuatingRate(expectedRate, srcTokenSymbol, destTokenSymbol) {
+function* getFluctuatingRate(expectedRate, srcToken, destToken) {
   let fluctuatingRate = 0;
 
   try {
     const account = yield select(getAccountState);
-    const expectedDefaultRate = yield call(getTokenPairRate, account.eos, srcTokenSymbol, destTokenSymbol, appConfig.DEFAULT_RATE_AMOUNT);
+    const expectedDefaultRate = yield call(
+      getTokenPairRate,
+      account.eos, srcToken.symbol, destToken.symbol, appConfig.DEFAULT_RATE_AMOUNT, srcToken.precision, destToken.precision
+    );
 
     if (+expectedRate && +expectedDefaultRate) {
       fluctuatingRate = (expectedDefaultRate - expectedRate) / expectedRate;

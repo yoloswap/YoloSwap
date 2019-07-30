@@ -30,6 +30,24 @@ const envConfig = {
 envConfig.TOKENS = [
   envConfig.EOS,
   {
+    "id": "karma-coin",
+    "name": "Karma",
+    "symbol": "KARMA",
+    "account": "therealkarma",
+    "precision": 4,
+    "logo": "karma.png",
+    "listingTime": "7-2-2019"
+  },
+  {
+    "id": "equilibrium-eosdt",
+    "name": "Eosdt",
+    "symbol": "EOSDT",
+    "account": "eosdtsttoken",
+    "precision": 9,
+    "logo": "eosdt.svg",
+    "listingTime": "7-2-2019"
+  },
+  {
     "id": "carbon",
     "name": "Carbon",
     "symbol": "CUSD",
@@ -85,24 +103,6 @@ envConfig.TOKENS = [
     "precision": 8,
     "logo": "chex.png",
     "listingTime": "5-27-2019"
-  },
-  {
-    "id": "karma-coin",
-    "name": "Karma",
-    "symbol": "KARMA",
-    "account": "therealkarma",
-    "precision": 4,
-    "logo": "karma.png",
-    "listingTime": "7-2-2019"
-  },
-  {
-    "id": "equilibrium-eosdt",
-    "name": "Eosdt",
-    "symbol": "EOSDT",
-    "account": "eosdtsttoken",
-    "precision": 9,
-    "logo": "eosdt.svg",
-    "listingTime": "7-2-2019"
   },
   {
     "id": "lumeos",

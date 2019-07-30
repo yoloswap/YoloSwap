@@ -72,7 +72,7 @@ function* getTokensWithRateFromAPI() {
 }
 
 function* getTokensWithRateFromBlockChain() {
-  let srcSymbols = [], destSymbols = [], srcAmounts = [], tokenIds = [];
+  let srcSymbols = [], destSymbols = [], srcAmounts = [], tokenIds = [], srcPrecisions = [], destPrecisions = [];
   const account = yield select(getAccountState);
   let tokens = yield select(getTokens);
 
@@ -82,12 +82,14 @@ function* getTokensWithRateFromBlockChain() {
     if (token.symbol !== envConfig.EOS.symbol) {
       srcSymbols.push(token.symbol);
       destSymbols.push(envConfig.EOS.symbol);
+      srcPrecisions.push(token.precision);
+      destPrecisions.push(envConfig.EOS.precision);
       srcAmounts.push(1);
     }
   });
 
-  let sellRates = yield call(getAllRates, account.eos, srcSymbols, destSymbols, srcAmounts);
-  let buyRates = yield call(getAllRates, account.eos, destSymbols, srcSymbols, srcAmounts);
+  let sellRates = yield call(getAllRates, account.eos, srcSymbols, destSymbols, srcAmounts, srcPrecisions, destPrecisions);
+  let buyRates = yield call(getAllRates, account.eos, destSymbols, srcSymbols, srcAmounts, destPrecisions, srcPrecisions);
 
   const usdBasedTokens = yield call(fetchTokensByIds, tokenIds);
   const eosBasedTokens = yield call(fetchTokensByIds, tokenIds, envConfig.EOS.id);
