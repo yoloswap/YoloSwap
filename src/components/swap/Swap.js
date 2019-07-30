@@ -60,6 +60,7 @@ class Swap extends Component {
 
   componentDidMount = () => {
     this.setSrcAndDestTokenFromParams();
+    this.props.fetchTokenPairRate();
   };
 
   setSrcAndDestTokenFromParams = () => {
