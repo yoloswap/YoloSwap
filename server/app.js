@@ -39,7 +39,7 @@ async function getRateAPI(req, res) {
   const srcAmount = req.query.srcAmount;
   const srcToken = findTokenBySymbol(envConfig.TOKENS, srcSymbol);
   const destToken = findTokenBySymbol(envConfig.TOKENS, destSymbol);
-  const error = validateGetRateParams(srcToken, destToken, srcAmount);
+  const error = validateGetRateParams(srcSymbol, destSymbol, srcToken, destToken, srcAmount);
 
   if (error) {
     res.send(getAPIFReturnFormat(0, 400, error));
@@ -139,23 +139,23 @@ async function fetchMarketRatesInterval() {
   }
 }
 
-function validateGetRateParams(srcToken, destToken, srcAmount) {
+function validateGetRateParams(srcSymbol, destSymbol, srcToken, destToken, srcAmount) {
   let error = false;
   const eosSymbol = envConfig.EOS.symbol;
   const sourceAmountDecimals = srcAmount ? (srcAmount.toString()).split(".")[1] : false;
 
-  if (!srcToken.symbol || !destToken.symbol || !srcAmount) {
+  if (!srcSymbol || !destSymbol || !srcAmount) {
     error = `One or more of the required parameters are missing. Please make sure you have srcSymbol, destSymbol and srcAmount`;
   } else if (srcAmount.includes('0x') || isNaN(srcAmount) || srcAmount <= 0) {
     error = `Your source amount is invalid`;
   } else if (!srcToken) {
-    error = `${srcToken.symbol} is not supported by our API`;
+    error = `${srcSymbol} is not supported by our API`;
   } else if (!destToken) {
-    error = `${destToken.symbol} is not supported by our API`;
-  } else if (srcToken.symbol !== eosSymbol && destToken.symbol !== eosSymbol) {
+    error = `${destSymbol} is not supported by our API`;
+  } else if (srcSymbol !== eosSymbol && destSymbol !== eosSymbol) {
     error = `Token to Token Swapping is not yet supported. Please choose EOS as either your srcSymbol or destSymbol`;
   } else if (sourceAmountDecimals && sourceAmountDecimals.length > srcToken.precision) {
-    error = `Your ${srcToken.symbol} source amount's decimals should be no longer than ${srcToken.precision} characters`;
+    error = `Your ${srcSymbol} source amount's decimals should be no longer than ${srcToken.precision} characters`;
   }
 
   return error;
