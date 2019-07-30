@@ -59,7 +59,6 @@ class Swap extends Component {
   }
 
   componentDidMount = () => {
-    this.props.fetchTokenPairRate();
     this.setSrcAndDestTokenFromParams();
   };
 
@@ -79,8 +78,7 @@ class Swap extends Component {
       this.props.changeRouteParams(srcToken.symbol, destToken.symbol);
     }
 
-    this.props.setSourceToken(srcToken);
-    this.props.setDestToken(destToken);
+    this.props.setSourceAndDestToken(srcToken, destToken);
   };
 
   confirmSwap = () => {

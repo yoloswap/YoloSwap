@@ -13,7 +13,9 @@ const rateFetchingInterval = 500;
 const marketRateFetchingInterval = 10000;
 const eos = getEOSInstance();
 
-let globalRates = [], globalMarketRates = [], globalSrcAmounts = [], globalSrcSymbols = [], globalDestSymbols = [], globalTokenIds = [];
+let globalRates = [], globalMarketRates = [], globalSrcAmounts = [],
+  globalSrcSymbols = [], globalDestSymbols = [], globalTokenIds = [],
+  globalSrcPrecision = [], globalDestPrecision = [];
 
 envConfig.TOKENS.forEach((token) => {
   globalTokenIds.push(token.id);
@@ -21,6 +23,8 @@ envConfig.TOKENS.forEach((token) => {
   if (token.id !== envConfig.EOS.id) {
     globalSrcSymbols.push(token.symbol);
     globalDestSymbols.push(envConfig.EOS.symbol);
+    globalSrcPrecision.push(token.precision);
+    globalDestPrecision.push(envConfig.EOS.precision);
     globalSrcAmounts.push(1);
   }
 });
@@ -33,8 +37,9 @@ async function getRateAPI(req, res) {
   const srcSymbol = req.query.srcSymbol;
   const destSymbol = req.query.destSymbol;
   const srcAmount = req.query.srcAmount;
-
-  const error = validateGetRateParams(srcSymbol, destSymbol, srcAmount);
+  const srcToken = findTokenBySymbol(envConfig.TOKENS, srcSymbol);
+  const destToken = findTokenBySymbol(envConfig.TOKENS, destSymbol);
+  const error = validateGetRateParams(srcSymbol, destSymbol, srcToken, destToken, srcAmount);
 
   if (error) {
     res.send(getAPIFReturnFormat(0, 400, error));
@@ -46,7 +51,7 @@ async function getRateAPI(req, res) {
 
     if (srcSymbol !== destSymbol) {
       if (+srcAmount !== appConfig.DEFAULT_RATE_AMOUNT) {
-        rate = await getTokenPairRate(eos, srcSymbol, destSymbol, srcAmount);
+        rate = await getTokenPairRate(eos, srcSymbol, destSymbol, srcAmount, srcToken.precision, destToken.precision);
       } else {
         const isBuy = srcSymbol === envConfig.EOS.symbol;
         const tokenSymbol = isBuy ? destSymbol : srcSymbol;
@@ -75,9 +80,8 @@ setInterval(fetchRatesInterval, rateFetchingInterval);
 
 async function fetchRatesInterval() {
   try {
-    const sellRates = await getAllRates(eos, globalSrcSymbols, globalDestSymbols, globalSrcAmounts);
-    const buyRates = await getAllRates(eos, globalDestSymbols, globalSrcSymbols, globalSrcAmounts);
-
+    const sellRates = await getAllRates(eos, globalSrcSymbols, globalDestSymbols, globalSrcAmounts, globalSrcPrecision, globalDestPrecision);
+    const buyRates = await getAllRates(eos, globalDestSymbols, globalSrcSymbols, globalSrcAmounts, globalDestPrecision, globalSrcPrecision);
     let tokenRates = [];
 
     globalSrcSymbols.forEach((tokenSymbol, index) => {
@@ -135,10 +139,8 @@ async function fetchMarketRatesInterval() {
   }
 }
 
-function validateGetRateParams(srcSymbol, destSymbol, srcAmount) {
+function validateGetRateParams(srcSymbol, destSymbol, srcToken, destToken, srcAmount) {
   let error = false;
-  const srcToken = findTokenBySymbol(envConfig.TOKENS, srcSymbol);
-  const destToken = findTokenBySymbol(envConfig.TOKENS, destSymbol);
   const eosSymbol = envConfig.EOS.symbol;
   const sourceAmountDecimals = srcAmount ? (srcAmount.toString()).split(".")[1] : false;
 

@@ -2,15 +2,18 @@ import envConfig from "../../src/config/env";
 import Eos from "eosjs";
 import { getRate } from "../../src/services/network_service";
 
-export async function getTokenPairRate(eos, srcSymbol, destSymbol, srcAmount) {
-  return await callEosServiceWithBackupNode(getRate, createRateParams(eos, srcSymbol, destSymbol, srcAmount));
+export async function getTokenPairRate(eos, srcSymbol, destSymbol, srcAmount, srcPrecision, destPrecision) {
+  return await callEosServiceWithBackupNode(
+    getRate,
+    createRateParams(eos, srcSymbol, destSymbol, srcAmount, srcPrecision, destPrecision)
+  );
 }
 
-export async function getAllRates(eos, srcSymbols, destSymbols, srcAmounts) {
+export async function getAllRates(eos, srcSymbols, destSymbols, srcAmounts, srcPrecisions, destPrecisions) {
   let rates = [];
 
   for (let i = 0; i < srcSymbols.length; i++) {
-    const rate = await getTokenPairRate(eos, srcSymbols[i], destSymbols[i], srcAmounts[i]);
+    const rate = await getTokenPairRate(eos, srcSymbols[i], destSymbols[i], srcAmounts[i], srcPrecisions[i], destPrecisions[i]);
     rates.push(rate)
   }
 
@@ -40,13 +43,15 @@ export function getEOSInstance(attempt = 0) {
   });
 }
 
-function createRateParams(eos, srcSymbol, destSymbol, srcAmount) {
+function createRateParams(eos, srcSymbol, destSymbol, srcAmount, srcPrecision, destPrecision) {
   return {
-    eos: eos,
-    srcSymbol: srcSymbol,
-    destSymbol: destSymbol,
-    srcAmount: srcAmount,
+    eos,
+    srcSymbol,
+    destSymbol,
+    srcAmount,
+    srcPrecision,
+    destPrecision,
     networkAccount: envConfig.NETWORK_ACCOUNT,
-    eosTokenAccount: envConfig.EOS.account,
+    eosTokenAccount: envConfig.EOS.account
   }
 }

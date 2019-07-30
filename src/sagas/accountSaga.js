@@ -3,7 +3,7 @@ import * as accountActions from "../actions/accountAction";
 import * as globalActions from "../actions/globalAction";
 import * as scatterService from "../services/scatter_service";
 import appConfig from '../config/app';
-import { validateInputParams, fetchTokenPairRate } from "./swapSaga";
+import { fetchTokenPairRate } from "./swapSaga";
 import { getTokenBalances } from "./serviceSaga/eosServiceSaga";
 
 const getTokens = state => state.token.tokens;
@@ -68,8 +68,6 @@ function* fetchBalances() {
       token.balance = balances[index];
       return token;
     });
-
-    yield call(validateInputParams);
   } catch (e) {
     console.log(e);
   }
