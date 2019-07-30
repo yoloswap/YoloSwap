@@ -147,7 +147,7 @@ export function* fetchTokenPairRate() {
   yield put(swapActions.setTokenPairRateLoading(false));
 }
 
-function* validateInputParams() {
+export function* validateInputParams() {
   const swap = yield select(getSwapState);
   const eosSymbol = envConfig.EOS.symbol;
   const sourceToken = swap.sourceToken;

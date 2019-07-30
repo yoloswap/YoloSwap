@@ -60,15 +60,12 @@ class Swap extends Component {
 
   componentDidMount = () => {
     this.setSrcAndDestTokenFromParams();
-    this.props.fetchTokenPairRate();
   };
 
   setSrcAndDestTokenFromParams = () => {
     const tokens = this.props.tokens;
-    const srcSymbolParam = this.props.srcSymbolParam;
-    const destSymbolParam = this.props.destSymbolParam;
-
-    if (!srcSymbolParam || !destSymbolParam) return;
+    const srcSymbolParam = this.props.srcSymbolParam || tokens[0].symbol;
+    const destSymbolParam = this.props.destSymbolParam || tokens[1].symbol;
 
     let srcToken = findTokenBySymbol(tokens, srcSymbolParam);
     let destToken = findTokenBySymbol(tokens, destSymbolParam);
