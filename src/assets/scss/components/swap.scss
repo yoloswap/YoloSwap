@@ -107,16 +107,21 @@
       padding: 0 25px;
       position: relative;
       display: flex;
-      align-items: flex-start;
+      align-items: center;
 
       .common__flexbox {
         height: 100%;
-        align-items: flex-start;
+        align-items: center;
       }
 
       &.right {
         justify-content: flex-end;
       }
+    }
+
+    &-fluctuate {
+      height: 100%;
+      display: inline-block;
     }
 
     &-loading {
@@ -235,6 +240,15 @@
         display: flex;
         align-items: center;
         justify-content: flex-end;
+      }
+
+      &-info {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      &-fluctuate {
+        margin-top: 7px;
       }
     }
   }
