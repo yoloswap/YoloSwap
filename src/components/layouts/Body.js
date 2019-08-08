@@ -55,10 +55,10 @@ class Body extends PureComponent {
           {isTitleShown &&
             <div className={"body__content"}>
               <div className={"body__title"}>Simple Just Became Instant</div>
-              <a className={"body__banner"} href={"https://medium.com/hello-yolo/introducing-yolo-weekly-swap-rewards-84cec5c96ad0"} target="_blank" rel="noopener noreferrer">
+            {/*  <a className={"body__banner"} href={"https://medium.com/hello-yolo/introducing-yolo-weekly-swap-rewards-84cec5c96ad0"} target="_blank" rel="noopener noreferrer">
                 <div className={"body__banner-title"}>Weekly Swap Rewards</div>
                 <div className={"body__banner-link"}>Learn more</div>
-              </a>
+              </a>*/}
             </div>
           }
 
