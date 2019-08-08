@@ -17,7 +17,8 @@
     padding: 0 40px 0 60px;
     margin-bottom: 50px;
     display: flex;
-    justify-content: space-between;
+    //justify-content: space-between;
+    justify-content: center;
     align-items: center;
   }
 
@@ -130,7 +131,11 @@
       background: url($image-path + 'backgrounds/home-mobile.svg') 0 340px;
     }
 
-    &__banner {
+    &__content {
+      display: none;
+    }
+
+   /* &__banner {
       padding: 15px 20px;
 
       &-title {
@@ -140,7 +145,7 @@
       &-link {
         font-size: 9px;
       }
-    }
+    }*/
   }
 
   @media (max-width: 350px) {
