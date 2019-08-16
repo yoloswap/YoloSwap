@@ -10,6 +10,7 @@ const envConfig = {
   TX_URL: 'https://jungle.bloks.io/transaction/',
   COINGECKO_URL: 'https://api.coingecko.com/api/v3/',
   API_URL: 'https://dev-yolo-backend.knstats.com/',
+  DFUSE_URL: 'https://mainnet.eos.dfuse.io/',
   EOS: {
     "id": "eos",
     "name": "EOS",
