@@ -12,6 +12,7 @@ const envConfig = {
   TX_URL: 'https://bloks.io/transaction/',
   COINGECKO_URL: 'https://api.coingecko.com/api/v3/',
   API_URL: 'https://api.yoloswap.com/',
+  DFUSE_URL: 'https://mainnet.eos.dfuse.io/',
   EOS: {
     "id": "eos",
     "name": "EOS",
@@ -113,15 +114,6 @@ envConfig.TOKENS = [
     "precision": 8,
     "logo": "chex.png",
     "listingTime": "5-27-2019"
-  },
-  {
-    "id": "lumeos",
-    "name": "Lumeos",
-    "symbol": "LUME",
-    "account": "lumetokenctr",
-    "precision": 3,
-    "logo": "lume.svg",
-    "listingTime": "7-30-2019"
   },
 ];
 
