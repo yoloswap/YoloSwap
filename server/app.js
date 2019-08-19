@@ -37,7 +37,7 @@ let tokenRates = [], marketRates = [], srcAmounts = [], srcSymbols = [], destSym
   setInterval(async () => {
     dfuseAuthToken = await dfuseService.getAuthToken();
     volumes = await volumeController.fetch24hVolume(dfuseAuthToken, srcSymbols, tokenRates);
-  }, 10000);
+  }, 60000);
 })();
 
 app.use(cors());

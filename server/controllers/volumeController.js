@@ -17,7 +17,7 @@ export async function fetch24hVolume(dfuseAuthToken, srcSymbols, tokenRates) {
         token: symbol,
         lastPrice: tokenRate.sellRate,
         eosVolume: volumes[symbol].eos,
-        usdVolume: volumes[symbol].tokens,
+        tokenVolume: volumes[symbol].tokens,
         contractName: token.account
       });
     });

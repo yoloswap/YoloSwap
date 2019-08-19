@@ -109,14 +109,14 @@ Run the API in the development mode, the server is served in port 3002 [http://l
         token: "KARMA",
         lastPrice: 0.00004348,
         eosVolume: 191.10570000000007,
-        usdVolume: 4300028.114399999,
+        tokenVolume: 4300028.114399999,
         contractName: "therealkarma"
     },
     {
         token: "EOSDT",
         lastPrice: 0.267,
         eosVolume: 15.063900000001013,
-        usdVolume: 55.911678821998066,
+        tokenVolume: 55.911678821998066,
         contractName: "eosdtsttoken"
     },
 ]
