@@ -13,6 +13,7 @@ const envConfig = {
   COINGECKO_URL: 'https://api.coingecko.com/api/v3/',
   API_URL: 'https://api.yoloswap.com/',
   DFUSE_URL: 'https://mainnet.eos.dfuse.io/',
+  DFUSE_KEY: 'server_cecd94f26e5c70b349ea8ac0e6643a8b',
   EOS: {
     "id": "eos",
     "name": "EOS",

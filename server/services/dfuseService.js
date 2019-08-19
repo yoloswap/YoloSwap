@@ -90,7 +90,7 @@ function fetchAuthToken() {
   const options = {
     method: 'POST',
     body : JSON.stringify({
-      'api_key' : 'server_cecd94f26e5c70b349ea8ac0e6643a8b'
+      'api_key' : envConfig.DFUSE_KEY
     })
   };
 
