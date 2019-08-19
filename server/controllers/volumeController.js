@@ -1,7 +1,6 @@
 import * as dfuseService from "../services/dfuseService";
 import envConfig from "../../src/config/env";
 import { findTokenBySymbol } from "../utils/helpers";
-import { formatNumberWithZeroDigit } from "../../src/utils/helpers";
 
 export async function fetch24hVolume(dfuseAuthToken, srcSymbols, tokenRates) {
   try {
@@ -16,7 +15,7 @@ export async function fetch24hVolume(dfuseAuthToken, srcSymbols, tokenRates) {
 
       formattedVolumes.push({
         token: symbol,
-        lastPrice: formatNumberWithZeroDigit(tokenRate.sellRate),
+        lastPrice: tokenRate.sellRate,
         eosVolume: volumes[symbol].eos,
         usdVolume: volumes[symbol].tokens,
         contractName: token.account
