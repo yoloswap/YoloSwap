@@ -6,16 +6,22 @@ import { fetchTokensByIds } from "../src/services/coingecko_service";
 import * as _ from 'underscore';
 import { formatNumberWithZeroDigit } from "../src/utils/helpers";
 import { getTokenPairRate, getAllRates, getEOSInstance } from "./services/eosService";
+import * as dfuseService from "../src/services/dfuseService";
 
 const app = express();
 const port = 3002;
 const rateFetchingInterval = 500;
 const marketRateFetchingInterval = 10000;
+const volumeFetchingInterval = 60000;
+const dfuseAuthTokenLife = 1;
 const eos = getEOSInstance();
 
 let globalRates = [], globalMarketRates = [], globalSrcAmounts = [],
   globalSrcSymbols = [], globalDestSymbols = [], globalTokenIds = [],
   globalSrcPrecision = [], globalDestPrecision = [];
+
+let globalDfuseToken = null;
+let globalVolumes = [];
 
 envConfig.TOKENS.forEach((token) => {
   globalTokenIds.push(token.id);
@@ -32,6 +38,50 @@ envConfig.TOKENS.forEach((token) => {
 app.use(cors());
 app.get('/fetchMarketRates', fetchMarketRatesAPI);
 app.get('/getRate', getRateAPI);
+app.get('/getLatestData', getLatestDataAPI);
+
+setInterval(fetchMarketRatesInterval, marketRateFetchingInterval);
+setInterval(fetchRatesInterval, rateFetchingInterval);
+setInterval(fetchLatestDataInterval, volumeFetchingInterval);
+
+(async function initiateFetchingGlobalValues() {
+  fetchMarketRatesInterval();
+  await fetchRatesInterval();
+  fetchLatestDataInterval();
+})();
+
+async function fetchLatestDataInterval() {
+  const isExpired = dfuseService.isAuthTokenExpired(globalDfuseToken);
+
+  if (isExpired) {
+    globalDfuseToken = await dfuseService.getAuthToken();
+  }
+
+  const volumes = await dfuseService.getLastDaysVolume(
+    globalDfuseToken['token'],
+    envConfig.NETWORK_ACCOUNT,
+    dfuseAuthTokenLife
+  );
+
+  console.log(globalRates);
+
+  // const formatedVolumes = [];
+  //
+  // globalSrcSymbols.forEach((symbol, index) => {
+  //   formatedVolumes.push({
+  //     token: symbol,
+  //     lastPrice: sellRate,
+  //     '24hVolumeInEos': buyRate,
+  //     '24hVolumeInUsd': 1,
+  //     contractName: ''
+  //   });
+  // });
+  //
+  // globalVolumes = [
+  //   {token: 'KARMA', lastPrice: 0.002, '24hVolumeInEos': 0, '24hVolumeInUsd': 0, contractName: "everipediaiq"},
+  //   {token: 'HVT', lastPrice: 0.002, '24hVolumeInEos': 0, '24hVolumeInUsd': 0, contractName: "hirevibeshvt"},
+  // ];
+}
 
 async function getRateAPI(req, res) {
   const srcSymbol = req.query.srcSymbol;
@@ -71,12 +121,13 @@ async function getRateAPI(req, res) {
   }
 }
 
+async function getLatestDataAPI(req, res) {
+  res.send(globalVolumes);
+}
+
 function fetchMarketRatesAPI(req, res) {
   res.send(globalMarketRates);
 }
-
-setInterval(fetchMarketRatesInterval, marketRateFetchingInterval);
-setInterval(fetchRatesInterval, rateFetchingInterval);
 
 async function fetchRatesInterval() {
   try {
