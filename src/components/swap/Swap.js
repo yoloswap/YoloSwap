@@ -87,7 +87,7 @@ class Swap extends Component {
 
     if (!this.props.isAccountImported) {
       if (this.props.widgetMode) {
-        this.props.setGlobalError("Please logging in to make a swap");
+        this.props.setGlobalError("Please login to make a swap");
       } else {
         this.props.connectToScatter();
       }
