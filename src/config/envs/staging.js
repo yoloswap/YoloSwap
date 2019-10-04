@@ -32,32 +32,6 @@ const envConfig = {
 envConfig.TOKENS = [
   envConfig.EOS,
   {
-    "id": "karma-coin",
-    "name": "Karma",
-    "symbol": "KARMA",
-    "account": "therealkarma",
-    "precision": 4,
-    "logo": "karma.png",
-    "listingTime": "7-2-2019"
-  },
-  {
-    "id": "equilibrium-eosdt",
-    "name": "Eosdt",
-    "symbol": "EOSDT",
-    "account": "eosdtsttoken",
-    "precision": 9,
-    "logo": "eosdt.svg",
-    "listingTime": "7-2-2019"
-  },
-  {
-    "id": "carbon",
-    "name": "Carbon",
-    "symbol": "CUSD",
-    "account": "stablecarbon",
-    "precision": 2,
-    "logo": "cusd.png",
-  },
-  {
     "id": "everipedia",
     "name": "Everipedia",
     "symbol": "IQ",
@@ -98,22 +72,13 @@ envConfig.TOKENS = [
     "logo": "bnt.svg",
   },
   {
-    "id": "chintai",
-    "name": "Chintai",
-    "symbol": "CHEX",
-    "account": "chexchexchex",
-    "precision": 8,
-    "logo": "chex.png",
-    "listingTime": "5-27-2019"
-  },
-  {
-    "id": "lumeos",
-    "name": "Lumeos",
-    "symbol": "LUME",
-    "account": "lumetokenctr",
-    "precision": 3,
-    "logo": "lume.svg",
-    "listingTime": "7-24-2019"
+    "id": "native-utility-token",
+    "name": "Native Utility Token",
+    "symbol": "NUT",
+    "account": "eosdtnutoken",
+    "precision": 9,
+    "logo": "nut.svg",
+    "listingTime": "10-1-2019"
   },
 ];
 
