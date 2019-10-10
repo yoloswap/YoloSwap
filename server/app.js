@@ -32,7 +32,7 @@ let tokenRates = [], marketRates = [], srcAmounts = [], srcSymbols = [], destSym
 
   setInterval(async () => {
     tokenRates = await rateController.fetchTokenRates(eos, srcSymbols, destSymbols, srcAmounts, srcPrecisions, destPrecisions);
-  }, 500);
+  }, 3000);
 
   setInterval(async () => {
     dfuseAuthToken = await dfuseService.getAuthToken();
