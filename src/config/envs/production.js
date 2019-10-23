@@ -116,7 +116,7 @@ envConfig.TOKENS = [
     "logo": "chex.png",
     "listingTime": "5-27-2019"
   },
-  {
+  /*{
     "id": "native-utility-token",
     "name": "Native Utility Token",
     "symbol": "NUT",
@@ -124,7 +124,7 @@ envConfig.TOKENS = [
     "precision": 9,
     "logo": "nut.svg",
     "listingTime": "10-4-2019"
-  },
+  },*/
 ];
 
 export default envConfig;
