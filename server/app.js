@@ -42,8 +42,12 @@ let tokenRates = [], marketRates = [], srcAmounts = [], srcSymbols = [], destSym
 
 app.use(cors());
 app.get('/fetchMarketRates', getMarketRatesAPI);
-app.get('/getRate', getTokenPairRateAPI);
 app.get('/get24hVolumes', get24hVolumesAPI);
+app.get('/getRate', getTokenPairRateAPI);
+app.get('/getRate2', getTokenPairRateAPI2);
+app.get('/getRate3', getTokenPairRateAPI3);
+app.get('/getRate4', getTokenPairRateAPI4);
+
 
 function getMarketRatesAPI(req, res) {
   res.send(marketRates);
@@ -55,6 +59,36 @@ async function getTokenPairRateAPI(req, res) {
   const srcAmount = req.query.srcAmount;
   const result = await rateController.fetchTokenPairRate(eos, tokenRates, srcSymbol, destSymbol, srcAmount);
 
+  res.send(result);
+}
+
+async function getTokenPairRateAPI2(req, res) {
+  const eos = getEOSInstance(1);
+  const srcSymbol = req.query.srcSymbol;
+  const destSymbol = req.query.destSymbol;
+  const srcAmount = req.query.srcAmount;
+  const result = await rateController.fetchTokenPairRate(eos, tokenRates, srcSymbol, destSymbol, srcAmount);
+  
+  res.send(result);
+}
+
+async function getTokenPairRateAPI3(req, res) {
+  const eos = getEOSInstance(2);
+  const srcSymbol = req.query.srcSymbol;
+  const destSymbol = req.query.destSymbol;
+  const srcAmount = req.query.srcAmount;
+  const result = await rateController.fetchTokenPairRate(eos, tokenRates, srcSymbol, destSymbol, srcAmount);
+  
+  res.send(result);
+}
+
+async function getTokenPairRateAPI4(req, res) {
+  const eos = getEOSInstance(3);
+  const srcSymbol = req.query.srcSymbol;
+  const destSymbol = req.query.destSymbol;
+  const srcAmount = req.query.srcAmount;
+  const result = await rateController.fetchTokenPairRate(eos, tokenRates, srcSymbol, destSymbol, srcAmount);
+  
   res.send(result);
 }
 
