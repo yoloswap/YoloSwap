@@ -6,7 +6,7 @@
     "bignumber.js": "^8.1.1",
     "cors": "^2.8.5",
     "eosjs": "^16.0.9",
-    "express": "^4.16.4",
+    "express": "^4.18.2",
     "react": "^16.8.6",
     "react-dom": "^16.7.0",
     "react-redux": "^6.0.0",
